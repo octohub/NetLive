@@ -26,6 +26,8 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends Activity {
 
+    //TODO fix http://stackoverflow.com/questions/16777829/java-lang-runtimeexception-unable-to-start-activity-componentinfo-java-lang-nu
+
     MyApplication app;
 
     SharedPreferences sharedPref;

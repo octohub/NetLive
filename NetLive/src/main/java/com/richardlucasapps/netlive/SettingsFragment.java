@@ -9,6 +9,7 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
 
 
+
 public class SettingsFragment extends PreferenceFragment {
 
 	ListPreference notificationDrawerUnitOfMeasurePreference;
