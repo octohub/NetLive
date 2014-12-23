@@ -219,7 +219,7 @@ public class MainService extends Service {
         for (AppDataUsage currentApp : appDataUsageList) {
             int uid = currentApp.getUid();
             bytesTransferred = TrafficStats.getUidRxBytes(uid) + TrafficStats.getUidTxBytes(uid);
-            if (bytesTransferred > 0) {
+            if (bytesTransferred > 0) { //TODO its possible the phone is in airplane mode and has yet to transfer any data
                 return true;
 
             }
