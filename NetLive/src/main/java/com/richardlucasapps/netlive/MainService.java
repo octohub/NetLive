@@ -86,13 +86,6 @@ public class MainService extends Service {
     boolean showTotalValueNotification;
     boolean hideNotification;
 
-    /*
-    So this guys is interesting.  Here is my problem.  When the user turns their screen on, the service will pick up reporting where it left off.
-    But since it has no notion of how long it has been so it actually updated, upon the first update the numbers will be artificially high-
-    reporting your transfer rate much higher than it actually is.  So this variable will keep track of this down time, and I will use it
-    to prevent a spike if the user looks at NetLive's reporting as soon as they turn on their screen.
-     */
-    int updatesMissed;
 
     boolean widgetRequestsActiveApp;
 
@@ -115,7 +108,6 @@ public class MainService extends Service {
             return;
         }
 
-        updatesMissed = 0;
 
         unitMeasurement = sharedPref.getString("pref_key_measurement_unit", "Mbps");
         showTotalValueNotification = sharedPref.getBoolean("pref_key_show_total_value", false);
@@ -327,12 +319,6 @@ public class MainService extends Service {
 
 
     private void update() {
-        if (!pm.isScreenOn()) {//TODO a snazier thing might be to do a broadcast receiver that pauses the schedule executor service when screen is off, and renables when screen on.
-            updatesMissed+=1;
-
-            return;          //I don't think cancelling the service all together would be a good idea when screen is off, I don't want to keep calling onCreate when the user turns their screen on
-        }
-
 
         prepareUpdate();
 
@@ -504,12 +490,7 @@ public class MainService extends Service {
 
     private void prepareUpdate(){
 
-        if(updatesMissed!=0){
-            correctedPollRate = pollRate * updatesMissed;
-        }else{
-            correctedPollRate = pollRate;
-        }
-        updatesMissed = 0;
+        correctedPollRate = pollRate;
 
 
         bytesSentSinceBoot = TrafficStats.getTotalTxBytes();
