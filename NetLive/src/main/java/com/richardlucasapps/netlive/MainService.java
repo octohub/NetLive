@@ -24,6 +24,7 @@ import android.preference.PreferenceManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 public class MainService extends Service {
@@ -144,7 +145,9 @@ public class MainService extends Service {
         appDataUsageList = new ArrayList<AppDataUsage>();
 
         loadAllAppsIntoAppDataUsageList();
-        canUseTrafficApiForActiveApp = determineIfCanUseTrafficApiForActiveApp();
+        determineIfCanUseTrafficApiForActiveApp();
+        canUseTrafficApiForActiveApp = true;
+        Log.d("canUseTrafficApiForActiveApp", String.valueOf(canUseTrafficApiForActiveApp));
 
 
         if (notificationEnabled) {
