@@ -113,7 +113,7 @@ public class MainActivity extends Activity {
 		           }
 		       });
 			 builder.setMessage(getString(R.string.welcome))
-		       .setTitle("Welcome to NetLive");
+		       .setTitle("Welcome to NetLive v3.0 Beta");
 			 AlertDialog dialog = builder.create();
 			 
 			 AlertDialog newFragment = dialog;
@@ -204,7 +204,7 @@ public class MainActivity extends Activity {
 	private void showAboutDialog() {
 		 AlertDialog.Builder aboutBuilder = new AlertDialog.Builder(this);
 		 TextView myMsg = new TextView(this);
-		 SpannableString s = new SpannableString("NetLive v2.5\n\nrichardlucasapps.com");
+		 SpannableString s = new SpannableString("NetLive v3.0 Beta\n\nrichardlucasapps.com");
 		 Linkify.addLinks(s, Linkify.WEB_URLS);
 		 myMsg.setText(s);
 		 myMsg.setTextSize(15);
@@ -254,7 +254,7 @@ public class MainActivity extends Activity {
 	           }
 	       });
 		 builder.setView(view)
-	       .setTitle("Welcome to NetLive");
+	       .setTitle("Welcome to NetLive v3.0 Beta");
 		 AlertDialog dialog = builder.create();
 		 
 		 AlertDialog newFragment = dialog;

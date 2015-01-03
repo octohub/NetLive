@@ -6,6 +6,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -16,6 +17,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.TrafficStats;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
@@ -95,6 +97,7 @@ public class MainService extends Service {
     //TODO allow no notification to be displayed
 
     boolean widgetExist;
+
     @Override
     public void onCreate() {
         pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -123,10 +126,9 @@ public class MainService extends Service {
         if (widgetExist) {
             setupWidgets();
         }
-        if(showActiveApp || widgetRequestsActiveApp){
+        if (showActiveApp || widgetRequestsActiveApp) {
             eitherNotificationOrWidgetRequestsActiveApp = true;
         }
-
 
 
         appMonitorCounter = 0;
@@ -148,14 +150,12 @@ public class MainService extends Service {
                     .setContentText("")
                     .setOngoing(true);
 
-            if(Integer.valueOf(android.os.Build.VERSION.SDK_INT)>15){//not sure if this is needed, but Notification.PRIORITY_HIGH is only compatible with version above ice cream sandwich
-                if(hideNotification){
-                    mBuilder.setPriority(Notification.PRIORITY_MIN);
-                }else{
-                    mBuilder.setPriority(Notification.PRIORITY_HIGH);
-                }
-            }
 
+            if (hideNotification) {
+                mBuilder.setPriority(Notification.PRIORITY_MIN);
+            } else {
+                mBuilder.setPriority(Notification.PRIORITY_HIGH);
+            }
 
 
             resultIntent = new Intent(this, MainActivity.class);
@@ -190,6 +190,7 @@ public class MainService extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
+
     @Override
     public void onDestroy() {
         try {
@@ -222,10 +223,6 @@ public class MainService extends Service {
         return "(" + appLabel + ")";
 
     }
-
-
-
-
 
 
     private UnitConverter getUnitConverter(String unitMeasurement) {
@@ -317,16 +314,23 @@ public class MainService extends Service {
     }
 
 
-
     private void update() {
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
+            if(!pm.isInteractive()){
+                return;
+            }
+        } else if(!pm.isScreenOn()){
+            return;
+        }
 
         prepareUpdate();
 
-        if(notificationEnabled){
+        if (notificationEnabled) {
             updateNotification();
 
         }
-        if(widgetExist){
+        if (widgetExist) {
             updateWidgets();
 
         }
@@ -343,7 +347,7 @@ public class MainService extends Service {
         previousBytesSentSinceBoot = bytesSentSinceBoot;
         previousBytesReceivedSinceBoot = bytesReceivedSinceBoot;
 
-        if(showTotalValueNotification){
+        if (showTotalValueNotification) {
             double total = (converter.convert(bytesSentPerSecond) + converter.convert(bytesReceivedPerSecond)) / correctedPollRate;
             String totalString = String.format("%.3f", total);
             displayValuesText = "Total: " + totalString;
@@ -352,8 +356,8 @@ public class MainService extends Service {
         displayValuesText += " Up: " + sentString + " Down: " + receivedString;
         contentTitleText = unitMeasurement;
 
-        if(showActiveApp){
-            contentTitleText+= " " + activeApp;
+        if (showActiveApp) {
+            contentTitleText += " " + activeApp;
         }
 
         mBuilder.setContentText(displayValuesText);
@@ -412,7 +416,7 @@ public class MainService extends Service {
             boolean displayActiveApp = sharedPref.getBoolean("pref_key_widget_active_app" + awID, true);
 
 
-            if(displayActiveApp){
+            if (displayActiveApp) {
                 widgetRequestsActiveApp = true;
             }
 
@@ -471,7 +475,7 @@ public class MainService extends Service {
             String receivedString = String.format("%.3f", c.convert(bytesReceivedPerSecond) / correctedPollRate);
 
             widgetTextViewLineOneText += unitMeasurement + "\n";
-            if(displayTotalValue){
+            if (displayTotalValue) {
                 double total = (converter.convert(bytesSentPerSecond) + converter.convert(bytesReceivedPerSecond)) / correctedPollRate;
                 String totalString = String.format("%.3f", total);
                 displayValuesText = "Total: " + totalString;
@@ -488,7 +492,7 @@ public class MainService extends Service {
 
     }
 
-    private void prepareUpdate(){
+    private void prepareUpdate() {
 
         correctedPollRate = pollRate;
 
@@ -504,7 +508,7 @@ public class MainService extends Service {
 
 
         if (eitherNotificationOrWidgetRequestsActiveApp) {
-                activeApp = getActiveAppWithTrafficApi();
+            activeApp = getActiveAppWithTrafficApi();
 
 
             appMonitorCounter += 1;
