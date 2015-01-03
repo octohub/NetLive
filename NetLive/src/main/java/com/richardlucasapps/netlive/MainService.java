@@ -69,7 +69,6 @@ public class MainService extends Service {
     boolean showActiveApp;
     String contentTitleText = "";
 
-    boolean canUseTrafficApiForActiveApp;
 
     PowerManager pm;
     boolean notificationEnabled;
@@ -145,9 +144,6 @@ public class MainService extends Service {
         appDataUsageList = new ArrayList<AppDataUsage>();
 
         loadAllAppsIntoAppDataUsageList();
-        determineIfCanUseTrafficApiForActiveApp();
-        canUseTrafficApiForActiveApp = true;
-        Log.d("canUseTrafficApiForActiveApp", String.valueOf(canUseTrafficApiForActiveApp));
 
 
         if (notificationEnabled) {
@@ -214,24 +210,6 @@ public class MainService extends Service {
 
     }
 
-    private boolean determineIfCanUseTrafficApiForActiveApp() {
-        //TODO I think I will have to maintain that useTrafficStatsAPI boolean from this class.  And simply separtate the methods within app data usage and call them accordingly
-
-        long bytesTransferred = 0L;
-
-        for (AppDataUsage currentApp : appDataUsageList) {
-            int uid = currentApp.getUid();
-            bytesTransferred = TrafficStats.getUidRxBytes(uid) + TrafficStats.getUidTxBytes(uid);
-            if (bytesTransferred > 0) { //TODO its possible the phone is in airplane mode and has yet to transfer any data
-                return true;
-
-            }
-        }
-
-        return false;
-
-    }
-
 
     public String getActiveAppWithTrafficApi() {
 
@@ -253,25 +231,6 @@ public class MainService extends Service {
 
     }
 
-
-    public String getActiveAppManual() {
-
-        long maxDelta = 0L;
-        long delta = 0L;
-        String appLabel = "";
-
-        for (AppDataUsage currentApp : appDataUsageList) {
-            delta = currentApp.getRateManual();
-            if (delta > maxDelta) {
-                appLabel = currentApp.getAppName();
-                maxDelta = delta;
-            }
-        }
-        if (appLabel.equals("")) {
-            return "(" +"..." + ")";
-        }
-        return "(" + appLabel + ")";
-    }
 
 
 
@@ -564,12 +523,8 @@ public class MainService extends Service {
 
 
         if (eitherNotificationOrWidgetRequestsActiveApp) {
-
-            if(canUseTrafficApiForActiveApp){
                 activeApp = getActiveAppWithTrafficApi();
-            }else{
-                activeApp = getActiveAppManual();
-            }
+
 
             appMonitorCounter += 1;
             if (appMonitorCounter >= (500 / pollRate)) {//divide by pollRate so that if you have a pollRate of 10, that will end up being 500 seconds, not 5000
