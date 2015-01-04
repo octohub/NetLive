@@ -11,17 +11,11 @@ android {
         versionName "3.0 Beta"
     }
 
-    signingConfigs {
 
-        release {
-
-
-        }
-    }
 
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }

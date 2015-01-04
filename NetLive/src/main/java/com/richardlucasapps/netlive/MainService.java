@@ -511,7 +511,7 @@ public class MainService extends Service {
             activeApp = getActiveAppWithTrafficApi();
 
 
-            appMonitorCounter += 1;
+            appMonitorCounter += 1;  //TODO perhaps just get rid of this, or increase it by more. If a user installs another app, it updates app list
             if (appMonitorCounter >= (500 / pollRate)) {//divide by pollRate so that if you have a pollRate of 10, that will end up being 500 seconds, not 5000
                 loadAllAppsIntoAppDataUsageList();
                 appMonitorCounter = 0;
