@@ -91,6 +91,8 @@ public class MainService extends Service {
 
     boolean widgetRequestsActiveApp;
 
+    private int updatesMissed = 1;
+
 
     //TODO show total value as an option
 
@@ -210,13 +212,16 @@ public class MainService extends Service {
         long delta = 0L;
         String appLabel = "";
 
+        int count  = 0;
         for (AppDataUsage currentApp : appDataUsageList) {
+            count++;
             delta = currentApp.getRateWithTrafficStatsAPI();
             if (delta > maxDelta) {
                 appLabel = currentApp.getAppName();
                 maxDelta = delta;
             }
         }
+        Log.d("Iterated",count + " times");
         if (appLabel.equals("")) {
             return "(" + "..." + ")";
         }
@@ -318,11 +323,14 @@ public class MainService extends Service {
 
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
             if(!pm.isInteractive()){
+                updatesMissed+=1;
                 return;
             }
         } else if(!pm.isScreenOn()){
+            updatesMissed+=1;
             return;
         }
+
 
         prepareUpdate();
 
@@ -439,6 +447,7 @@ public class MainService extends Service {
 
 
     private void loadAllAppsIntoAppDataUsageList() {
+        appDataUsageList.clear(); // clear before adding all the apps so we don't add duplicates
         PackageManager packageManager = this.getPackageManager();
         List<ApplicationInfo> appList = packageManager.getInstalledApplications(0);
 
@@ -451,6 +460,9 @@ public class MainService extends Service {
             appDataUsageList.add(app);
 
         }
+        //TODO NEED to add back in the correction so when you awake device from sleep values are not messed up
+        //See if can register for installed app events, then can loadallappslist again
+        Log.d("appDataUsageList Size", String.valueOf(appDataUsageList.size()));
     }
 
 
@@ -494,7 +506,8 @@ public class MainService extends Service {
 
     private void prepareUpdate() {
 
-        correctedPollRate = pollRate;
+        correctedPollRate = pollRate * updatesMissed;
+        updatesMissed = 1;
 
 
         bytesSentSinceBoot = TrafficStats.getTotalTxBytes();
@@ -512,7 +525,8 @@ public class MainService extends Service {
 
 
             appMonitorCounter += 1;  //TODO perhaps just get rid of this, or increase it by more. If a user installs another app, it updates app list
-            if (appMonitorCounter >= (500 / pollRate)) {//divide by pollRate so that if you have a pollRate of 10, that will end up being 500 seconds, not 5000
+            if (appMonitorCounter >= (1000 / pollRate)) {//divide by pollRate so that if you have a pollRate of 10, that will end up being 500 seconds, not 5000
+                Log.d("loading new apps list", "doing it");
                 loadAllAppsIntoAppDataUsageList();
                 appMonitorCounter = 0;
             }
