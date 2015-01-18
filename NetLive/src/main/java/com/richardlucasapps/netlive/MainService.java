@@ -102,6 +102,8 @@ public class MainService extends Service {
 
     @Override
     public void onCreate() {
+        super.onCreate();
+
         pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 
@@ -184,8 +186,17 @@ public class MainService extends Service {
 
         startUpdateService(pollRate);
 
+    }
 
-        super.onCreate();
+    private void createService(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(getApplicationContext(), MainService.class); //getApp
+                startService(intent);
+
+            }
+        }).start();
     }
 
     @Override

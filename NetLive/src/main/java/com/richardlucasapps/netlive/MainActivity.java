@@ -123,7 +123,7 @@ public class MainActivity extends Activity {
                 startService(intent);
 
             }
-        }).start(); //TODO even before starting my service, skipping a hella of a lot of frames. This is mad unchill.
+        }).start();
 
 
 

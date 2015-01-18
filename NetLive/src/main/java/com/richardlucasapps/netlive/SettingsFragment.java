@@ -55,8 +55,7 @@ public class SettingsFragment extends PreferenceFragment {
 
             ((ListPreference) preference).setValue(newValue.toString());
             preference.setSummary(newValue.toString());
-            getActivity().stopService(new Intent(getActivity(), MainService.class));
-            getActivity().startService(new Intent(getActivity(), MainService.class));
+            restartService();
             return false;
         }
 
@@ -68,8 +67,7 @@ public class SettingsFragment extends PreferenceFragment {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             ((CheckBoxPreference) preference).setChecked((Boolean)newValue);
-            getActivity().stopService(new Intent(getActivity(), MainService.class));
-            getActivity().startService(new Intent(getActivity(), MainService.class));
+            restartService();
 
 
             return false;
@@ -84,8 +82,7 @@ public class SettingsFragment extends PreferenceFragment {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             ((ListPreference) preference).setValue(newValue.toString());
-            getActivity().stopService(new Intent(getActivity(), MainService.class));
-            getActivity().startService(new Intent(getActivity(), MainService.class));
+            restartService();
 
             return false;
         }
@@ -98,8 +95,7 @@ public class SettingsFragment extends PreferenceFragment {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             ((CheckBoxPreference) preference).setChecked((Boolean)newValue);
-            getActivity().stopService(new Intent(getActivity(), MainService.class));
-            getActivity().startService(new Intent(getActivity(), MainService.class));
+            restartService();
 
 
             return false;
@@ -113,8 +109,7 @@ public class SettingsFragment extends PreferenceFragment {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             ((CheckBoxPreference) preference).setChecked((Boolean)newValue);
-            getActivity().stopService(new Intent(getActivity(), MainService.class));
-            getActivity().startService(new Intent(getActivity(), MainService.class));
+            restartService();
 
 
             return false;
@@ -130,13 +125,28 @@ public class SettingsFragment extends PreferenceFragment {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             ((CheckBoxPreference) preference).setChecked((Boolean)newValue);
-            getActivity().stopService(new Intent(getActivity(), MainService.class));
-            getActivity().startService(new Intent(getActivity(), MainService.class));
+            restartService();
 
             return false;
 
         }
     };
+
+    private void restartService(){
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getActivity().stopService(new Intent(getActivity(), MainService.class));
+                getActivity().startService(new Intent(getActivity(), MainService.class));
+
+
+            }
+        }).start();
+
+    }
+
+
 
 
 
