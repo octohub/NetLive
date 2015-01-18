@@ -370,6 +370,7 @@ public class MainService extends Service {
 
         mBuilder.setContentText(displayValuesText);
         mBuilder.setContentTitle(contentTitleText);
+        mBuilder.setWhen(System.currentTimeMillis());
         displayValuesText = "";
 
         //TODO Report issue to AOSP where if the notification is set to minimum priority, and you update it after having called setWhen(), it will reissue it like a new notification, wont just update it
