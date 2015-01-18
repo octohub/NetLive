@@ -103,97 +103,97 @@ public class MainService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-
-        notificationEnabled = !(sharedPref.getBoolean("pref_key_auto_start", false));
-        widgetExist = sharedPref.getBoolean("widget_exists", false);
-
-        if (!notificationEnabled && !widgetExist) {
-            this.onDestroy();
-            return;
-        }
+        createService(this);
 
 
-        unitMeasurement = sharedPref.getString("pref_key_measurement_unit", "Mbps");
-        showTotalValueNotification = sharedPref.getBoolean("pref_key_show_total_value", false);
-        pollRate = Long.parseLong(sharedPref.getString("pref_key_poll_rate", "1"));
-        showActiveApp = sharedPref.getBoolean("pref_key_active_app", true);
-        hideNotification = sharedPref.getBoolean("pref_key_hide_notification", false);
-
-        converter = getUnitConverter(unitMeasurement);
-
-
-        context = getApplicationContext();
-        widgetRequestsActiveApp = false;
-        if (widgetExist) {
-            setupWidgets();
-        }
-        if (showActiveApp || widgetRequestsActiveApp) {
-            eitherNotificationOrWidgetRequestsActiveApp = true;
-        }
-
-
-        appMonitorCounter = 0;
-
-        previousBytesSentSinceBoot = TrafficStats.getTotalTxBytes();//i dont initialize these to 0, because if i do, when app first reports, the rate will be crazy high
-        previousBytesReceivedSinceBoot = TrafficStats.getTotalRxBytes();
-        appDataUsageList = new ArrayList<AppDataUsage>();
-
-        loadAllAppsIntoAppDataUsageList();
-
-
-        if (notificationEnabled) {
-            mNotifyMgr =
-                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            mId = 1;
-            mBuilder = new NotificationCompat.Builder(this)
-                    .setSmallIcon(R.drawable.idle)
-                    .setContentTitle("")
-                    .setContentText("")
-                    .setOngoing(true);
-
-
-            if (hideNotification) {
-                mBuilder.setPriority(Notification.PRIORITY_MIN);
-            } else {
-                mBuilder.setPriority(Notification.PRIORITY_HIGH);
-            }
-
-
-            resultIntent = new Intent(this, MainActivity.class);
-            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-            stackBuilder.addParentStack(MainActivity.class);
-            stackBuilder.addNextIntent(resultIntent);
-            PendingIntent resultPendingIntent =
-                    stackBuilder.getPendingIntent(
-                            0,
-                            PendingIntent.FLAG_UPDATE_CURRENT
-                    );
-            mBuilder.setContentIntent(resultPendingIntent);
-
-
-            notification = mBuilder.build();
-
-
-            mNotifyMgr.notify(
-                    mId,
-                    notification);
-
-            startForeground(mId, notification);
-        }
-
-        startUpdateService(pollRate);
 
     }
 
-    private void createService(){
+    private void createService(final Service service){
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(getApplicationContext(), MainService.class); //getApp
-                startService(intent);
+                pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+                sharedPref = PreferenceManager.getDefaultSharedPreferences(service);
+
+                notificationEnabled = !(sharedPref.getBoolean("pref_key_auto_start", false));
+                widgetExist = sharedPref.getBoolean("widget_exists", false);
+
+                if (!notificationEnabled && !widgetExist) {
+                    service.onDestroy();
+                    return;
+                }
+
+
+                unitMeasurement = sharedPref.getString("pref_key_measurement_unit", "Mbps");
+                showTotalValueNotification = sharedPref.getBoolean("pref_key_show_total_value", false);
+                pollRate = Long.parseLong(sharedPref.getString("pref_key_poll_rate", "1"));
+                showActiveApp = sharedPref.getBoolean("pref_key_active_app", true);
+                hideNotification = sharedPref.getBoolean("pref_key_hide_notification", false);
+
+                converter = getUnitConverter(unitMeasurement);
+
+
+                context = getApplicationContext();
+                widgetRequestsActiveApp = false;
+                if (widgetExist) {
+                    setupWidgets();
+                }
+                if (showActiveApp || widgetRequestsActiveApp) {
+                    eitherNotificationOrWidgetRequestsActiveApp = true;
+                }
+
+
+                appMonitorCounter = 0;
+
+                previousBytesSentSinceBoot = TrafficStats.getTotalTxBytes();//i dont initialize these to 0, because if i do, when app first reports, the rate will be crazy high
+                previousBytesReceivedSinceBoot = TrafficStats.getTotalRxBytes();
+                appDataUsageList = new ArrayList<AppDataUsage>();
+
+                loadAllAppsIntoAppDataUsageList();
+
+
+                if (notificationEnabled) {
+                    mNotifyMgr =
+                            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    mId = 1;
+                    mBuilder = new NotificationCompat.Builder(service)
+                            .setSmallIcon(R.drawable.idle)
+                            .setContentTitle("")
+                            .setContentText("")
+                            .setOngoing(true);
+
+
+                    if (hideNotification) {
+                        mBuilder.setPriority(Notification.PRIORITY_MIN);
+                    } else {
+                        mBuilder.setPriority(Notification.PRIORITY_HIGH);
+                    }
+
+
+                    resultIntent = new Intent(service, MainActivity.class);
+                    TaskStackBuilder stackBuilder = TaskStackBuilder.create(service);
+                    stackBuilder.addParentStack(MainActivity.class);
+                    stackBuilder.addNextIntent(resultIntent);
+                    PendingIntent resultPendingIntent =
+                            stackBuilder.getPendingIntent(
+                                    0,
+                                    PendingIntent.FLAG_UPDATE_CURRENT
+                            );
+                    mBuilder.setContentIntent(resultPendingIntent);
+
+
+                    notification = mBuilder.build();
+
+
+                    mNotifyMgr.notify(
+                            mId,
+                            notification);
+
+                    startForeground(mId, notification);
+                }
+
+                startUpdateService(pollRate);
 
             }
         }).start();
