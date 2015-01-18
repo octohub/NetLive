@@ -15,9 +15,6 @@ public class AppDataUsage {
 	private int uId;
 	private long previousTotalData;
 
-    private static final String uidStatPath = "/proc/uid_stat/";
-    private static final String uidRcv = "tcp_rcv";
-    private static final String uidSnd = "tcp_snd";
 
 
 	public AppDataUsage(String appName1, int uid1) {
@@ -26,10 +23,6 @@ public class AppDataUsage {
 		this.previousTotalData = getStatsWithTrafficStatsAPI();
 
 	}
-
-    public int getUid(){
-        return this.uId;
-    }
 
 
 
