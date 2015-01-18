@@ -133,16 +133,8 @@ public class SettingsFragment extends PreferenceFragment {
     };
 
     private void restartService(){
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getActivity().stopService(new Intent(getActivity(), MainService.class));
-                getActivity().startService(new Intent(getActivity(), MainService.class));
-
-
-            }
-        }).start();
+        getActivity().stopService(new Intent(getActivity(), MainService.class));
+        getActivity().startService(new Intent(getActivity(), MainService.class));
 
     }
 

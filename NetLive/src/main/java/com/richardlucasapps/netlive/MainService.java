@@ -49,6 +49,7 @@ public class MainService extends Service {
     private String activeApp = "";
     List<AppDataUsage> appDataUsageList;
     int appMonitorCounter;
+    int setWhenCounter;
 
     int mId;
 
@@ -106,98 +107,96 @@ public class MainService extends Service {
         createService(this);
 
 
-
     }
 
-    private void createService(final Service service){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-                sharedPref = PreferenceManager.getDefaultSharedPreferences(service);
+    private void createService(final Service service) {
 
-                notificationEnabled = !(sharedPref.getBoolean("pref_key_auto_start", false));
-                widgetExist = sharedPref.getBoolean("widget_exists", false);
+        pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(service);
 
-                if (!notificationEnabled && !widgetExist) {
-                    service.onDestroy();
-                    return;
-                }
+        notificationEnabled = !(sharedPref.getBoolean("pref_key_auto_start", false));
+        widgetExist = sharedPref.getBoolean("widget_exists", false);
+
+        if (!notificationEnabled && !widgetExist) {
+            service.onDestroy();
+            return;
+        }
 
 
-                unitMeasurement = sharedPref.getString("pref_key_measurement_unit", "Mbps");
-                showTotalValueNotification = sharedPref.getBoolean("pref_key_show_total_value", false);
-                pollRate = Long.parseLong(sharedPref.getString("pref_key_poll_rate", "1"));
-                showActiveApp = sharedPref.getBoolean("pref_key_active_app", true);
-                hideNotification = sharedPref.getBoolean("pref_key_hide_notification", false);
+        unitMeasurement = sharedPref.getString("pref_key_measurement_unit", "Mbps");
+        showTotalValueNotification = sharedPref.getBoolean("pref_key_show_total_value", false);
+        pollRate = Long.parseLong(sharedPref.getString("pref_key_poll_rate", "1"));
+        showActiveApp = sharedPref.getBoolean("pref_key_active_app", true);
+        hideNotification = sharedPref.getBoolean("pref_key_hide_notification", false);
 
-                converter = getUnitConverter(unitMeasurement);
-
-
-                context = getApplicationContext();
-                widgetRequestsActiveApp = false;
-                if (widgetExist) {
-                    setupWidgets();
-                }
-                if (showActiveApp || widgetRequestsActiveApp) {
-                    eitherNotificationOrWidgetRequestsActiveApp = true;
-                }
+        converter = getUnitConverter(unitMeasurement);
 
 
-                appMonitorCounter = 0;
-
-                previousBytesSentSinceBoot = TrafficStats.getTotalTxBytes();//i dont initialize these to 0, because if i do, when app first reports, the rate will be crazy high
-                previousBytesReceivedSinceBoot = TrafficStats.getTotalRxBytes();
-                appDataUsageList = new ArrayList<AppDataUsage>();
-
-                loadAllAppsIntoAppDataUsageList();
-
-
-                if (notificationEnabled) {
-                    mNotifyMgr =
-                            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                    mId = 1;
-                    mBuilder = new NotificationCompat.Builder(service)
-                            .setSmallIcon(R.drawable.idle)
-                            .setContentTitle("")
-                            .setContentText("")
-                            .setOngoing(true);
+        context = getApplicationContext();
+        widgetRequestsActiveApp = false;
+        if (widgetExist) {
+            setupWidgets();
+        }
+        if (showActiveApp || widgetRequestsActiveApp) {
+            eitherNotificationOrWidgetRequestsActiveApp = true;
+        }
 
 
-                    if (hideNotification) {
-                        mBuilder.setPriority(Notification.PRIORITY_MIN);
-                    } else {
-                        mBuilder.setPriority(Notification.PRIORITY_HIGH);
-                    }
+        appMonitorCounter = 0;
+        setWhenCounter = 0;
+
+        previousBytesSentSinceBoot = TrafficStats.getTotalTxBytes();//i dont initialize these to 0, because if i do, when app first reports, the rate will be crazy high
+        previousBytesReceivedSinceBoot = TrafficStats.getTotalRxBytes();
+        appDataUsageList = new ArrayList<AppDataUsage>();
+
+        loadAllAppsIntoAppDataUsageList();
 
 
-                    resultIntent = new Intent(service, MainActivity.class);
-                    TaskStackBuilder stackBuilder = TaskStackBuilder.create(service);
-                    stackBuilder.addParentStack(MainActivity.class);
-                    stackBuilder.addNextIntent(resultIntent);
-                    PendingIntent resultPendingIntent =
-                            stackBuilder.getPendingIntent(
-                                    0,
-                                    PendingIntent.FLAG_UPDATE_CURRENT
-                            );
-                    mBuilder.setContentIntent(resultPendingIntent);
+        if (notificationEnabled) {
+            mNotifyMgr =
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mId = 1;
+            mBuilder = new NotificationCompat.Builder(service)
+                    .setSmallIcon(R.drawable.idle)
+                    .setContentTitle("")
+                    .setContentText("")
+                    .setOngoing(true);
 
 
-                    notification = mBuilder.build();
-
-
-                    mNotifyMgr.notify(
-                            mId,
-                            notification);
-
-                    startForeground(mId, notification);
-                }
-
-                startUpdateService(pollRate);
-
+            if (hideNotification) {
+                mBuilder.setPriority(Notification.PRIORITY_MIN);
+            } else {
+                mBuilder.setPriority(Notification.PRIORITY_HIGH);
             }
-        }).start();
+
+
+            resultIntent = new Intent(service, MainActivity.class);
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create(service);
+            stackBuilder.addParentStack(MainActivity.class);
+            stackBuilder.addNextIntent(resultIntent);
+            PendingIntent resultPendingIntent =
+                    stackBuilder.getPendingIntent(
+                            0,
+                            PendingIntent.FLAG_UPDATE_CURRENT
+                    );
+            mBuilder.setContentIntent(resultPendingIntent);
+
+
+            notification = mBuilder.build();
+
+
+            mNotifyMgr.notify(
+                    mId,
+                    notification);
+
+            startForeground(mId, notification);
+        }
+
+        startUpdateService(pollRate);
+
     }
+
+
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -223,7 +222,7 @@ public class MainService extends Service {
         long delta = 0L;
         String appLabel = "";
 
-        int count  = 0;
+        int count = 0;
         for (AppDataUsage currentApp : appDataUsageList) {
             count++;
             delta = currentApp.getRateWithTrafficStatsAPI();
@@ -232,7 +231,7 @@ public class MainService extends Service {
                 maxDelta = delta;
             }
         }
-        Log.d("Iterated",count + " times");
+        Log.d("Iterated", count + " times");
         if (appLabel.equals("")) {
             return "(" + "..." + ")";
         }
@@ -332,13 +331,13 @@ public class MainService extends Service {
 
     private void update() {
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP){
-            if(!pm.isInteractive()){
-                updatesMissed+=1;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            if (!pm.isInteractive()) {
+                updatesMissed += 1;
                 return;
             }
-        } else if(!pm.isScreenOn()){
-            updatesMissed+=1;
+        } else if (!pm.isScreenOn()) {
+            updatesMissed += 1;
             return;
         }
 
@@ -381,7 +380,12 @@ public class MainService extends Service {
 
         mBuilder.setContentText(displayValuesText);
         mBuilder.setContentTitle(contentTitleText);
-        mBuilder.setWhen(System.currentTimeMillis());
+        setWhenCounter++;
+        if (setWhenCounter > 10800 / pollRate) { //10800 seconds is three hours, but in reality this will be greater because the device will not be awake for that whole time
+            mBuilder.setWhen(System.currentTimeMillis());
+            setWhenCounter = 0;
+        }
+
         displayValuesText = "";
 
         //TODO Report issue to AOSP where if the notification is set to minimum priority, and you update it after having called setWhen(), it will reissue it like a new notification, wont just update it
@@ -485,7 +489,7 @@ public class MainService extends Service {
 
             boolean displayActiveApp = sharedPref.getBoolean("pref_key_widget_active_app" + awID, true);
             boolean displayTotalValue = sharedPref.getBoolean("pref_key_widget_show_total" + awID, false);
-            String widgetUnitMeasurement = sharedPref.getString("pref_key_widget_measurement_unit"+awID,unitMeasurement);
+            String widgetUnitMeasurement = sharedPref.getString("pref_key_widget_measurement_unit" + awID, unitMeasurement);
 
 
             String widgetTextViewLineOneText = "";

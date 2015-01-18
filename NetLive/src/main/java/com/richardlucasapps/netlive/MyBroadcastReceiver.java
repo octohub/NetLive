@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 
 
 public class MyBroadcastReceiver extends BroadcastReceiver {
+
     @Override
     public void onReceive(Context context, Intent intent) {
         //this will always autostart and at least check if notification or widget enabled, if not, it destroys

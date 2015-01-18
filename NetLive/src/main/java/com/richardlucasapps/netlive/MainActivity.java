@@ -115,15 +115,9 @@ public class MainActivity extends Activity {
         }
 
 
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
                 Intent intent = new Intent(getApplicationContext(), MainService.class); //getApp
                 startService(intent);
 
-            }
-        }).start();
 
 
 
