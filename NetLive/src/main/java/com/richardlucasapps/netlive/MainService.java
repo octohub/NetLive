@@ -485,6 +485,7 @@ public class MainService extends Service {
 
             boolean displayActiveApp = sharedPref.getBoolean("pref_key_widget_active_app" + awID, true);
             boolean displayTotalValue = sharedPref.getBoolean("pref_key_widget_show_total" + awID, false);
+            String widgetUnitMeasurement = sharedPref.getString("pref_key_widget_measurement_unit"+awID,unitMeasurement);
 
 
             String widgetTextViewLineOneText = "";
@@ -498,7 +499,7 @@ public class MainService extends Service {
             String sentString = String.format("%.3f", c.convert(bytesSentPerSecond) / correctedPollRate);
             String receivedString = String.format("%.3f", c.convert(bytesReceivedPerSecond) / correctedPollRate);
 
-            widgetTextViewLineOneText += unitMeasurement + "\n";
+            widgetTextViewLineOneText += widgetUnitMeasurement + "\n";
             if (displayTotalValue) {
                 double total = (converter.convert(bytesSentPerSecond) + converter.convert(bytesReceivedPerSecond)) / correctedPollRate;
                 String totalString = String.format("%.3f", total);
