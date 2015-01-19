@@ -18,6 +18,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.TrafficStats;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
@@ -139,6 +140,8 @@ public class MainService extends Service {
         }
         if (showActiveApp || widgetRequestsActiveApp) {
             eitherNotificationOrWidgetRequestsActiveApp = true;
+            appDataUsageList = new ArrayList<AppDataUsage>();
+            loadAllAppsIntoAppDataUsageList();  //no need to store list in RAM if user not requesting active app
         }
 
 
@@ -147,9 +150,7 @@ public class MainService extends Service {
 
         previousBytesSentSinceBoot = TrafficStats.getTotalTxBytes();//i dont initialize these to 0, because if i do, when app first reports, the rate will be crazy high
         previousBytesReceivedSinceBoot = TrafficStats.getTotalRxBytes();
-        appDataUsageList = new ArrayList<AppDataUsage>();
 
-        loadAllAppsIntoAppDataUsageList();
 
 
         if (notificationEnabled) {
@@ -215,6 +216,20 @@ public class MainService extends Service {
 
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Bundle extras = intent.getExtras();
+        boolean wasPackageAdded = false;
+        if(extras!=null){
+            wasPackageAdded = extras.getBoolean("PACKAGE_ADDED");
+
+        }
+        if(wasPackageAdded && eitherNotificationOrWidgetRequestsActiveApp){
+            Log.d("onStartCommand", "loadAllApps");
+            loadAllAppsIntoAppDataUsageList();
+        }
+        return super.onStartCommand(intent, flags, startId);
+    }
 
     public String getActiveAppWithTrafficApi() {
 
