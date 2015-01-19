@@ -95,6 +95,9 @@ public class MainService extends Service {
 
     private int updatesMissed = 1;
 
+    private boolean firstUpdate;
+
+
 
     //TODO show total value as an option
 
@@ -111,6 +114,7 @@ public class MainService extends Service {
     }
 
     private void createService(final Service service) {
+        firstUpdate = true;
 
         pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         sharedPref = PreferenceManager.getDefaultSharedPreferences(service);
@@ -140,8 +144,7 @@ public class MainService extends Service {
         }
         if (showActiveApp || widgetRequestsActiveApp) {
             eitherNotificationOrWidgetRequestsActiveApp = true;
-            appDataUsageList = new ArrayList<AppDataUsage>();
-            loadAllAppsIntoAppDataUsageList();  //no need to store list in RAM if user not requesting active app
+
         }
 
 
@@ -537,6 +540,12 @@ public class MainService extends Service {
     }
 
     private void prepareUpdate() {
+
+        if(firstUpdate && eitherNotificationOrWidgetRequestsActiveApp){  //lazy initiazation, do it here so it is not done on the main thread, thus freezing the UI
+            appDataUsageList = new ArrayList<AppDataUsage>();
+            loadAllAppsIntoAppDataUsageList();  //
+            firstUpdate = false;
+        }
 
         correctedPollRate = pollRate * updatesMissed;
         updatesMissed = 1;

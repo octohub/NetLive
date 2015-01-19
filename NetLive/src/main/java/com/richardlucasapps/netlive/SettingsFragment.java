@@ -56,7 +56,7 @@ public class SettingsFragment extends PreferenceFragment {
             ((ListPreference) preference).setValue(newValue.toString());
             preference.setSummary(newValue.toString());
             restartService();
-            return false;
+            return true;
         }
 
 
@@ -70,7 +70,7 @@ public class SettingsFragment extends PreferenceFragment {
             restartService();
 
 
-            return false;
+            return true;
         }
 
 
@@ -84,7 +84,7 @@ public class SettingsFragment extends PreferenceFragment {
             ((ListPreference) preference).setValue(newValue.toString());
             restartService();
 
-            return false;
+            return true;
         }
 
 
@@ -98,7 +98,7 @@ public class SettingsFragment extends PreferenceFragment {
             restartService();
 
 
-            return false;
+            return true;
         }
 
 
@@ -112,7 +112,7 @@ public class SettingsFragment extends PreferenceFragment {
             restartService();
 
 
-            return false;
+            return true;
         }
 
 
