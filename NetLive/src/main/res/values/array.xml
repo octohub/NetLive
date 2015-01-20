@@ -62,10 +62,10 @@
  
  
   <string-array name="pref_widget_font_size_values">
- <item>12.0</item>
- <item>14.0</item>
- <item>18.0</item>
- <item>22.0</item>
+ <item>12</item>
+ <item>14</item>
+ <item>18</item>
+ <item>22</item>
  </string-array>
  
    <string-array name="pref_widget_font_color_values">

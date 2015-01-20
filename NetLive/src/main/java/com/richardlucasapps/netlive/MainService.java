@@ -350,6 +350,7 @@ public class MainService extends Service {
     private void update() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Log.d("isLolipop","device");
             if (!pm.isInteractive()) {
                 updatesMissed += 1;
                 return;
@@ -453,7 +454,8 @@ public class MainService extends Service {
             int awID = ids[i];
 
             String colorOfFont = sharedPref.getString("pref_key_widget_font_color" + awID, "Black");
-            String sizeOfFont = sharedPref.getString("pref_key_widget_font_size" + awID, "12.0");
+            String sizeOfFont = sharedPref.getString("pref_key_widget_font_size" + awID,"12");
+            float floatSizeOfFont = Float.parseFloat(sizeOfFont);
             String measurementUnit = sharedPref.getString("pref_key_widget_measurement_unit" + awID, "Mbps");
             boolean displayActiveApp = sharedPref.getBoolean("pref_key_widget_active_app" + awID, true);
 
@@ -468,8 +470,8 @@ public class MainService extends Service {
 
             RemoteViews v = new RemoteViews(getPackageName(), R.layout.widget);
             v.setTextColor(R.id.widgetTextViewLineOne, widgetColor);
-            Float tempFloat = Float.parseFloat(sizeOfFont);
-            v.setFloat(R.id.widgetTextViewLineOne, "setTextSize", tempFloat);
+
+            v.setFloat(R.id.widgetTextViewLineOne, "setTextSize", floatSizeOfFont);
 
             widgetRemoteViews.add(v);
             UnitConverter converter = getUnitConverter(measurementUnit);

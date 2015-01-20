@@ -6,9 +6,6 @@
             android:key="pref_key_widget_add_widget_preference_screen"
             android:title="Add widget" />
 
-
-
-
         <ListPreference
             android:key="pref_key_widget_measurement_unit"
             android:title="@string/pref_title_measurement_unit"
@@ -40,7 +37,7 @@
             android:dialogTitle="@string/pref_widget_dialog_font_size"
             android:entries="@array/pref_widget_font_size_entries"
             android:entryValues="@array/pref_widget_font_size_values"
-            android:defaultValue="12.0" />
+            android:defaultValue="@string/widget_font_size_default_value" />
 
 
         <ListPreference
@@ -51,9 +48,5 @@
             android:entries="@array/pref_widget_font_color_entries"
             android:entryValues="@array/pref_widget_font_color_values"
             android:defaultValue="white" />
-
-
-
-
 
 </PreferenceScreen>

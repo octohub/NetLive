@@ -12,6 +12,7 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -58,7 +59,7 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
 		
 		widgetFontSize = (ListPreference) findPreference("pref_key_widget_font_size");
 		widgetFontSize.setOnPreferenceChangeListener(widgetFontSizeListener);
-		widgetFontSize.setSummary(widgetFontSize.getEntry().toString());
+		widgetFontSize.setSummary(widgetFontSize.getEntry());
 		
 	}
 
@@ -113,7 +114,7 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
 
 			boolean displayActiveApp = sharedPref.getBoolean("pref_key_widget_active_app", true);
 			String styleOfFont = sharedPref.getString("pref_key_widget_font_style", null);
-			String sizeOfFont = sharedPref.getString("pref_key_widget_font_size", null);
+			String sizeOfFont = sharedPref.getString("pref_key_widget_font_size", "12");
 			String colorOfFont = sharedPref.getString("pref_key_widget_font_color", null);
             boolean showTotalValue = sharedPref.getBoolean("pref_key_widget_show_total", false);
 			
