@@ -15,7 +15,7 @@
             android:key="pref_key_show_total_value"
             android:summary="@string/pref_summary_show_total_value"
             android:title="@string/pref_title_show_total_value"
-            android:defaultValue="false " />
+            android:defaultValue="false" />
 
         <ListPreference
             android:key="pref_key_poll_rate"
@@ -24,19 +24,19 @@
             android:dialogTitle="@string/pref_dialog_title_poll_rate"
             android:entries="@array/pref_poll_rate_entries"
             android:entryValues="@array/pref_poll_rate_values"
-            android:defaultValue="5" />
+            android:defaultValue="@string/pref_key_poll_rate_default_value"/>
 
         <CheckBoxPreference
             android:key="pref_key_active_app"
             android:summary="@string/pref_summary_active_app"
             android:title="@string/pref_title_active_app"
-            android:defaultValue="false" />
+            android:defaultValue="true" />
 
         <CheckBoxPreference
             android:key="pref_key_hide_notification"
             android:summary="@string/pref_summary_hide_notification"
             android:title="@string/pref_title_hide_notification"
-            android:defaultValue="false" />
+            android:defaultValue="true" />
 
 
         <CheckBoxPreference
