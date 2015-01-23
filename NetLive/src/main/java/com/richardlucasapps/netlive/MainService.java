@@ -99,6 +99,7 @@ public class MainService extends Service {
 
 
 
+
     //TODO show total value as an option
 
     //TODO allow no notification to be displayed
@@ -223,12 +224,20 @@ public class MainService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle extras = intent.getExtras();
         boolean wasPackageAdded = false;
+        String newAppUid = null;
         if(extras!=null){
             wasPackageAdded = extras.getBoolean("PACKAGE_ADDED");
+            newAppUid = extras.getString("EXTRA_UID", null);
+
+
 
         }
         if(wasPackageAdded && eitherNotificationOrWidgetRequestsActiveApp){
             Log.d("onStartCommand", "loadAllApps");
+//            if(newAppUid!=null){
+//                addSpecificPackageWithUID(newAppUid);
+//            }
+
             loadAllAppsIntoAppDataUsageList();
         }
         return super.onStartCommand(intent, flags, startId);
@@ -482,6 +491,15 @@ public class MainService extends Service {
     }
 
 
+    private void addSpecificPackageWithUID(String uid){
+        //String[] package
+
+
+        if(uid!=null){
+
+        }
+
+    }
     private void loadAllAppsIntoAppDataUsageList() {
         appDataUsageList.clear(); // clear before adding all the apps so we don't add duplicates
         PackageManager packageManager = this.getPackageManager();

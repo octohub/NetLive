@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 
 public class NetworkSpeedWidget extends AppWidgetProvider {
@@ -28,8 +29,6 @@ public class NetworkSpeedWidget extends AppWidgetProvider {
     @Override
     public void onEnabled(Context context) {
 
-//        MyApplication.getInstance().stopService(new Intent(MyApplication.getInstance(),MainService.class));
-//        MyApplication.getInstance().startService(new Intent(MyApplication.getInstance(), MainService.class));
         super.onEnabled(context);
     }
 
