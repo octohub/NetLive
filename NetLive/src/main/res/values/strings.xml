@@ -37,15 +37,15 @@
     <string name="general_category">General</string>
 
     <string name="pref_title_show_total_value">Show total value</string>
-    <string name="pref_summary_show_total_value">Show total speed beside upload and download speeds</string>
+    <string name="pref_summary_show_total_value">Show total speed beside upload and download speeds.</string>
 
-    <string name="pref_summary_hide_notification">Prevent the notification icon from displaying (requires Android 4.1+). This may cause notification to disappear entirely or reduce functionality of other expandable notifications.</string>
+    <string name="pref_summary_hide_notification">Hide NetLive notification icon from displaying in the status bar. This will hide upload and download arrows from displaying that can show you at a glance info in the status bar.</string>
     <string name="pref_title_hide_notification">Hide notification icon</string>
 
 
 
     <string name="general_category_start_on_boot">Start on boot</string>
-    <string name="pref_summary_auto_start">Prevent all transfer rate reporting in notification area (widgets must be deleted manually)</string>
+    <string name="pref_summary_auto_start">Prevent all transfer rate reporting in the notification area (widgets must be deleted manually).</string>
     <string name="pref_title_auto_start">Disable</string>
    
     <string name="notification_drawer_category">General</string>
@@ -82,7 +82,7 @@
     <string name="pref_measurement_unit_default_value_notification_area">Auto (Kbps, Mbps, Gbps)</string>
     
     <string name="pref_title_active_app">Display active app</string>
-    <string name="pref_summary_active_app">Display the name of the app currently using the most data. Disabling this feature decreases battery usage.</string>
+    <string name="pref_summary_active_app">Display the name of the app currently using the most data. Enabling this feature may increase battery usage.</string>
     
     
     <string name="pref_widget_category_general">General Widget Settings</string>
@@ -105,7 +105,7 @@
     <string name="pref_widget_dialog_font_color">Choose font color</string>
 
     <string name="pref_title_poll_rate">Poll Rate</string>
-    <string name="pref_summary_poll_rate">Choose how often NetLive updates, longer poll rates decrease battery usage (controls widgets too)</string>
+    <string name="pref_summary_poll_rate">Choose how often NetLive updates, shorter poll rates increase battery usage (controls widgets too).</string>
     <string name="pref_dialog_title_poll_rate">Choose poll rate</string>
 
     <string name="widget_font_size_default_value">12</string>
