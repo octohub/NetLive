@@ -27,19 +27,15 @@ import android.preference.PreferenceManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 public class MainService extends Service {
 
-    private final ScheduledExecutorService scheduler =
-            Executors.newScheduledThreadPool(1);
+//    private Long bytesSentSinceBoot;
+//    private Long bytesReceivedSinceBoot;
 
-    private Long bytesSentSinceBoot;
-    private Long bytesReceivedSinceBoot;
-
-    private Long previousBytesSentSinceBoot;
-    private Long previousBytesReceivedSinceBoot;
+    private long previousBytesSentSinceBoot;
+    private long previousBytesReceivedSinceBoot;
 
     private Long bytesSentPerSecond;
     private Long bytesReceivedPerSecond;
@@ -151,9 +147,6 @@ public class MainService extends Service {
         appMonitorCounter = 0;
         setWhenCounter = 0;
 
-        previousBytesSentSinceBoot = trafficStats.getTotalTxBytes();//i dont initialize these to 0, because if i do, when app first reports, the rate will be crazy high
-        previousBytesReceivedSinceBoot = trafficStats.getTotalRxBytes();
-
 
 
         if (notificationEnabled) {
@@ -244,6 +237,49 @@ public class MainService extends Service {
 
         }
         return START_STICKY;
+    }
+
+    private void setupWidgets() {
+
+        name = new ComponentName(context, NetworkSpeedWidget.class);
+        ids = AppWidgetManager.getInstance(context).getAppWidgetIds(name);
+        manager = AppWidgetManager.getInstance(this);
+
+
+        widgetUnitMeasurementConverters = new ArrayList<UnitConverter>();
+        widgetRemoteViews = new ArrayList<RemoteViews>();
+
+        N = ids.length;
+
+        for (int i = 0; i < N; i++) {
+            int awID = ids[i];
+
+            String colorOfFont = sharedPref.getString("pref_key_widget_font_color" + awID, "Black");
+            String sizeOfFont = sharedPref.getString("pref_key_widget_font_size" + awID,"12");
+            float floatSizeOfFont = Float.parseFloat(sizeOfFont);
+            String measurementUnit = sharedPref.getString("pref_key_widget_measurement_unit" + awID, "Mbps");
+            boolean displayActiveApp = sharedPref.getBoolean("pref_key_widget_active_app" + awID, true);
+
+
+            if (displayActiveApp) {
+                widgetRequestsActiveApp = true;
+            }
+
+            int widgetColor;
+            widgetColor = Color.parseColor(colorOfFont);
+
+
+            RemoteViews v = new RemoteViews(getPackageName(), R.layout.widget);
+            v.setTextColor(R.id.widgetTextViewLineOne, widgetColor);
+
+            v.setFloat(R.id.widgetTextViewLineOne, "setTextSize", floatSizeOfFont);
+
+            widgetRemoteViews.add(v);
+            UnitConverter converter = getUnitConverter(measurementUnit);
+            widgetUnitMeasurementConverters.add(converter);
+
+
+        }
     }
 
     public synchronized String getActiveAppWithTrafficApi() {
@@ -349,13 +385,15 @@ public class MainService extends Service {
 
 
     public void startUpdateService(long pollRate) {
-        final Runnable beeper = new Runnable() {
+        final Runnable updater = new Runnable() {
             public void run() {
                 update();
             }
         };
+        ScheduledExecutorService scheduler =
+                Executors.newScheduledThreadPool(1);
         updateHandler =
-                scheduler.scheduleAtFixedRate(beeper, 1, pollRate, TimeUnit.SECONDS);
+                scheduler.scheduleAtFixedRate(updater, 1, pollRate, TimeUnit.SECONDS);
     }
 
 
@@ -373,10 +411,60 @@ public class MainService extends Service {
         }
 
 
-        prepareUpdate();
+        initiateUpdate();
+
+
+    }
+
+    private void initiateUpdate() {
+
+
+        if(firstUpdate){
+            previousBytesSentSinceBoot = trafficStats.getTotalTxBytes();//i dont initialize these to 0, because if i do, when app first reports, the rate will be crazy high
+            previousBytesReceivedSinceBoot = trafficStats.getTotalRxBytes();
+            if(eitherNotificationOrWidgetRequestsActiveApp){
+                appDataUsageList = new ArrayList<AppDataUsage>();
+                loadAllAppsIntoAppDataUsageList();
+
+            }
+            firstUpdate = false;
+
+        }
+
+        if(firstUpdate && eitherNotificationOrWidgetRequestsActiveApp){  //lazy initiazation, do it here so it is not done on the main thread, thus freezing the UI
+            appDataUsageList = new ArrayList<AppDataUsage>();
+            loadAllAppsIntoAppDataUsageList();  //
+            firstUpdate = false;
+        }
+
+        correctedPollRate = pollRate * updatesMissed;
+        updatesMissed = 1;
+
+
+        long bytesSentSinceBoot = trafficStats.getTotalTxBytes();
+        long bytesReceivedSinceBoot = trafficStats.getTotalRxBytes();
+
+        bytesSentPerSecond = bytesSentSinceBoot - previousBytesSentSinceBoot;
+        bytesReceivedPerSecond = bytesReceivedSinceBoot - previousBytesReceivedSinceBoot;
+
+        previousBytesSentSinceBoot = bytesSentSinceBoot;
+        previousBytesReceivedSinceBoot = bytesReceivedSinceBoot;
+
+
+        if (eitherNotificationOrWidgetRequestsActiveApp) {
+            activeApp = getActiveAppWithTrafficApi();
+
+
+            appMonitorCounter += 1;  //TODO perhaps just get rid of this, or increase it by more. If a user installs another app, it updates app list
+            if (appMonitorCounter >= (1000 / pollRate)) {//divide by pollRate so that if you have a pollRate of 10, that will end up being 500 seconds, not 5000
+
+                loadAllAppsIntoAppDataUsageList();
+                appMonitorCounter = 0;
+            }
+        }
 
         if (notificationEnabled) {
-            updateNotification();
+            updateNotification(bytesSentPerSecond,bytesReceivedPerSecond);
 
         }
         if (widgetExist) {
@@ -384,17 +472,15 @@ public class MainService extends Service {
 
         }
 
-
     }
 
 
-    private void updateNotification() {
+    private void updateNotification(long bytesSentPerSecond, long bytesReceivedPerSecond) {
+
 
         sentString = String.format("%.3f", converter.convert(bytesSentPerSecond) / correctedPollRate);
         receivedString = String.format("%.3f", converter.convert(bytesReceivedPerSecond) / correctedPollRate);
 
-        previousBytesSentSinceBoot = bytesSentSinceBoot;
-        previousBytesReceivedSinceBoot = bytesReceivedSinceBoot;
 
         if (showTotalValueNotification) {
             double total = (converter.convert(bytesSentPerSecond) + converter.convert(bytesReceivedPerSecond)) / correctedPollRate;
@@ -450,88 +536,6 @@ public class MainService extends Service {
         mNotifyMgr.notify(mId, mBuilder.build());
     }
 
-    private void setupWidgets() {
-
-        name = new ComponentName(context, NetworkSpeedWidget.class);
-        ids = AppWidgetManager.getInstance(context).getAppWidgetIds(name);
-        manager = AppWidgetManager.getInstance(this);
-
-
-        widgetUnitMeasurementConverters = new ArrayList<UnitConverter>();
-        widgetRemoteViews = new ArrayList<RemoteViews>();
-
-        N = ids.length;
-
-        for (int i = 0; i < N; i++) {
-            int awID = ids[i];
-
-            String colorOfFont = sharedPref.getString("pref_key_widget_font_color" + awID, "Black");
-            String sizeOfFont = sharedPref.getString("pref_key_widget_font_size" + awID,"12");
-            float floatSizeOfFont = Float.parseFloat(sizeOfFont);
-            String measurementUnit = sharedPref.getString("pref_key_widget_measurement_unit" + awID, "Mbps");
-            boolean displayActiveApp = sharedPref.getBoolean("pref_key_widget_active_app" + awID, true);
-
-
-            if (displayActiveApp) {
-                widgetRequestsActiveApp = true;
-            }
-
-            int widgetColor;
-            widgetColor = Color.parseColor(colorOfFont);
-
-
-            RemoteViews v = new RemoteViews(getPackageName(), R.layout.widget);
-            v.setTextColor(R.id.widgetTextViewLineOne, widgetColor);
-
-            v.setFloat(R.id.widgetTextViewLineOne, "setTextSize", floatSizeOfFont);
-
-            widgetRemoteViews.add(v);
-            UnitConverter converter = getUnitConverter(measurementUnit);
-            widgetUnitMeasurementConverters.add(converter);
-
-
-        }
-    }
-
-
-    private void addSpecificPackageWithUID(int uid){
-        String[] packagesForUid;
-         //TODO don't reinstantiate every time
-
-
-        //check what the uid is coming back, also check if need to make new instance of paclageManager in order to make it work
-        packagesForUid = packageManager.getPackagesForUid(uid);
-        for (String element : packagesForUid) {
-            try {
-                ApplicationInfo appInfo = packageManager.getApplicationInfo(element, 0);
-                addAppToAppDataUsageList(appInfo);
-            } catch (PackageManager.NameNotFoundException e) {
-                //e.printStackTrace();
-            }
-
-        }
-
-    }
-    private void loadAllAppsIntoAppDataUsageList() {
-        appDataUsageList.clear(); // clear before adding all the apps so we don't add duplicates
-        List<ApplicationInfo> appList = packageManager.getInstalledApplications(0);
-
-        for (ApplicationInfo appInfo : appList) {
-            addAppToAppDataUsageList(appInfo);
-
-        }
-
-    }
-
-    private synchronized void addAppToAppDataUsageList(ApplicationInfo appInfo){  //synchronized because both addSpecificPackageUID and loadAllAppsIntoAppDataUsageList may be changing the app list at the same time.
-        String appLabel = (String) packageManager.getApplicationLabel(appInfo);
-        int uid = appInfo.uid;
-        AppDataUsage app = new AppDataUsage(appLabel, uid);
-        appDataUsageList.add(app);
-
-    }
-
-
     private void updateWidgets() {
 
         for (int i = 0; i < N; i++) {
@@ -571,40 +575,46 @@ public class MainService extends Service {
 
     }
 
-    private void prepareUpdate() {
 
-        if(firstUpdate && eitherNotificationOrWidgetRequestsActiveApp){  //lazy initiazation, do it here so it is not done on the main thread, thus freezing the UI
-            appDataUsageList = new ArrayList<AppDataUsage>();
-            loadAllAppsIntoAppDataUsageList();  //
-            firstUpdate = false;
-        }
+    private void loadAllAppsIntoAppDataUsageList() {
+        appDataUsageList.clear(); // clear before adding all the apps so we don't add duplicates
+        List<ApplicationInfo> appList = packageManager.getInstalledApplications(0);
 
-        correctedPollRate = pollRate * updatesMissed;
-        updatesMissed = 1;
+        for (ApplicationInfo appInfo : appList) {
+            addAppToAppDataUsageList(appInfo);
 
-
-        bytesSentSinceBoot = trafficStats.getTotalTxBytes();
-        bytesReceivedSinceBoot = trafficStats.getTotalRxBytes();
-
-        bytesSentPerSecond = bytesSentSinceBoot - previousBytesSentSinceBoot;
-        bytesReceivedPerSecond = bytesReceivedSinceBoot - previousBytesReceivedSinceBoot;
-
-        previousBytesSentSinceBoot = bytesSentSinceBoot;
-        previousBytesReceivedSinceBoot = bytesReceivedSinceBoot;
-
-
-        if (eitherNotificationOrWidgetRequestsActiveApp) {
-            activeApp = getActiveAppWithTrafficApi();
-
-
-            appMonitorCounter += 1;  //TODO perhaps just get rid of this, or increase it by more. If a user installs another app, it updates app list
-            if (appMonitorCounter >= (1000 / pollRate)) {//divide by pollRate so that if you have a pollRate of 10, that will end up being 500 seconds, not 5000
-
-                loadAllAppsIntoAppDataUsageList();
-                appMonitorCounter = 0;
-            }
         }
 
     }
+
+    private void addSpecificPackageWithUID(int uid){
+        String[] packagesForUid;
+        //TODO don't reinstantiate every time
+
+
+        //check what the uid is coming back, also check if need to make new instance of paclageManager in order to make it work
+        packagesForUid = packageManager.getPackagesForUid(uid);
+        for (String element : packagesForUid) {
+            try {
+                ApplicationInfo appInfo = packageManager.getApplicationInfo(element, 0);
+                addAppToAppDataUsageList(appInfo);
+            } catch (PackageManager.NameNotFoundException e) {
+                //e.printStackTrace();
+            }
+
+        }
+
+    }
+
+    private synchronized void addAppToAppDataUsageList(ApplicationInfo appInfo){  //synchronized because both addSpecificPackageUID and loadAllAppsIntoAppDataUsageList may be changing the app list at the same time.
+        String appLabel = (String) packageManager.getApplicationLabel(appInfo);
+        int uid = appInfo.uid;
+        AppDataUsage app = new AppDataUsage(appLabel, uid);
+        appDataUsageList.add(app);
+
+    }
+
+
+
 
 }
