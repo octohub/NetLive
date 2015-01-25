@@ -523,8 +523,6 @@ public class MainService extends Service {
             addAppToAppDataUsageList(appInfo);
 
         }
-        //TODO NEED to add back in the correction so when you awake device from sleep values are not messed up
-        //See if can register for installed app events, then can loadallappslist again
 
     }
 

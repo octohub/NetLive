@@ -168,8 +168,4 @@ public class SettingsFragment extends PreferenceFragment {
         return false;
     }
 
-
-
-
-
 }
