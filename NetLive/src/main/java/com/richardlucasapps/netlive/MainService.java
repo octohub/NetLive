@@ -11,6 +11,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.app.TaskStackBuilder;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -21,8 +22,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.TaskStackBuilder;
 import android.preference.PreferenceManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -36,14 +35,14 @@ public class MainService extends Service {
     private long previousBytesReceivedSinceBoot;
 
 
-    private String activeApp = "";
+    //private String activeApp = "";
     List<AppDataUsage> appDataUsageList;
     int appMonitorCounter;
     int setWhenCounter;
 
-    int mId;
+    //int mId;
 
-    NotificationCompat.Builder mBuilder;
+    Notification.Builder mBuilder;
     NotificationManager mNotifyMgr;
     Notification notification;
     SharedPreferences sharedPref;
@@ -145,8 +144,8 @@ public class MainService extends Service {
         if (notificationEnabled) {
             mNotifyMgr =
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            mId = 1;
-            mBuilder = new NotificationCompat.Builder(service)
+            int mId = 1;
+            mBuilder = new Notification.Builder(service)
                     .setSmallIcon(R.drawable.idle)
                     .setContentTitle("")
                     .setContentText("")
@@ -443,7 +442,7 @@ public class MainService extends Service {
         previousBytesSentSinceBoot = bytesSentSinceBoot;
         previousBytesReceivedSinceBoot = bytesReceivedSinceBoot;
 
-
+        String activeApp = "";
         if (eitherNotificationOrWidgetRequestsActiveApp) {
             activeApp = getActiveAppWithTrafficApi();
 
@@ -457,18 +456,18 @@ public class MainService extends Service {
         }
 
         if (notificationEnabled) {
-            updateNotification(bytesSentPerSecond,bytesReceivedPerSecond);
+            updateNotification(bytesSentPerSecond,bytesReceivedPerSecond,activeApp);
 
         }
         if (widgetExist) {
-            updateWidgets(bytesSentPerSecond,bytesReceivedPerSecond);
+            updateWidgets(bytesSentPerSecond,bytesReceivedPerSecond,activeApp);
 
         }
 
     }
 
 
-    private void updateNotification(long bytesSentPerSecond, long bytesReceivedPerSecond) {
+    private void updateNotification(long bytesSentPerSecond, long bytesReceivedPerSecond, String activeApp) {
 
 
         String sentString = String.valueOf((converter.convert(bytesSentPerSecond) / correctedPollRate));
@@ -500,7 +499,7 @@ public class MainService extends Service {
 
         //TODO Report issue to AOSP where if the notification is set to minimum priority, and you update it after having called setWhen(), it will reissue it like a new notification, wont just update it
 
-
+        int mId = 1;
         if (!hideNotification) {
 
             if (bytesSentPerSecond / correctedPollRate < 13107 && bytesReceivedPerSecond / correctedPollRate < 13107) {
@@ -529,7 +528,7 @@ public class MainService extends Service {
         mNotifyMgr.notify(mId, mBuilder.build());
     }
 
-    private void updateWidgets(long bytesSentPerSecond, long bytesReceivedPerSecond) {
+    private void updateWidgets(long bytesSentPerSecond, long bytesReceivedPerSecond, String activeApp) {
 
         for (int i = 0; i < N; i++) {
             int awID = ids[i];
