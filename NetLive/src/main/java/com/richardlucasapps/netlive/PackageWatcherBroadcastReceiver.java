@@ -19,12 +19,15 @@ public class PackageWatcherBroadcastReceiver extends BroadcastReceiver {
         Intent startServiceIntent = new Intent(context, MainService.class);
         Bundle extras = intent.getExtras();
         String uid = null;
+        //Log.d("extras",extras.getString("EXTRA_UID",null));
+
         if(extras!=null){
             uid = extras.getString("EXTRA_UID",null);
+            //Log.d("broadcast receiver", uid);
 
         }
         if(uid!=null && !uid.isEmpty()){
-            startServiceIntent.putExtra("EXTRA_UID", uid);
+            startServiceIntent.putExtra("EXTRA_UID", Integer.parseInt(uid));
         }
         //TODO make sure this doesn't trigger even when NetLive is disabled
 

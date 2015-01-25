@@ -96,6 +96,7 @@ public class MainService extends Service {
     private int updatesMissed = 1;
 
     private boolean firstUpdate;
+    private PackageManager packageManager;
 
 
 
@@ -124,7 +125,7 @@ public class MainService extends Service {
         widgetExist = sharedPref.getBoolean("widget_exists", false);
 
         if (!notificationEnabled && !widgetExist) {
-            service.onDestroy();
+            this.stopSelf();
             return;
         }
 
@@ -145,6 +146,7 @@ public class MainService extends Service {
         }
         if (showActiveApp || widgetRequestsActiveApp) {
             eitherNotificationOrWidgetRequestsActiveApp = true;
+            packageManager = this.getPackageManager();
 
         }
 
@@ -211,11 +213,10 @@ public class MainService extends Service {
     @Override
     public void onDestroy() {
         try {
-            updateHandler.cancel(true);
+            updateHandler.cancel(true); //TODO can probabaly get rid of this stuff, only call superOnDestory because it nothing is bound to service, it will stop.
         } catch (NullPointerException e) {
             //The only way there will be a null pointer, is if the disabled preference is checked.  Because if it is, onDestory() is called right away, without creating the updateHandler
         }
-        this.stopSelf();
         super.onDestroy();
 
     }
@@ -224,26 +225,31 @@ public class MainService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle extras = intent.getExtras();
         boolean wasPackageAdded = false;
-        String newAppUid = null;
+        int newAppUid = 0;
         if(extras!=null){
             wasPackageAdded = extras.getBoolean("PACKAGE_ADDED");
-            newAppUid = extras.getString("EXTRA_UID", null);
-
-
+            newAppUid = extras.getInt("EXTRA_UID");
 
         }
         if(wasPackageAdded && eitherNotificationOrWidgetRequestsActiveApp){
             Log.d("onStartCommand", "loadAllApps");
-//            if(newAppUid!=null){
-//                addSpecificPackageWithUID(newAppUid);
-//            }
 
             loadAllAppsIntoAppDataUsageList();
+            //the uid in the EXTRA_UID from the packagewatcher broadcast receiver is always blank, to be fair, API says only that is "may" include it. Wtf Google, get your shit together.
+            //so for now just leave this disabled and just reload the entire list of apps
+//            if(newAppUid!=0) {
+//                addSpecificPackageWithUID(newAppUid);
+//            } else {
+//                loadAllAppsIntoAppDataUsageList();
+//            }
+
+
+
         }
-        return super.onStartCommand(intent, flags, startId);
+        return START_STICKY;
     }
 
-    public String getActiveAppWithTrafficApi() {
+    public synchronized String getActiveAppWithTrafficApi() {
 
         long maxDelta = 0L;
         long delta = 0L;
@@ -491,32 +497,43 @@ public class MainService extends Service {
     }
 
 
-    private void addSpecificPackageWithUID(String uid){
-        //String[] package
+    private void addSpecificPackageWithUID(int uid){
+        String[] packagesForUid;
+         //TODO don't reinstantiate every time
 
-
-        if(uid!=null){
+        Log.d("uid",String.valueOf(uid));
+        //check what the uid is coming back, also check if need to make new instance of paclageManager in order to make it work
+        packagesForUid = packageManager.getPackagesForUid(uid);
+        for (String element : packagesForUid) {
+            try {
+                ApplicationInfo appInfo = packageManager.getApplicationInfo(element, 0);
+                addAppToAppDataUsageList(appInfo);
+            } catch (PackageManager.NameNotFoundException e) {
+                //e.printStackTrace();
+            }
 
         }
 
     }
     private void loadAllAppsIntoAppDataUsageList() {
         appDataUsageList.clear(); // clear before adding all the apps so we don't add duplicates
-        PackageManager packageManager = this.getPackageManager();
         List<ApplicationInfo> appList = packageManager.getInstalledApplications(0);
 
         for (ApplicationInfo appInfo : appList) {
-            String appLabel = (String) packageManager.getApplicationLabel(appInfo);
-            int uid = appInfo.uid;
-
-
-            AppDataUsage app = new AppDataUsage(appLabel, uid);
-            appDataUsageList.add(app);
+            addAppToAppDataUsageList(appInfo);
 
         }
         //TODO NEED to add back in the correction so when you awake device from sleep values are not messed up
         //See if can register for installed app events, then can loadallappslist again
-        Log.d("appDataUsageList Size", String.valueOf(appDataUsageList.size()));
+
+    }
+
+    private synchronized void addAppToAppDataUsageList(ApplicationInfo appInfo){  //synchronized because both addSpecificPackageUID and loadAllAppsIntoAppDataUsageList may be changing the app list at the same time.
+        String appLabel = (String) packageManager.getApplicationLabel(appInfo);
+        int uid = appInfo.uid;
+        AppDataUsage app = new AppDataUsage(appLabel, uid);
+        appDataUsageList.add(app);
+
     }
 
 

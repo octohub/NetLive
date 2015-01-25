@@ -105,7 +105,7 @@
     <string name="pref_widget_dialog_font_color">Choose font color</string>
 
     <string name="pref_title_poll_rate">Poll Rate</string>
-    <string name="pref_summary_poll_rate">Choose how often NetLive updates, shorter poll rates increase battery usage (controls widgets too).</string>
+    <string name="pref_summary_poll_rate">Choose how often in seconds NetLive updates, shorter poll rates increase battery usage (controls widgets too).</string>
     <string name="pref_dialog_title_poll_rate">Choose poll rate</string>
 
     <string name="widget_font_size_default_value">12</string>
