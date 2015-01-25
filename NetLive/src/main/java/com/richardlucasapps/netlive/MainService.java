@@ -31,17 +31,10 @@ import android.widget.RemoteViews;
 
 public class MainService extends Service {
 
-//    private Long bytesSentSinceBoot;
-//    private Long bytesReceivedSinceBoot;
 
     private long previousBytesSentSinceBoot;
     private long previousBytesReceivedSinceBoot;
 
-    private Long bytesSentPerSecond;
-    private Long bytesReceivedPerSecond;
-
-    private String sentString;
-    private String receivedString;
 
     private String activeApp = "";
     List<AppDataUsage> appDataUsageList;
@@ -444,8 +437,8 @@ public class MainService extends Service {
         long bytesSentSinceBoot = trafficStats.getTotalTxBytes();
         long bytesReceivedSinceBoot = trafficStats.getTotalRxBytes();
 
-        bytesSentPerSecond = bytesSentSinceBoot - previousBytesSentSinceBoot;
-        bytesReceivedPerSecond = bytesReceivedSinceBoot - previousBytesReceivedSinceBoot;
+        long bytesSentPerSecond = bytesSentSinceBoot - previousBytesSentSinceBoot;
+        long bytesReceivedPerSecond = bytesReceivedSinceBoot - previousBytesReceivedSinceBoot;
 
         previousBytesSentSinceBoot = bytesSentSinceBoot;
         previousBytesReceivedSinceBoot = bytesReceivedSinceBoot;
@@ -468,7 +461,7 @@ public class MainService extends Service {
 
         }
         if (widgetExist) {
-            updateWidgets();
+            updateWidgets(bytesSentPerSecond,bytesReceivedPerSecond);
 
         }
 
@@ -478,8 +471,8 @@ public class MainService extends Service {
     private void updateNotification(long bytesSentPerSecond, long bytesReceivedPerSecond) {
 
 
-        sentString = String.format("%.3f", converter.convert(bytesSentPerSecond) / correctedPollRate);
-        receivedString = String.format("%.3f", converter.convert(bytesReceivedPerSecond) / correctedPollRate);
+        String sentString = String.valueOf((converter.convert(bytesSentPerSecond) / correctedPollRate));
+        String receivedString = String.valueOf((converter.convert(bytesReceivedPerSecond) / correctedPollRate));
 
 
         if (showTotalValueNotification) {
@@ -536,7 +529,7 @@ public class MainService extends Service {
         mNotifyMgr.notify(mId, mBuilder.build());
     }
 
-    private void updateWidgets() {
+    private void updateWidgets(long bytesSentPerSecond, long bytesReceivedPerSecond) {
 
         for (int i = 0; i < N; i++) {
             int awID = ids[i];
