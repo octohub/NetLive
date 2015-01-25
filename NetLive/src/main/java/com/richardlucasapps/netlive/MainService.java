@@ -98,6 +98,8 @@ public class MainService extends Service {
     private boolean firstUpdate;
     private PackageManager packageManager;
 
+    private TrafficStats trafficStats;
+
 
 
 
@@ -105,7 +107,7 @@ public class MainService extends Service {
 
     //TODO allow no notification to be displayed
 
-    boolean widgetExist;
+    private boolean widgetExist;
 
     @Override
     public void onCreate() {
@@ -113,9 +115,11 @@ public class MainService extends Service {
         createService(this);
 
 
+
     }
 
     private void createService(final Service service) {
+        trafficStats = new TrafficStats();
         firstUpdate = true;
 
         pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -154,8 +158,8 @@ public class MainService extends Service {
         appMonitorCounter = 0;
         setWhenCounter = 0;
 
-        previousBytesSentSinceBoot = TrafficStats.getTotalTxBytes();//i dont initialize these to 0, because if i do, when app first reports, the rate will be crazy high
-        previousBytesReceivedSinceBoot = TrafficStats.getTotalRxBytes();
+        previousBytesSentSinceBoot = trafficStats.getTotalTxBytes();//i dont initialize these to 0, because if i do, when app first reports, the rate will be crazy high
+        previousBytesReceivedSinceBoot = trafficStats.getTotalRxBytes();
 
 
 
@@ -232,7 +236,7 @@ public class MainService extends Service {
 
         }
         if(wasPackageAdded && eitherNotificationOrWidgetRequestsActiveApp){
-            Log.d("onStartCommand", "loadAllApps");
+
 
             loadAllAppsIntoAppDataUsageList();
             //the uid in the EXTRA_UID from the packagewatcher broadcast receiver is always blank, to be fair, API says only that is "may" include it. Wtf Google, get your shit together.
@@ -264,7 +268,7 @@ public class MainService extends Service {
                 maxDelta = delta;
             }
         }
-        Log.d("Iterated", count + " times");
+
         if (appLabel.equals("")) {
             return "(" + "..." + ")";
         }
@@ -365,7 +369,7 @@ public class MainService extends Service {
     private void update() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Log.d("isLolipop","device");
+
             if (!pm.isInteractive()) {
                 updatesMissed += 1;
                 return;
@@ -501,7 +505,7 @@ public class MainService extends Service {
         String[] packagesForUid;
          //TODO don't reinstantiate every time
 
-        Log.d("uid",String.valueOf(uid));
+
         //check what the uid is coming back, also check if need to make new instance of paclageManager in order to make it work
         packagesForUid = packageManager.getPackagesForUid(uid);
         for (String element : packagesForUid) {
@@ -586,8 +590,8 @@ public class MainService extends Service {
         updatesMissed = 1;
 
 
-        bytesSentSinceBoot = TrafficStats.getTotalTxBytes();
-        bytesReceivedSinceBoot = TrafficStats.getTotalRxBytes();
+        bytesSentSinceBoot = trafficStats.getTotalTxBytes();
+        bytesReceivedSinceBoot = trafficStats.getTotalRxBytes();
 
         bytesSentPerSecond = bytesSentSinceBoot - previousBytesSentSinceBoot;
         bytesReceivedPerSecond = bytesReceivedSinceBoot - previousBytesReceivedSinceBoot;
@@ -602,7 +606,7 @@ public class MainService extends Service {
 
             appMonitorCounter += 1;  //TODO perhaps just get rid of this, or increase it by more. If a user installs another app, it updates app list
             if (appMonitorCounter >= (1000 / pollRate)) {//divide by pollRate so that if you have a pollRate of 10, that will end up being 500 seconds, not 5000
-                Log.d("loading new apps list", "doing it");
+
                 loadAllAppsIntoAppDataUsageList();
                 appMonitorCounter = 0;
             }
