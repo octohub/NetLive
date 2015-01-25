@@ -100,13 +100,6 @@ public class MainService extends Service {
 
     private TrafficStats trafficStats;
 
-
-
-
-    //TODO show total value as an option
-
-    //TODO allow no notification to be displayed
-
     private boolean widgetExist;
 
     @Override
