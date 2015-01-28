@@ -30,7 +30,7 @@
             android:key="pref_key_active_app"
             android:summary="@string/pref_summary_active_app"
             android:title="@string/pref_title_active_app"
-            android:defaultValue="false" />
+            android:defaultValue="true" />
 
         <CheckBoxPreference
             android:key="pref_key_hide_notification"
