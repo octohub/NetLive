@@ -415,7 +415,7 @@ public class MainService extends Service {
 
     }
 
-    private void initiateUpdate() {
+    private synchronized void initiateUpdate() {
 
 
         if(firstUpdate){
@@ -455,7 +455,7 @@ public class MainService extends Service {
 
 
             appMonitorCounter += 1;  //TODO perhaps just get rid of this, or increase it by more. If a user installs another app, it updates app list
-            if (appMonitorCounter >= (1000 / pollRate)) {//divide by pollRate so that if you have a pollRate of 10, that will end up being 500 seconds, not 5000
+            if (appMonitorCounter >= (10800 / pollRate)) {//divide by pollRate so that if you have a pollRate of 10, that will end up being 500 seconds, not 5000
 
                 loadAllAppsIntoAppDataUsageList();
                 appMonitorCounter = 0;
@@ -542,9 +542,6 @@ public class MainService extends Service {
 
             WidgetSettings widgetSettings = widgetSettingsOfAllWidgets.get(i);
 
-//            boolean displayActiveApp = sharedPref.getBoolean("pref_key_widget_active_app" + awID, true);
-//            boolean displayTotalValue = sharedPref.getBoolean("pref_key_widget_show_total" + awID, false);
-//            String widgetUnitMeasurement = sharedPref.getString("pref_key_widget_measurement_unit" + awID, unitMeasurement);
 
 
             String widgetTextViewLineOneText = "";
@@ -576,7 +573,7 @@ public class MainService extends Service {
     }
 
 
-    private void loadAllAppsIntoAppDataUsageList() {
+    private synchronized void loadAllAppsIntoAppDataUsageList() {
         appDataUsageList.clear(); // clear before adding all the apps so we don't add duplicates
         List<ApplicationInfo> appList = packageManager.getInstalledApplications(0);
 
