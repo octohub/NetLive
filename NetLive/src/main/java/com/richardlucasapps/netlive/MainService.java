@@ -26,6 +26,7 @@ import android.preference.PreferenceManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 public class MainService extends Service {
@@ -35,31 +36,24 @@ public class MainService extends Service {
     private long previousBytesReceivedSinceBoot;
 
 
-    //private String activeApp = "";
     List<AppDataUsage> appDataUsageList;
     int appMonitorCounter;
     int setWhenCounter;
 
-    //int mId;
 
     Notification.Builder mBuilder;
     NotificationManager mNotifyMgr;
     Notification notification;
+
     SharedPreferences sharedPref;
-
-    ScheduledFuture updateHandler;
-    Intent resultIntent;
-
-    Context context;
-    ComponentName name;
 
     UnitConverter converter;
     long pollRate;
 
-    String displayValuesText = "";
+
     String unitMeasurement;
     boolean showActiveApp;
-    String contentTitleText = "";
+
 
 
     PowerManager pm;
@@ -86,9 +80,12 @@ public class MainService extends Service {
     private boolean firstUpdate;
     private PackageManager packageManager;
 
-    private TrafficStats trafficStats;
 
     private boolean widgetExist;
+
+    private ScheduledFuture updateHandler;
+
+    private ArrayList<WidgetSettings> widgetSettingsOfAllWidgets;
 
     @Override
     public void onCreate() {
@@ -100,7 +97,6 @@ public class MainService extends Service {
     }
 
     private void createService(final Service service) {
-        trafficStats = new TrafficStats();
         firstUpdate = true;
 
         pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -124,7 +120,6 @@ public class MainService extends Service {
         converter = getUnitConverter(unitMeasurement);
 
 
-        context = getApplicationContext();
         widgetRequestsActiveApp = false;
         if (widgetExist) {
             setupWidgets();
@@ -159,7 +154,7 @@ public class MainService extends Service {
             }
 
 
-            resultIntent = new Intent(service, MainActivity.class);
+            Intent resultIntent = new Intent(service, MainActivity.class);
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(service);
             stackBuilder.addParentStack(MainActivity.class);
             stackBuilder.addNextIntent(resultIntent);
@@ -194,18 +189,23 @@ public class MainService extends Service {
 
     @Override
     public void onDestroy() {
+
         try {
             updateHandler.cancel(true); //TODO can probabaly get rid of this stuff, only call superOnDestory because it nothing is bound to service, it will stop.
         } catch (NullPointerException e) {
             //The only way there will be a null pointer, is if the disabled preference is checked.  Because if it is, onDestory() is called right away, without creating the updateHandler
         }
+
         super.onDestroy();
 
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Bundle extras = intent.getExtras();
+        Bundle extras = null;
+        if(intent!=null){
+            extras = intent.getExtras();
+        }
         boolean wasPackageAdded = false;
         int newAppUid = 0;
         if(extras!=null){
@@ -232,9 +232,11 @@ public class MainService extends Service {
     }
 
     private void setupWidgets() {
+        Log.d("setupWidgets", "called");
+        widgetSettingsOfAllWidgets = new ArrayList<>();
 
-        name = new ComponentName(context, NetworkSpeedWidget.class);
-        ids = AppWidgetManager.getInstance(context).getAppWidgetIds(name);
+        ComponentName name = new ComponentName(getApplicationContext(), NetworkSpeedWidget.class);
+        ids = AppWidgetManager.getInstance(getApplicationContext()).getAppWidgetIds(name);
         manager = AppWidgetManager.getInstance(this);
 
 
@@ -251,6 +253,11 @@ public class MainService extends Service {
             float floatSizeOfFont = Float.parseFloat(sizeOfFont);
             String measurementUnit = sharedPref.getString("pref_key_widget_measurement_unit" + awID, "Mbps");
             boolean displayActiveApp = sharedPref.getBoolean("pref_key_widget_active_app" + awID, true);
+            boolean displayTotalValue = sharedPref.getBoolean("pref_key_widget_show_total" + awID, false);
+
+            WidgetSettings widgetSettings = new WidgetSettings(measurementUnit,
+                    displayActiveApp, displayTotalValue);
+            widgetSettingsOfAllWidgets.add(i,widgetSettings);
 
 
             if (displayActiveApp) {
@@ -412,8 +419,8 @@ public class MainService extends Service {
 
 
         if(firstUpdate){
-            previousBytesSentSinceBoot = trafficStats.getTotalTxBytes();//i dont initialize these to 0, because if i do, when app first reports, the rate will be crazy high
-            previousBytesReceivedSinceBoot = trafficStats.getTotalRxBytes();
+            previousBytesSentSinceBoot = TrafficStats.getTotalTxBytes();//i dont initialize these to 0, because if i do, when app first reports, the rate will be crazy high
+            previousBytesReceivedSinceBoot = TrafficStats.getTotalRxBytes();
             if(eitherNotificationOrWidgetRequestsActiveApp){
                 appDataUsageList = new ArrayList<AppDataUsage>();
                 loadAllAppsIntoAppDataUsageList();
@@ -433,8 +440,8 @@ public class MainService extends Service {
         updatesMissed = 1;
 
 
-        long bytesSentSinceBoot = trafficStats.getTotalTxBytes();
-        long bytesReceivedSinceBoot = trafficStats.getTotalRxBytes();
+        long bytesSentSinceBoot = TrafficStats.getTotalTxBytes();
+        long bytesReceivedSinceBoot = TrafficStats.getTotalRxBytes();
 
         long bytesSentPerSecond = bytesSentSinceBoot - previousBytesSentSinceBoot;
         long bytesReceivedPerSecond = bytesReceivedSinceBoot - previousBytesReceivedSinceBoot;
@@ -470,10 +477,10 @@ public class MainService extends Service {
     private void updateNotification(long bytesSentPerSecond, long bytesReceivedPerSecond, String activeApp) {
 
 
-        String sentString = String.valueOf((converter.convert(bytesSentPerSecond) / correctedPollRate));
-        String receivedString = String.valueOf((converter.convert(bytesReceivedPerSecond) / correctedPollRate));
+        String sentString = String.format("%.3f",(converter.convert(bytesSentPerSecond) / correctedPollRate));
+        String receivedString = String.format("%.3f",(converter.convert(bytesReceivedPerSecond) / correctedPollRate));
 
-
+        String displayValuesText = "";
         if (showTotalValueNotification) {
             double total = (converter.convert(bytesSentPerSecond) + converter.convert(bytesReceivedPerSecond)) / correctedPollRate;
             String totalString = String.format("%.3f", total);
@@ -481,7 +488,7 @@ public class MainService extends Service {
         }
 
         displayValuesText += " Up: " + sentString + " Down: " + receivedString;
-        contentTitleText = unitMeasurement;
+        String contentTitleText = unitMeasurement;
 
         if (showActiveApp) {
             contentTitleText += " " + activeApp;
@@ -533,14 +540,16 @@ public class MainService extends Service {
         for (int i = 0; i < N; i++) {
             int awID = ids[i];
 
-            boolean displayActiveApp = sharedPref.getBoolean("pref_key_widget_active_app" + awID, true);
-            boolean displayTotalValue = sharedPref.getBoolean("pref_key_widget_show_total" + awID, false);
-            String widgetUnitMeasurement = sharedPref.getString("pref_key_widget_measurement_unit" + awID, unitMeasurement);
+            WidgetSettings widgetSettings = widgetSettingsOfAllWidgets.get(i);
+
+//            boolean displayActiveApp = sharedPref.getBoolean("pref_key_widget_active_app" + awID, true);
+//            boolean displayTotalValue = sharedPref.getBoolean("pref_key_widget_show_total" + awID, false);
+//            String widgetUnitMeasurement = sharedPref.getString("pref_key_widget_measurement_unit" + awID, unitMeasurement);
 
 
             String widgetTextViewLineOneText = "";
 
-            if (displayActiveApp) {
+            if (widgetSettings.isDisplayActiveApp()) {
                 widgetTextViewLineOneText = activeApp + "\n";
             }
 
@@ -549,11 +558,10 @@ public class MainService extends Service {
             String sentString = String.format("%.3f", c.convert(bytesSentPerSecond) / correctedPollRate);
             String receivedString = String.format("%.3f", c.convert(bytesReceivedPerSecond) / correctedPollRate);
 
-            widgetTextViewLineOneText += widgetUnitMeasurement + "\n";
-            if (displayTotalValue) {
+            widgetTextViewLineOneText += widgetSettings.getMeasurementUnit() + "\n";
+            if (widgetSettings.isDisplayTotalValue()) {
                 double total = (converter.convert(bytesSentPerSecond) + converter.convert(bytesReceivedPerSecond)) / correctedPollRate;
                 String totalString = String.format("%.3f", total);
-                displayValuesText = "Total: " + totalString;
                 widgetTextViewLineOneText += "Total: " + totalString + "\n";
             }
             widgetTextViewLineOneText += "Up: " + sentString + "\n";

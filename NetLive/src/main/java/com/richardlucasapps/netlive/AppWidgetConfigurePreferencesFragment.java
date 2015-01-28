@@ -110,7 +110,7 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
 		@Override
 		public boolean onPreferenceClick(Preference arg0) {
 			
-			String unitOfMeasure = sharedPref.getString("pref_key_widget_measurement_unit", "Auto (bps, Kbps, Mbps, Gbps)");
+			String unitOfMeasure = sharedPref.getString("pref_key_widget_measurement_unit", "Mbps");
 
 			boolean displayActiveApp = sharedPref.getBoolean("pref_key_widget_active_app", true);
 			String styleOfFont = sharedPref.getString("pref_key_widget_font_style", null);
@@ -120,11 +120,6 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
 			
 			
 			edit.putString("pref_key_widget_measurement_unit"+mAppWidgetId, unitOfMeasure);
-			//edit.putBoolean("pref_key_widget_display_unit_of_measure"+mAppWidgetId, displayUnitOfMeasure);
-			
-//			edit.putBoolean("pref_key_widget_displayed_values_total"+mAppWidgetId, displayTotalValue);
-//			edit.putBoolean("pref_key_widget_displayed_values_upload"+mAppWidgetId, displayUploadValue);
-//			edit.putBoolean("pref_key_widget_displayed_values_download"+mAppWidgetId, displayDownloadValue);
 
 			edit.putBoolean("pref_key_widget_active_app"+mAppWidgetId, displayActiveApp);
             edit.putBoolean("pref_key_widget_show_total"+mAppWidgetId, showTotalValue);
@@ -132,9 +127,7 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
 			edit.putString("pref_key_widget_font_style"+mAppWidgetId, styleOfFont);
 			edit.putString("pref_key_widget_font_size"+mAppWidgetId, sizeOfFont);
 			edit.putString("pref_key_widget_font_color"+mAppWidgetId, colorOfFont);
-			//edit.putString("pref_key_widget_font_color_edit_text"+mAppWidgetId, customColorOfFont);
-			
-			//TODO This is where I need to add the widget exist shit
+
             edit.putBoolean("widget_exists",true);
 			edit.commit();
 			Intent result = new Intent();
