@@ -66,8 +66,6 @@ public class MainService extends Service {
     AppWidgetManager manager;
     int N;
 
-    long correctedPollRate;
-
     boolean eitherNotificationOrWidgetRequestsActiveApp;
     boolean showTotalValueNotification;
     boolean hideNotification;
@@ -86,6 +84,9 @@ public class MainService extends Service {
     private ScheduledFuture updateHandler;
 
     private ArrayList<WidgetSettings> widgetSettingsOfAllWidgets;
+
+    private long start = 0l;
+    private long end = 0L;
 
     @Override
     public void onCreate() {
@@ -113,7 +114,7 @@ public class MainService extends Service {
 
         unitMeasurement = sharedPref.getString("pref_key_measurement_unit", "Mbps");
         showTotalValueNotification = sharedPref.getBoolean("pref_key_show_total_value", false);
-        pollRate = Long.parseLong(sharedPref.getString("pref_key_poll_rate", "1"));
+        pollRate = Long.parseLong(sharedPref.getString("pref_key_poll_rate", "5"));
         showActiveApp = sharedPref.getBoolean("pref_key_active_app", true);
         hideNotification = sharedPref.getBoolean("pref_key_hide_notification", false);
 
@@ -232,7 +233,6 @@ public class MainService extends Service {
     }
 
     private void setupWidgets() {
-        Log.d("setupWidgets", "called");
         widgetSettingsOfAllWidgets = new ArrayList<>();
 
         ComponentName name = new ComponentName(getApplicationContext(), NetworkSpeedWidget.class);
@@ -308,7 +308,7 @@ public class MainService extends Service {
         if (unitMeasurement.equals("bps")) {
             return (new UnitConverter() {
                 @Override
-                public double convert(long bytesPerSecond) {
+                public double convert(double bytesPerSecond) {
                     return (bytesPerSecond * 8.0);
                 }
             });
@@ -316,7 +316,7 @@ public class MainService extends Service {
         if (unitMeasurement.equals("Kbps")) {
             return (new UnitConverter() {
                 @Override
-                public double convert(long bytesPerSecond) {
+                public double convert(double bytesPerSecond) {
                     return (bytesPerSecond * 8.0) / 1000.0;
                 }
             });
@@ -324,7 +324,7 @@ public class MainService extends Service {
         if (unitMeasurement.equals("Mbps")) {
             return (new UnitConverter() {
                 @Override
-                public double convert(long bytesPerSecond) {
+                public double convert(double bytesPerSecond) {
                     return (bytesPerSecond * 8.0) / 1000000.0;
                 }
             });
@@ -332,7 +332,7 @@ public class MainService extends Service {
         if (unitMeasurement.equals("Gbps")) {
             return (new UnitConverter() {
                 @Override
-                public double convert(long bytesPerSecond) {
+                public double convert(double bytesPerSecond) {
                     return (bytesPerSecond * 8.0) / 1000000000.0;
                 }
             });
@@ -340,7 +340,7 @@ public class MainService extends Service {
         if (unitMeasurement.equals("Bps")) {
             return (new UnitConverter() {
                 @Override
-                public double convert(long bytesPerSecond) {
+                public double convert(double bytesPerSecond) {
                     return bytesPerSecond;
                 }
             });
@@ -348,7 +348,7 @@ public class MainService extends Service {
         if (unitMeasurement.equals("KBps")) {
             return (new UnitConverter() {
                 @Override
-                public double convert(long bytesPerSecond) {
+                public double convert(double bytesPerSecond) {
                     return bytesPerSecond / 1000.0;
                 }
             });
@@ -356,7 +356,7 @@ public class MainService extends Service {
         if (unitMeasurement.equals("MBps")) {
             return (new UnitConverter() {
                 @Override
-                public double convert(long bytesPerSecond) {
+                public double convert(double bytesPerSecond) {
                     return bytesPerSecond / 1000000.0;
                 }
             });
@@ -364,7 +364,7 @@ public class MainService extends Service {
         if (unitMeasurement.equals("GBps")) {
             return (new UnitConverter() {
                 @Override
-                public double convert(long bytesPerSecond) {
+                public double convert(double bytesPerSecond) {
                     return bytesPerSecond / 1000000000.0;
                 }
             });
@@ -372,7 +372,7 @@ public class MainService extends Service {
 
         return (new UnitConverter() {
             @Override
-            public double convert(long bytesPerSecond) {
+            public double convert(double bytesPerSecond) {
                 return (bytesPerSecond * 8.0) / 1000000.0;
             }
         });
@@ -387,10 +387,8 @@ public class MainService extends Service {
                 update();
             }
         };
-        ScheduledExecutorService scheduler =
-                Executors.newScheduledThreadPool(1);
-        updateHandler =
-                scheduler.scheduleAtFixedRate(updater, 1, pollRate, TimeUnit.SECONDS);
+        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        updateHandler = scheduler.scheduleAtFixedRate(updater, 1, pollRate, TimeUnit.SECONDS);
     }
 
 
@@ -434,22 +432,40 @@ public class MainService extends Service {
             firstUpdate = false;
         }
 
-        correctedPollRate = pollRate * updatesMissed;
-        updatesMissed = 1;
 
-
+        end = System.nanoTime(); // TODO to correct for the first update, done let elapsed time be less than 1
+        long totalElapsed = end-start;
         long bytesSentSinceBoot = TrafficStats.getTotalTxBytes();
         long bytesReceivedSinceBoot = TrafficStats.getTotalRxBytes();
+        start = System.nanoTime();
 
-        long bytesSentPerSecond = bytesSentSinceBoot - previousBytesSentSinceBoot;
-        long bytesReceivedPerSecond = bytesReceivedSinceBoot - previousBytesReceivedSinceBoot;
+        double totalElapsedInSeconds = (double)totalElapsed / 1000000000.0;
+        //long totalElapsedInSeconds = TimeUnit.SECONDS.convert(totalElapsed, TimeUnit.NANOSECONDS);
+        long bytesSentOverPollPeriod = bytesSentSinceBoot - previousBytesSentSinceBoot;
+        long bytesReceivedOverPollPeriod = bytesReceivedSinceBoot - previousBytesReceivedSinceBoot;
 
+        double bytesSentPerSecond = bytesSentOverPollPeriod / totalElapsedInSeconds;
+        double bytesReceivedPerSecond = bytesReceivedOverPollPeriod / totalElapsedInSeconds;
+
+
+        Log.d("bytesSentOverPollPeriod", String.valueOf(bytesSentOverPollPeriod));
+        Log.d("bytesReceivedSinceBoot", String.valueOf(bytesReceivedSinceBoot));
+        Log.d("totalElapsedInSeconds", String.valueOf(totalElapsedInSeconds));
+        Log.d("bytesSentPerSecond", String.valueOf(bytesSentPerSecond));
+        Log.d("bytesReceivedPerSecond", String.valueOf(bytesReceivedPerSecond));
+
+//TODO need to create Strings here so have them so can pass them to notification and widget, just pass strings directlty
+//TODO before doing string bullshit need to make sure these bytessentpersecond getting right value
+//        String sentString = String.format("%.3f",(converter.convert(bytesSentPerSecond) / correctedPollRate));
+//        String receivedString = String.format("%.3f",(converter.convert(bytesReceivedPerSecond) / correctedPollRate));
         previousBytesSentSinceBoot = bytesSentSinceBoot;
         previousBytesReceivedSinceBoot = bytesReceivedSinceBoot;
 
         String activeApp = "";
         if (eitherNotificationOrWidgetRequestsActiveApp) {
+
             activeApp = getActiveAppWithTrafficApi();
+
 
 
             appMonitorCounter += 1;  //TODO perhaps just get rid of this, or increase it by more. If a user installs another app, it updates app list
@@ -472,15 +488,15 @@ public class MainService extends Service {
     }
 
 
-    private void updateNotification(long bytesSentPerSecond, long bytesReceivedPerSecond, String activeApp) {
+    private void updateNotification(double bytesSentPerSecond, double bytesReceivedPerSecond, String activeApp) {
 
 
-        String sentString = String.format("%.3f",(converter.convert(bytesSentPerSecond) / correctedPollRate));
-        String receivedString = String.format("%.3f",(converter.convert(bytesReceivedPerSecond) / correctedPollRate));
+        String sentString = String.format("%.3f",(converter.convert(bytesSentPerSecond)));
+        String receivedString = String.format("%.3f",(converter.convert(bytesReceivedPerSecond)));
 
         String displayValuesText = "";
         if (showTotalValueNotification) {
-            double total = (converter.convert(bytesSentPerSecond) + converter.convert(bytesReceivedPerSecond)) / correctedPollRate;
+            double total = (converter.convert(bytesSentPerSecond) + converter.convert(bytesReceivedPerSecond));
             String totalString = String.format("%.3f", total);
             displayValuesText = "Total: " + totalString;
         }
@@ -507,25 +523,25 @@ public class MainService extends Service {
         int mId = 1;
         if (!hideNotification) {
 
-            if (bytesSentPerSecond / correctedPollRate < 13107 && bytesReceivedPerSecond / correctedPollRate < 13107) {
+            if (bytesSentPerSecond < 13107 && bytesReceivedPerSecond  < 13107) {
                 mBuilder.setSmallIcon(R.drawable.idle);
                 mNotifyMgr.notify(mId, mBuilder.build());
                 return;
             }
 
-            if (!(bytesSentPerSecond / correctedPollRate > 13107) && bytesReceivedPerSecond / correctedPollRate > 13107) {
+            if (!(bytesSentPerSecond > 13107) && bytesReceivedPerSecond  > 13107) {
                 mBuilder.setSmallIcon(R.drawable.download);
                 mNotifyMgr.notify(mId, mBuilder.build());
                 return;
             }
 
-            if (bytesSentPerSecond / correctedPollRate > 13107 && bytesReceivedPerSecond / correctedPollRate < 13107) {
+            if (bytesSentPerSecond  > 13107 && bytesReceivedPerSecond  < 13107) {
                 mBuilder.setSmallIcon(R.drawable.upload);
                 mNotifyMgr.notify(mId, mBuilder.build());
                 return;
             }
 
-            if (bytesSentPerSecond / correctedPollRate > 13107 && bytesReceivedPerSecond / correctedPollRate > 13107) {//1307 bytes is equal to .1Mbit
+            if (bytesSentPerSecond  > 13107 && bytesReceivedPerSecond  > 13107) {//1307 bytes is equal to .1Mbit
                 mBuilder.setSmallIcon(R.drawable.both);
                 mNotifyMgr.notify(mId, mBuilder.build());
             }
@@ -533,7 +549,7 @@ public class MainService extends Service {
         mNotifyMgr.notify(mId, mBuilder.build());
     }
 
-    private void updateWidgets(long bytesSentPerSecond, long bytesReceivedPerSecond, String activeApp) {
+    private void updateWidgets(double bytesSentPerSecond, double bytesReceivedPerSecond, String activeApp) {
 
         for (int i = 0; i < N; i++) {
             int awID = ids[i];
@@ -550,12 +566,12 @@ public class MainService extends Service {
 
             UnitConverter c = widgetUnitMeasurementConverters.get(i);
 
-            String sentString = String.format("%.3f", c.convert(bytesSentPerSecond) / correctedPollRate);
-            String receivedString = String.format("%.3f", c.convert(bytesReceivedPerSecond) / correctedPollRate);
+            String sentString = String.format("%.3f", c.convert(bytesSentPerSecond) );
+            String receivedString = String.format("%.3f", c.convert(bytesReceivedPerSecond) );
 
             widgetTextViewLineOneText += widgetSettings.getMeasurementUnit() + "\n";
             if (widgetSettings.isDisplayTotalValue()) {
-                double total = (converter.convert(bytesSentPerSecond) + converter.convert(bytesReceivedPerSecond)) / correctedPollRate;
+                double total = (converter.convert(bytesSentPerSecond) + converter.convert(bytesReceivedPerSecond));
                 String totalString = String.format("%.3f", total);
                 widgetTextViewLineOneText += "Total: " + totalString + "\n";
             }
@@ -572,7 +588,6 @@ public class MainService extends Service {
 
 
     private synchronized void loadAllAppsIntoAppDataUsageList() {
-        Log.d("loading all apps","now");
         appDataUsageList.clear(); // clear before adding all the apps so we don't add duplicates
         List<ApplicationInfo> appList = packageManager.getInstalledApplications(0);
 
