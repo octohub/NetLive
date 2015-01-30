@@ -207,10 +207,10 @@ public class MainService extends Service {
             extras = intent.getExtras();
         }
         boolean wasPackageAdded = false;
-        int newAppUid = 0;
+        //int newAppUid = 0;
         if(extras!=null){
             wasPackageAdded = extras.getBoolean("PACKAGE_ADDED");
-            newAppUid = extras.getInt("EXTRA_UID");
+            //newAppUid = extras.getInt("EXTRA_UID");
 
         }
         if(wasPackageAdded && eitherNotificationOrWidgetRequestsActiveApp){
@@ -287,9 +287,7 @@ public class MainService extends Service {
         long delta = 0L;
         String appLabel = "";
 
-        int count = 0;
         for (AppDataUsage currentApp : appDataUsageList) {
-            count++;
             delta = currentApp.getRateWithTrafficStatsAPI();
             if (delta > maxDelta) {
                 appLabel = currentApp.getAppName();
@@ -574,6 +572,7 @@ public class MainService extends Service {
 
 
     private synchronized void loadAllAppsIntoAppDataUsageList() {
+        Log.d("loading all apps","now");
         appDataUsageList.clear(); // clear before adding all the apps so we don't add duplicates
         List<ApplicationInfo> appList = packageManager.getInstalledApplications(0);
 
