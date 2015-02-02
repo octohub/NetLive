@@ -15,6 +15,13 @@ public class PackageWatcherBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        boolean notificationEnabled = !(sharedPref.getBoolean("pref_key_auto_start", false));
+        boolean widgetExist = sharedPref.getBoolean("widget_exists", false);
+        if (!notificationEnabled && !widgetExist) {
+            Log.d("both disabled", "here");
+            return;
+        }
         Log.d("PackageWatcherBroadcastReceiver","Package Added");
         Intent startServiceIntent = new Intent(context, MainService.class);
         Bundle extras = intent.getExtras();

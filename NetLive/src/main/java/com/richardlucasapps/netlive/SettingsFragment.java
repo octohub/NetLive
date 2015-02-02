@@ -144,8 +144,13 @@ public class SettingsFragment extends PreferenceFragment {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             Log.d("Settings Fragment", "disabled checkbox, in onPreferenceChange");
-            ((CheckBoxPreference) preference).setChecked((Boolean)newValue);
-            restartService();
+            boolean checked = (Boolean) newValue;
+            ((CheckBoxPreference) preference).setChecked(checked);
+            if(checked){
+                getActivity().stopService(new Intent(getActivity(), MainService.class));
+            } else {
+                getActivity().startService(new Intent(getActivity(), MainService.class));
+            }
 
             return true;
 

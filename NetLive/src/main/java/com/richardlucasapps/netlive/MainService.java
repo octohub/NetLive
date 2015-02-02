@@ -249,7 +249,7 @@ public class MainService extends Service {
             int awID = ids[i];
 
             String colorOfFont = sharedPref.getString("pref_key_widget_font_color" + awID, "Black");
-            String sizeOfFont = sharedPref.getString("pref_key_widget_font_size" + awID,"12");
+            String sizeOfFont = sharedPref.getString("pref_key_widget_font_size" + awID, "12");
             float floatSizeOfFont = Float.parseFloat(sizeOfFont);
             String measurementUnit = sharedPref.getString("pref_key_widget_measurement_unit" + awID, "Mbps");
             boolean displayActiveApp = sharedPref.getBoolean("pref_key_widget_active_app" + awID, true);
@@ -257,7 +257,7 @@ public class MainService extends Service {
 
             WidgetSettings widgetSettings = new WidgetSettings(measurementUnit,
                     displayActiveApp, displayTotalValue);
-            widgetSettingsOfAllWidgets.add(i,widgetSettings);
+            widgetSettingsOfAllWidgets.add(i, widgetSettings);
 
 
             if (displayActiveApp) {
@@ -388,7 +388,7 @@ public class MainService extends Service {
             }
         };
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        updateHandler = scheduler.scheduleAtFixedRate(updater, 1, pollRate, TimeUnit.SECONDS);
+        updateHandler = scheduler.scheduleAtFixedRate(updater, 0, pollRate, TimeUnit.SECONDS);
     }
 
 
@@ -414,10 +414,10 @@ public class MainService extends Service {
     private synchronized void initiateUpdate() {
 
 
-        if(firstUpdate){
+        if (firstUpdate) {
             previousBytesSentSinceBoot = TrafficStats.getTotalTxBytes();//i dont initialize these to 0, because if i do, when app first reports, the rate will be crazy high
             previousBytesReceivedSinceBoot = TrafficStats.getTotalRxBytes();
-            if(eitherNotificationOrWidgetRequestsActiveApp){
+            if (eitherNotificationOrWidgetRequestsActiveApp) {
                 appDataUsageList = new ArrayList<AppDataUsage>();
                 loadAllAppsIntoAppDataUsageList();
 
@@ -426,7 +426,7 @@ public class MainService extends Service {
 
         }
 
-        if(firstUpdate && eitherNotificationOrWidgetRequestsActiveApp){  //lazy initiazation, do it here so it is not done on the main thread, thus freezing the UI
+        if (firstUpdate && eitherNotificationOrWidgetRequestsActiveApp) {  //lazy initiazation, do it here so it is not done on the main thread, thus freezing the UI
             appDataUsageList = new ArrayList<AppDataUsage>();
             loadAllAppsIntoAppDataUsageList();  //
             firstUpdate = false;
@@ -434,12 +434,12 @@ public class MainService extends Service {
 
 
         end = System.nanoTime(); // TODO to correct for the first update, done let elapsed time be less than 1
-        long totalElapsed = end-start;
+        long totalElapsed = end - start;
         long bytesSentSinceBoot = TrafficStats.getTotalTxBytes();
         long bytesReceivedSinceBoot = TrafficStats.getTotalRxBytes();
         start = System.nanoTime();
 
-        double totalElapsedInSeconds = (double)totalElapsed / 1000000000.0;
+        double totalElapsedInSeconds = (double) totalElapsed / 1000000000.0;
         //long totalElapsedInSeconds = TimeUnit.SECONDS.convert(totalElapsed, TimeUnit.NANOSECONDS);
         long bytesSentOverPollPeriod = bytesSentSinceBoot - previousBytesSentSinceBoot;
         long bytesReceivedOverPollPeriod = bytesReceivedSinceBoot - previousBytesReceivedSinceBoot;
@@ -447,12 +447,6 @@ public class MainService extends Service {
         double bytesSentPerSecond = bytesSentOverPollPeriod / totalElapsedInSeconds;
         double bytesReceivedPerSecond = bytesReceivedOverPollPeriod / totalElapsedInSeconds;
 
-
-        Log.d("bytesSentOverPollPeriod", String.valueOf(bytesSentOverPollPeriod));
-        Log.d("bytesReceivedSinceBoot", String.valueOf(bytesReceivedSinceBoot));
-        Log.d("totalElapsedInSeconds", String.valueOf(totalElapsedInSeconds));
-        Log.d("bytesSentPerSecond", String.valueOf(bytesSentPerSecond));
-        Log.d("bytesReceivedPerSecond", String.valueOf(bytesReceivedPerSecond));
 
 //TODO need to create Strings here so have them so can pass them to notification and widget, just pass strings directlty
 //TODO before doing string bullshit need to make sure these bytessentpersecond getting right value
@@ -467,7 +461,6 @@ public class MainService extends Service {
             activeApp = getActiveAppWithTrafficApi();
 
 
-
             appMonitorCounter += 1;  //TODO perhaps just get rid of this, or increase it by more. If a user installs another app, it updates app list
             if (appMonitorCounter >= (10800 / pollRate)) {//divide by pollRate so that if you have a pollRate of 10, that will end up being 500 seconds, not 5000
 
@@ -477,11 +470,11 @@ public class MainService extends Service {
         }
 
         if (notificationEnabled) {
-            updateNotification(bytesSentPerSecond,bytesReceivedPerSecond,activeApp);
+            updateNotification(bytesSentPerSecond, bytesReceivedPerSecond, activeApp);
 
         }
         if (widgetExist) {
-            updateWidgets(bytesSentPerSecond,bytesReceivedPerSecond,activeApp);
+            updateWidgets(bytesSentPerSecond, bytesReceivedPerSecond, activeApp);
 
         }
 
@@ -491,8 +484,8 @@ public class MainService extends Service {
     private void updateNotification(double bytesSentPerSecond, double bytesReceivedPerSecond, String activeApp) {
 
 
-        String sentString = String.format("%.3f",(converter.convert(bytesSentPerSecond)));
-        String receivedString = String.format("%.3f",(converter.convert(bytesReceivedPerSecond)));
+        String sentString = String.format("%.3f", (converter.convert(bytesSentPerSecond)));
+        String receivedString = String.format("%.3f", (converter.convert(bytesReceivedPerSecond)));
 
         String displayValuesText = "";
         if (showTotalValueNotification) {
@@ -523,25 +516,25 @@ public class MainService extends Service {
         int mId = 1;
         if (!hideNotification) {
 
-            if (bytesSentPerSecond < 13107 && bytesReceivedPerSecond  < 13107) {
+            if (bytesSentPerSecond < 13107 && bytesReceivedPerSecond < 13107) {
                 mBuilder.setSmallIcon(R.drawable.idle);
                 mNotifyMgr.notify(mId, mBuilder.build());
                 return;
             }
 
-            if (!(bytesSentPerSecond > 13107) && bytesReceivedPerSecond  > 13107) {
+            if (!(bytesSentPerSecond > 13107) && bytesReceivedPerSecond > 13107) {
                 mBuilder.setSmallIcon(R.drawable.download);
                 mNotifyMgr.notify(mId, mBuilder.build());
                 return;
             }
 
-            if (bytesSentPerSecond  > 13107 && bytesReceivedPerSecond  < 13107) {
+            if (bytesSentPerSecond > 13107 && bytesReceivedPerSecond < 13107) {
                 mBuilder.setSmallIcon(R.drawable.upload);
                 mNotifyMgr.notify(mId, mBuilder.build());
                 return;
             }
 
-            if (bytesSentPerSecond  > 13107 && bytesReceivedPerSecond  > 13107) {//1307 bytes is equal to .1Mbit
+            if (bytesSentPerSecond > 13107 && bytesReceivedPerSecond > 13107) {//1307 bytes is equal to .1Mbit
                 mBuilder.setSmallIcon(R.drawable.both);
                 mNotifyMgr.notify(mId, mBuilder.build());
             }
@@ -557,7 +550,6 @@ public class MainService extends Service {
             WidgetSettings widgetSettings = widgetSettingsOfAllWidgets.get(i);
 
 
-
             String widgetTextViewLineOneText = "";
 
             if (widgetSettings.isDisplayActiveApp()) {
@@ -566,8 +558,8 @@ public class MainService extends Service {
 
             UnitConverter c = widgetUnitMeasurementConverters.get(i);
 
-            String sentString = String.format("%.3f", c.convert(bytesSentPerSecond) );
-            String receivedString = String.format("%.3f", c.convert(bytesReceivedPerSecond) );
+            String sentString = String.format("%.3f", c.convert(bytesSentPerSecond));
+            String receivedString = String.format("%.3f", c.convert(bytesReceivedPerSecond));
 
             widgetTextViewLineOneText += widgetSettings.getMeasurementUnit() + "\n";
             if (widgetSettings.isDisplayTotalValue()) {
@@ -598,7 +590,7 @@ public class MainService extends Service {
 
     }
 
-    private void addSpecificPackageWithUID(int uid){
+    private void addSpecificPackageWithUID(int uid) {
         String[] packagesForUid;
         //TODO don't reinstantiate every time
 
@@ -617,15 +609,13 @@ public class MainService extends Service {
 
     }
 
-    private synchronized void addAppToAppDataUsageList(ApplicationInfo appInfo){  //synchronized because both addSpecificPackageUID and loadAllAppsIntoAppDataUsageList may be changing the app list at the same time.
+    private synchronized void addAppToAppDataUsageList(ApplicationInfo appInfo) {  //synchronized because both addSpecificPackageUID and loadAllAppsIntoAppDataUsageList may be changing the app list at the same time.
         String appLabel = (String) packageManager.getApplicationLabel(appInfo);
         int uid = appInfo.uid;
         AppDataUsage app = new AppDataUsage(appLabel, uid);
         appDataUsageList.add(app);
 
     }
-
-
 
 
 }
