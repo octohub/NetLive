@@ -2,47 +2,52 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
 
-        <ListPreference
-            android:key="pref_key_measurement_unit"
-            android:title="@string/pref_title_measurement_unit"
-            android:summary="@string/pref_measurement_unit_summary"
-            android:dialogTitle="@string/pref_dialog_title_choose_measurement_unit"
-            android:entries="@array/pref_measurement_unit_entries"
-            android:entryValues="@array/pref_measurement_unit_values"
-            android:defaultValue="Mbps" />
+    <ListPreference
+        android:defaultValue="Mbps"
+        android:dialogTitle="@string/pref_dialog_title_choose_measurement_unit"
+        android:entries="@array/pref_measurement_unit_entries"
+        android:entryValues="@array/pref_measurement_unit_values"
+        android:key="pref_key_measurement_unit"
+        android:summary="@string/pref_measurement_unit_summary"
+        android:title="@string/pref_title_measurement_unit" />
 
-        <CheckBoxPreference
-            android:key="pref_key_show_total_value"
-            android:summary="@string/pref_summary_show_total_value"
-            android:title="@string/pref_title_show_total_value"
-            android:defaultValue="false" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="pref_key_show_total_value"
+        android:summary="@string/pref_summary_show_total_value"
+        android:title="@string/pref_title_show_total_value" />
 
-        <ListPreference
-            android:key="pref_key_poll_rate"
-            android:title="@string/pref_title_poll_rate"
-            android:summary="@string/pref_summary_poll_rate"
-            android:dialogTitle="@string/pref_dialog_title_poll_rate"
-            android:entries="@array/pref_poll_rate_entries"
-            android:entryValues="@array/pref_poll_rate_values"
-            android:defaultValue="@string/pref_key_poll_rate_default_value"/>
+    <ListPreference
+        android:defaultValue="@string/pref_key_poll_rate_default_value"
+        android:dialogTitle="@string/pref_dialog_title_poll_rate"
+        android:entries="@array/pref_poll_rate_entries"
+        android:entryValues="@array/pref_poll_rate_values"
+        android:key="pref_key_poll_rate"
+        android:summary="@string/pref_summary_poll_rate"
+        android:title="@string/pref_title_poll_rate" />
 
-        <CheckBoxPreference
-            android:key="pref_key_active_app"
-            android:summary="@string/pref_summary_active_app"
-            android:title="@string/pref_title_active_app"
-            android:defaultValue="true" />
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="pref_key_active_app"
+        android:summary="@string/pref_summary_active_app"
+        android:title="@string/pref_title_active_app" />
 
-        <CheckBoxPreference
-            android:key="pref_key_hide_notification"
-            android:summary="@string/pref_summary_hide_notification"
-            android:title="@string/pref_title_hide_notification"
-            android:defaultValue="true" />
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="pref_key_hide_notification"
+        android:summary="@string/pref_summary_hide_notification"
+        android:title="@string/pref_title_hide_notification" />
 
 
-        <CheckBoxPreference
-            android:key="pref_key_auto_start"
-            android:summary="@string/pref_summary_auto_start"
-            android:title="@string/pref_title_auto_start"
-            android:defaultValue="false" />
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="pref_key_auto_start"
+        android:summary="@string/pref_summary_auto_start"
+        android:title="@string/pref_title_auto_start" />
+
+    <PreferenceScreen
+        android:key="pref_key_support_developer"
+        android:title="Support the developer"
+        android:summary="@string/pref_summary_support_developer"/>
 
 </PreferenceScreen>
