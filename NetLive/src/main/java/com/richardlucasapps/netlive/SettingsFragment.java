@@ -1,6 +1,8 @@
 package com.richardlucasapps.netlive;
 
+import android.app.Activity;
 import android.app.ActivityManager;
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +11,7 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceScreen;
 import android.util.Log;
 
 
@@ -20,6 +23,7 @@ public class SettingsFragment extends PreferenceFragment {
     CheckBoxPreference activeAppPreference;
     CheckBoxPreference showTotalValuePreference;
     CheckBoxPreference hideNotificationIconPreference;
+    PreferenceScreen supportDeveloper;
 
 
     @Override
@@ -46,6 +50,9 @@ public class SettingsFragment extends PreferenceFragment {
 
         disableCheckBoxPreference = (CheckBoxPreference) findPreference("pref_key_auto_start");
         disableCheckBoxPreference.setOnPreferenceChangeListener(disableCheckBoxPreferenceListener);
+
+        supportDeveloper = (PreferenceScreen) findPreference("pref_key_support_developer");
+        supportDeveloper.setOnPreferenceClickListener(supportDeveloperPreferenceListener);
 
 	}
 
@@ -155,6 +162,19 @@ public class SettingsFragment extends PreferenceFragment {
             return true;
 
         }
+    };
+
+    private Preference.OnPreferenceClickListener supportDeveloperPreferenceListener = new Preference.OnPreferenceClickListener(){
+
+        @Override
+        public boolean onPreferenceClick(Preference arg0) {
+            ((MainActivity)getActivity()).showDonateDialogFragment();
+
+            return true;
+        }
+
+
+
     };
 
     private void restartService(){

@@ -1,88 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    
- <string-array name="pref_measurement_unit_entries">
- <item>bps</item>
- <item>Kbps</item>
- <item>Mbps</item>
- <item>Gbps</item>
- <item>Bps</item>
- <item>KBps</item>
- <item>MBps</item>
- <item>GBps</item>
- <!--<item>Auto (bps, Kbps, Mbps, Gbps)</item>-->
- <!--<item>Auto (Bps, KBps, MBps, GBps)</item>-->
- </string-array>
 
-<string-array name="pref_measurement_unit_values">
- <item>bps</item>
- <item>Kbps</item>
- <item>Mbps</item>
- <item>Gbps</item>
- <item>Bps</item>
- <item>KBps</item>
- <item>MBps</item>
- <item>GBps</item>
- <!--<item>Auto (bps, Kbps, Mbps, Gbps)</item>-->
- <!--<item>Auto (Bps, KBps, MBps, GBps)</item>-->
-</string-array>   
-    
- <!--<string-array name="pref_measurement_unit_entries_notification_area">-->
- <!--<item>Auto (bps, kbps, Mbps, Gbps)</item>-->
- <!--<item>Auto (Bps, kBps, MBps, GBps)</item>-->
- <!--</string-array>-->
+    <string-array name="pref_measurement_unit_entries">
+        <item>bps</item>
+        <item>Kbps</item>
+        <item>Mbps</item>
+        <item>Gbps</item>
+        <item>Bps</item>
+        <item>KBps</item>
+        <item>MBps</item>
+        <item>GBps</item>
+        <!--<item>Auto (bps, Kbps, Mbps, Gbps)</item>-->
+        <!--<item>Auto (Bps, KBps, MBps, GBps)</item>-->
+    </string-array>
 
-<!--<string-array name="pref_measurement_unit_values_notification_area">-->
- <!--<item>Auto (bps, Kbps, Mbps, Gbps)</item>-->
- <!--<item>Auto (Bps, KBps, MBps, GBps)</item>-->
-<!--</string-array>-->
- 
-  <string-array name="pref_widget_font_size_entries">
- <item>Micro</item>
- <item>Small</item>
- <item>Medium</item>
- <item>Large</item>
- </string-array>
- 
-   <string-array name="pref_widget_font_color_entries">
- <item>Black</item>
- <item>Blue</item>
- <item>Dark Blue</item>
- <item>Green</item>
- <item>Dark Green</item>
- <item>Gray</item>
- <item>Orange</item>
- <item>Dark Orange</item>
- <item>Purple</item>
- <item>Dark Purple</item>
- <item>Red</item>
- <item>Dark Red</item>
- <item>White</item>
- </string-array>
- 
- 
-  <string-array name="pref_widget_font_size_values">
- <item>12</item>
- <item>14</item>
- <item>18</item>
- <item>22</item>
- </string-array>
- 
-   <string-array name="pref_widget_font_color_values">
- <item>black</item>
- <item>#33B5E5</item>
- <item>#0099CC</item>
- <item>#99CC00</item>
- <item>#669900</item>
- <item>gray</item>
- <item>#FFBB33</item>
- <item>#FF8800</item>
- <item>#AA66CC</item>
- <item>#9933CC</item>
- <item>#FF4444</item>
- <item>#CC0000</item>
- <item>white</item>
- </string-array>
+    <string-array name="pref_measurement_unit_values">
+        <item>bps</item>
+        <item>Kbps</item>
+        <item>Mbps</item>
+        <item>Gbps</item>
+        <item>Bps</item>
+        <item>KBps</item>
+        <item>MBps</item>
+        <item>GBps</item>
+        <!--<item>Auto (bps, Kbps, Mbps, Gbps)</item>-->
+        <!--<item>Auto (Bps, KBps, MBps, GBps)</item>-->
+    </string-array>
+
+    <!--<string-array name="pref_measurement_unit_entries_notification_area">-->
+    <!--<item>Auto (bps, kbps, Mbps, Gbps)</item>-->
+    <!--<item>Auto (Bps, kBps, MBps, GBps)</item>-->
+    <!--</string-array>-->
+
+    <!--<string-array name="pref_measurement_unit_values_notification_area">-->
+    <!--<item>Auto (bps, Kbps, Mbps, Gbps)</item>-->
+    <!--<item>Auto (Bps, KBps, MBps, GBps)</item>-->
+    <!--</string-array>-->
+
+    <string-array name="pref_widget_font_size_entries">
+        <item>Micro</item>
+        <item>Small</item>
+        <item>Medium</item>
+        <item>Large</item>
+    </string-array>
+
+    <string-array name="pref_widget_font_color_entries">
+        <item>Black</item>
+        <item>Blue</item>
+        <item>Dark Blue</item>
+        <item>Green</item>
+        <item>Dark Green</item>
+        <item>Gray</item>
+        <item>Orange</item>
+        <item>Dark Orange</item>
+        <item>Purple</item>
+        <item>Dark Purple</item>
+        <item>Red</item>
+        <item>Dark Red</item>
+        <item>White</item>
+    </string-array>
+
+
+    <string-array name="pref_widget_font_size_values">
+        <item>12</item>
+        <item>14</item>
+        <item>18</item>
+        <item>22</item>
+    </string-array>
+
+    <string-array name="pref_widget_font_color_values">
+        <item>black</item>
+        <item>#33B5E5</item>
+        <item>#0099CC</item>
+        <item>#99CC00</item>
+        <item>#669900</item>
+        <item>gray</item>
+        <item>#FFBB33</item>
+        <item>#FF8800</item>
+        <item>#AA66CC</item>
+        <item>#9933CC</item>
+        <item>#FF4444</item>
+        <item>#CC0000</item>
+        <item>white</item>
+    </string-array>
 
     <string-array name="pref_poll_rate_entries">
         <item>1</item>
@@ -110,7 +110,19 @@
         <item>9</item>
         <item>10</item>
     </string-array>
-        	
-        	
+
+    <string-array name="donate_amounts">
+        <item>$.99</item>
+        <item>$1.99</item>
+        <item>$2.99</item>
+        <item>$3.99</item>
+        <item>$4.99</item>
+        <item>$5.99</item>
+        <item>$6.99</item>
+        <item>$7.99</item>
+        <item>$8.99</item>
+        <item>$9.99</item>
+    </string-array>
+
 
 </resources>

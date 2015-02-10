@@ -71,7 +71,7 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
 			((ListPreference) preference).setValue(newValue.toString());
 			String fontSizeEntry = (String) ((ListPreference) preference).getEntry();
 			preference.setSummary(fontSizeEntry);
-			return false;
+			return true;
 		}
 		
 		
@@ -83,7 +83,7 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
 		public boolean onPreferenceChange(Preference preference, Object newValue) {
 			((ListPreference) preference).setValue(newValue.toString());
 			preference.setSummary(newValue.toString());
-			return false;
+			return true;
 		}
 		
 		
@@ -98,7 +98,7 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
 			((ListPreference) preference).setValue(newValue.toString());
 			String fontColorEntry = (String) ((ListPreference) preference).getEntry();
 			preference.setSummary(fontColorEntry);
-			return false;
+			return true;
 		}
 		
 		
@@ -137,7 +137,7 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
             MyApplication.getInstance().stopService(new Intent(MyApplication.getInstance(),MainService.class));
             MyApplication.getInstance().startService(new Intent(MyApplication.getInstance(), MainService.class));
 
-			return false;
+			return true;
 		}
 
 		

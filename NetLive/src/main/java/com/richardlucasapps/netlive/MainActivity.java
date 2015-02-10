@@ -14,6 +14,7 @@ import android.text.Html;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -259,6 +260,20 @@ public class MainActivity extends Activity {
 
         AlertDialog newFragment = dialog;
         newFragment.show();
+
+
+    }
+
+    public void showDonateDialogFragment(){
+        DonateDialogFragment frag = new DonateDialogFragment();
+        frag.show(getFragmentManager(),"Donate");
+        return;
+    }
+
+    public void donateAmountClicked(int which){
+        Log.d("Donate Amount clicked", String.valueOf(which));
+        String[] donate_amounts = getResources().getStringArray(R.array.donate_amounts);
+        String donateAmount = donate_amounts[which];
 
 
     }
