@@ -580,7 +580,9 @@ public class MainService extends Service {
 
 
     private synchronized void loadAllAppsIntoAppDataUsageList() {
-        appDataUsageList.clear(); // clear before adding all the apps so we don't add duplicates
+        if(appDataUsageList!=null){
+            appDataUsageList.clear(); // clear before adding all the apps so we don't add duplicates
+        }
         List<ApplicationInfo> appList = packageManager.getInstalledApplications(0);
 
         for (ApplicationInfo appInfo : appList) {

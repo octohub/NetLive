@@ -23,15 +23,40 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.richardlucasapps.netlive.util.IabHelper;
+import com.richardlucasapps.netlive.util.IabResult;
+import com.richardlucasapps.netlive.util.Purchase;
+
 import java.util.concurrent.TimeUnit;
 
-public class MainActivity extends Activity {
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+
+public class MainActivity extends Activity implements AdFragment.OnFragmentInteractionListener{
 
     //TODO fix http://stackoverflow.com/questions/16777829/java-lang-runtimeexception-unable-to-start-activity-componentinfo-java-lang-nu
 
 
+    IabHelper mHelper;
 
     SharedPreferences sharedPref;
+    // SKUs for our products: the premium upgrade (non-consumable) and gas (consumable)
+    String[] skuArray = {"0dollar99cents","1dollar99cents","2dollar99cents","3dollar99cents",
+            "0dollar99cents","0dollar99cents","0dollar99cents","0dollar99cents","0dollar99cents",
+            "0dollar99cents"};
+    static final String SKU_0_99 = "0dollar99cents";  //TODO gotta get rid of decimal and money sign
+    static final String SKU_1_99 = "1dollar99cents";
+    static final String SKU_2_99 = "2dollar99cents";
+    static final String SKU_3_99 = "3dollar99cents";
+    static final String SKU_4_99 = "4dollar99cents";
+    static final String SKU_5_99 = "5dollar99cents";
+    static final String SKU_6_99 = "6dollar99cents";
+    static final String SKU_7_99 = "7dollar99cents";
+    static final String SKU_8_99 = "8dollar99cents";
+    static final String SKU_9_99 = "9dollar99cents";
+
+    // (arbitrary) request code for the purchase flow
+    static final int RC_REQUEST = 10001;
 
     //TODO externalize the strings in this activity, show some class*
     //*denotes pun
@@ -39,9 +64,17 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new SettingsFragment())
-                .commit();
+//        getFragmentManager().beginTransaction()
+//                .replace(android.R.id.content, new SettingsFragment())
+//                .add(new AdFragment(), "AdFragment")
+//                .commit();
+        boolean showAds = true;
+        if(showAds){
+            setContentView(R.layout.activity_main);
+
+        } else {
+            setContentView(R.layout.activity_main_no_ads);
+        }
 
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
@@ -122,6 +155,26 @@ public class MainActivity extends Activity {
 
 
 
+        String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvgiGgngCKPB1oRP7KojA9Ler9vDPnIVaRKZXq5/dn+4tRZSV4imuNyL8oMsWIMUFdkP3KMjJYAwRVMCqF5Jxg4XPiYvD4/FAb3ZqXDtcW9k/d7AgqcTEvqi3B4nnrGGgKvkE3ExWrD+vsFDBsMUT1zLRzXmel2KMitOTgN9UergWez/eRjJaCSYEidmMiR/XR+4L+dTjcyT4K28zgBt15OsgiP+C9cfmKswCJ9vZODqc4iLQYS7dzmns/s15X8w5UlyqHCvBp5mi8dohopSZIIX/Olc30xa8maJemkfY8vAtnnnCdvQ5ANejZstB/dINUWXOS/FvqPf7SyFQga+HRQIDAQAB";
+        mHelper = new IabHelper(this, base64EncodedPublicKey);
+        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+            public void onIabSetupFinished(IabResult result) {
+                Log.d("TAG", "Setup finished.");
+
+                if (!result.isSuccess()) {
+                    // Oh noes, there was a problem.
+                    //complain("Problem setting up in-app billing: " + result);
+                    return;
+                }
+
+                // Have we been disposed of in the meantime? If so, quit.
+                if (mHelper == null) return;
+
+                // IAB is fully set up. Now, let's get an inventory of stuff we own.
+                //Log.d(TAG, "Setup successful. Querying inventory.");
+                //mHelper.queryInventoryAsync(mGotInventoryListener);
+            }
+        });
 
     }
 
@@ -271,10 +324,112 @@ public class MainActivity extends Activity {
     }
 
     public void donateAmountClicked(int which){
+        // The helper object
+
         Log.d("Donate Amount clicked", String.valueOf(which));
         String[] donate_amounts = getResources().getStringArray(R.array.donate_amounts);
         String donateAmount = donate_amounts[which];
 
+        //setWaitScreen(true);
 
+        /* TODO: for security, generate your payload here for verification. See the comments on
+         *        verifyDeveloperPayload() for more info. Since this is a SAMPLE, we just use
+         *        an empty string, but on a production app you should carefully generate this. */
+        String payload = "";
+
+        mHelper.launchPurchaseFlow(this, donateAmount, RC_REQUEST,
+                mPurchaseFinishedListener, payload);
+
+
+    }
+
+    // Callback for when a purchase is finished
+    IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
+        public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
+            Log.d("TAG", "Purchase finished: " + result + ", purchase: " + purchase);
+
+            // if we were disposed of in the meantime, quit.
+            if (mHelper == null) return;
+
+            if (result.isFailure()) {
+                //complain("Error purchasing: " + result);
+                //setWaitScreen(false);
+                Log.d("Result", "isFailure");
+                return;
+            }
+            if (!verifyDeveloperPayload(purchase)) {
+                Log.d("Did not verify", "Developer Payload");
+                //complain("Error purchasing. Authenticity verification failed.");
+                //setWaitScreen(false);
+                return;
+            }
+
+            Log.d("TAG", "Purchase successful.");
+            //purchase.getSku().equals(SKU_0_99);
+            String purchaseSKU = purchase.getSku();
+            switch(purchaseSKU){
+                case SKU_0_99: Log.d("Purchase successful.", SKU_0_99);
+                                break;
+                case SKU_1_99: Log.d("Purchase successful.", SKU_1_99);
+                    break;
+                case SKU_2_99: Log.d("Purchase successful.", SKU_2_99);
+                    break;
+                case SKU_3_99: Log.d("Purchase successful.", SKU_3_99);
+                    break;
+                case SKU_4_99: Log.d("Purchase successful.", SKU_4_99);
+                    break;
+                case SKU_5_99: Log.d("Purchase successful.", SKU_5_99);
+                    break;
+                case SKU_6_99: Log.d("Purchase successful.", SKU_6_99);
+                    break;
+                case SKU_7_99: Log.d("Purchase successful.", SKU_7_99);
+                    break;
+                case SKU_8_99: Log.d("Purchase successful.", SKU_8_99);
+                    break;
+                case SKU_9_99: Log.d("Purchase successful.", SKU_9_99);
+                    break;
+                default: Log.d("Default", "No Match");
+                    break;
+
+            }
+
+
+
+        }
+    };
+
+    /** Verifies the developer payload of a purchase. */
+    boolean verifyDeveloperPayload(Purchase p) {
+        String payload = p.getDeveloperPayload();
+
+        /*
+         * TODO: verify that the developer payload of the purchase is correct. It will be
+         * the same one that you sent when initiating the purchase.
+         *
+         * WARNING: Locally generating a random string when starting a purchase and
+         * verifying it here might seem like a good approach, but this will fail in the
+         * case where the user purchases an item on one device and then uses your app on
+         * a different device, because on the other device you will not have access to the
+         * random string you originally generated.
+         *
+         * So a good developer payload has these characteristics:
+         *
+         * 1. If two different users purchase an item, the payload is different between them,
+         *    so that one user's purchase can't be replayed to another user.
+         *
+         * 2. The payload must be such that you can verify it even when the app wasn't the
+         *    one who initiated the purchase flow (so that items purchased by the user on
+         *    one device work on other devices owned by the user).
+         *
+         * Using your own server to store and verify developer payloads across app
+         * installations is recommended.
+         */
+
+        return true;
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        return;
     }
 }

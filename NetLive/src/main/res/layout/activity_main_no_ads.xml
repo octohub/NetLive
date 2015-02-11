@@ -7,17 +7,11 @@
     tools:context=".MainActivity">
 
     <fragment
-    android:id="@+id/list"
-    android:name="com.richardlucasapps.netlive.SettingsFragment"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1" />
-
-    <fragment android:name="com.richardlucasapps.netlive.AdFragment"
-        android:id="@+id/viewer"
-        android:layout_weight="0"
+        android:id="@+id/list"
+        android:name="com.richardlucasapps.netlive.SettingsFragment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="0dp"
+        android:layout_weight="1" />
 
 
 </LinearLayout>
