@@ -34,10 +34,8 @@ import com.richardlucasapps.netlive.util.Purchase;
 
 import java.util.concurrent.TimeUnit;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 
-public class MainActivity extends Activity implements AdFragment.OnFragmentInteractionListener{
+public class MainActivity extends Activity implements AdFragment.OnFragmentInteractionListener {
 
     //TODO fix http://stackoverflow.com/questions/16777829/java-lang-runtimeexception-unable-to-start-activity-componentinfo-java-lang-nu
 
@@ -46,19 +44,13 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
 
     SharedPreferences sharedPref;
     // SKUs for our products: the premium upgrade (non-consumable) and gas (consumable)
-    static final String[] skuArray = {"1dollar99cents","3dollar99cents","5dollar99cents","7dollar99cents",
-            "9dollar99cents","99centsperyear","2dollar99centsperyear","4dollar99centsperyear",
+    static final String[] skuArray = {"1dollar99cents", "3dollar99cents", "5dollar99cents",
+            "7dollar99cents",
+            "9dollar99cents", "99centsperyear", "2dollar99centsperyear", "4dollar99centsperyear",
             "6dollar99centsperyear", "8dollar99centsperyear"};
-    static final String SKU_0_99 = "0dollar99cents";  //TODO gotta get rid of decimal and money sign
-    static final String SKU_1_99 = "1dollar99cents";
-    static final String SKU_2_99 = "2dollar99cents";
-    static final String SKU_3_99 = "3dollar99cents";
-    static final String SKU_4_99 = "4dollar99cents";
-    static final String SKU_5_99 = "5dollar99cents";
-    static final String SKU_6_99 = "6dollar99cents";
-    static final String SKU_7_99 = "7dollar99cents";
-    static final String SKU_8_99 = "8dollar99cents";
-    static final String SKU_9_99 = "9dollar99cents";
+
+    static boolean[] skuPurchases = {false, false, false, false, false, false, false, false, false,
+            false};
 
     // (arbitrary) request code for the purchase flow
     static final int RC_REQUEST = 10001;
@@ -78,9 +70,6 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
         //boolean showAds = sharedPref.getBoolean("SHOW_ADS", false);
 
 
-
-
-
         // Create new fragment and transaction
 //        Fragment frag = new AdFragment();
 //        FragmentTransaction transaction = getFragmentManager().beginTransaction();
@@ -91,7 +80,6 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
 //
 //// Commit the transaction
 //        transaction.commit();
-
 
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
@@ -150,7 +138,7 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
                 }
             });
             builder.setMessage(getString(R.string.welcome))
-                    .setTitle(getString(R.string.welcome_message_message)+" "+getString(R.string.app_name_with_version_number));
+                    .setTitle(getString(R.string.welcome_message_message) + " " + getString(R.string.app_name_with_version_number));
             AlertDialog dialog = builder.create();
 
             AlertDialog newFragment = dialog;
@@ -164,11 +152,8 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
         }
 
 
-                Intent intent = new Intent(getApplicationContext(), MainService.class); //getApp
-                startService(intent);
-
-
-
+        Intent intent = new Intent(getApplicationContext(), MainService.class); //getApp
+        startService(intent);
 
         String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvgiGgngCKPB1oRP7KojA9Ler9vDPnIVaRKZXq5/dn+4tRZSV4imuNyL8oMsWIMUFdkP3KMjJYAwRVMCqF5Jxg4XPiYvD4/FAb3ZqXDtcW9k/d7AgqcTEvqi3B4nnrGGgKvkE3ExWrD+vsFDBsMUT1zLRzXmel2KMitOTgN9UergWez/eRjJaCSYEidmMiR/XR+4L+dTjcyT4K28zgBt15OsgiP+C9cfmKswCJ9vZODqc4iLQYS7dzmns/s15X8w5UlyqHCvBp5mi8dohopSZIIX/Olc30xa8maJemkfY8vAtnnnCdvQ5ANejZstB/dINUWXOS/FvqPf7SyFQga+HRQIDAQAB";
         mHelper = new IabHelper(this, base64EncodedPublicKey);
@@ -188,7 +173,7 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
 
                 // IAB is fully set up. Now, let's get an inventory of stuff we own.
                 Log.d("NetLive", "Setup successful. Querying inventory.");
-                if(savedInstanceState == null){  //this means we are first starting the Activity
+                if (savedInstanceState == null) {  //this means we are first starting the Activity
                     mHelper.queryInventoryAsync(mGotInventoryListener);
 
                 }
@@ -199,14 +184,26 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
     }
 
 
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mHelper != null) {
+            mHelper.dispose();
+            mHelper = null;
+        }
+
     }
 
     @Override
@@ -250,7 +247,7 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
 
     }
 
-    private void openNetLiveInGooglePlay(){
+    private void openNetLiveInGooglePlay() {
 
         Intent intent = new Intent(Intent.ACTION_VIEW);
         //Try Google play
@@ -287,7 +284,7 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
         }
         int version = pInfo.versionCode;
         SpannableString s = new SpannableString(getString(R.string.app_name_with_version_number) +
-                "\n\n Version Code: " + version  +"\n\nrichardlucasapps.com");
+                "\n\n Version Code: " + version + "\n\nrichardlucasapps.com");
         Linkify.addLinks(s, Linkify.WEB_URLS);
         myMsg.setText(s);
         myMsg.setTextSize(15);
@@ -336,7 +333,7 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
             }
         });
         builder.setView(view)
-                .setTitle(getString(R.string.welcome_message_message)+" "+getString(R.string.app_name_with_version_number));
+                .setTitle(getString(R.string.welcome_message_message) + " " + getString(R.string.app_name_with_version_number));
         AlertDialog dialog = builder.create();
 
         AlertDialog newFragment = dialog;
@@ -345,13 +342,42 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
 
     }
 
-    public void showDonateDialogFragment(){
+    public void showDonateDialogFragment() {
+        if(mHelper == null){
+            String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvgiGgngCKPB1oRP7KojA9Ler9vDPnIVaRKZXq5/dn+4tRZSV4imuNyL8oMsWIMUFdkP3KMjJYAwRVMCqF5Jxg4XPiYvD4/FAb3ZqXDtcW9k/d7AgqcTEvqi3B4nnrGGgKvkE3ExWrD+vsFDBsMUT1zLRzXmel2KMitOTgN9UergWez/eRjJaCSYEidmMiR/XR+4L+dTjcyT4K28zgBt15OsgiP+C9cfmKswCJ9vZODqc4iLQYS7dzmns/s15X8w5UlyqHCvBp5mi8dohopSZIIX/Olc30xa8maJemkfY8vAtnnnCdvQ5ANejZstB/dINUWXOS/FvqPf7SyFQga+HRQIDAQAB";
+            mHelper = new IabHelper(this, base64EncodedPublicKey);
+            mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+                public void onIabSetupFinished(IabResult result) {
+                    Log.d("TAG", "Setup finished.");
+
+                    if (!result.isSuccess()) {
+                        // Oh noes, there was a problem.
+                        //complain("Problem setting up in-app billing: " + result);
+                        Log.d("Problem setting up in-app billing:", "FAILED");
+                        return;
+                    }
+
+                    // Have we been disposed of in the meantime? If so, quit.
+                    if (mHelper == null) return;
+
+
+
+
+                }
+            });
+
+        }
+
+        if (hasDonated()) {
+            Toast.makeText(getBaseContext(), "You have already donated, thank you!", Toast.LENGTH_SHORT).show();
+        }
+
         DonateDialogFragment frag = new DonateDialogFragment();
-        frag.show(getFragmentManager(),"Donate");
+        frag.show(getFragmentManager(), "Support NetLive");
         return;
     }
 
-    public void donateAmountClicked(int which){
+    public void donateAmountClicked(int which) {
         // The helper object
 
         Log.d("Donate Amount clicked", String.valueOf(which));
@@ -365,8 +391,12 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
 
         Log.d("Item in SKUarray", skuArray[which]);
 
-        mHelper.launchPurchaseFlow(this, skuArray[which], RC_REQUEST,
-                mPurchaseFinishedListener, payload);
+        if(mHelper!=null){
+            mHelper.launchPurchaseFlow(this, skuArray[which], RC_REQUEST,
+                    mPurchaseFinishedListener, payload);
+
+        }
+
 
 
     }
@@ -375,6 +405,18 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
     IabHelper.OnIabPurchaseFinishedListener mPurchaseFinishedListener = new IabHelper.OnIabPurchaseFinishedListener() {
         public void onIabPurchaseFinished(IabResult result, Purchase purchase) {
             Log.d("TAG", "Purchase finished: " + result + ", purchase: " + purchase);
+
+            Log.d("RESPONSE_NUMBER", String.valueOf(result.getResponse()));
+
+            if (result.getResponse() == 7) { //THIS MEANS ALREADY PURCHASED
+                Toast.makeText(getBaseContext(), "Already Purchased, thank you!", Toast.LENGTH_SHORT).show();
+
+            }
+
+            if (result.isSuccess()) {
+                Log.d("RESULT_IS", "IS SUCCESS");
+                Toast.makeText(getBaseContext(), "Thank you for supporting NetLive!", Toast.LENGTH_SHORT).show();
+            }
 
             // if we were disposed of in the meantime, quit.
             if (mHelper == null) return;
@@ -392,21 +434,41 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
                 return;
             }
 
+
+            //TODO see about this matching up, see about crash
             Log.d("TAG", "Purchase successful.");
             //purchase.getSku().equals(SKU_0_99);
             String purchaseSKU = purchase.getSku();
-            for(String element : skuArray){
-                if(purchaseSKU.equals(element)){
+            Log.d("purchaseSKU", purchaseSKU);
+            for (String element : skuArray) {
+                if (purchaseSKU.equals(element)) {
                     Log.d("SKU MATCH", "Element");
                 }
             }
 
 
-
         }
     };
 
-    /** Verifies the developer payload of a purchase. */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("NetLive", "onActivityResult(" + requestCode + "," + resultCode + "," + data);
+        if (mHelper == null) return;
+
+        // Pass on the activity result to the helper for handling
+        if (!mHelper.handleActivityResult(requestCode, resultCode, data)) {
+            // not handled, so handle it ourselves (here's where you'd
+            // perform any handling of activity results not related to in-app
+            // billing...
+            super.onActivityResult(requestCode, resultCode, data);
+        } else {
+            Log.d("NetLive", "onActivityResult handled by IABUtil.");
+        }
+    }
+
+    /**
+     * Verifies the developer payload of a purchase.
+     */
     boolean verifyDeveloperPayload(Purchase p) {
         String payload = p.getDeveloperPayload();
 
@@ -463,26 +525,63 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
              * verifyDeveloperPayload().
              */
 
-            SharedPreferences.Editor edit = sharedPref.edit();
+            //SharedPreferences.Editor edit = sharedPref.edit();
             // Do we have the premium upgrade?
-            for(String element: skuArray){
+            boolean atLeastOnePurchase = false;
+            for (int i = 0; i < skuArray.length; i++) {
+                String element = skuArray[i];
                 Purchase purchase = inventory.getPurchase(element);
                 boolean isPurchased = (purchase != null && verifyDeveloperPayload(purchase));
-                Log.d("Did Purchase " + element,(isPurchased ? "YES" : "NO"));
+                skuPurchases[i] = isPurchased;
+
+                if (isPurchased) {
+                    atLeastOnePurchase = true;
+                }
+                Log.d("Did Purchase " + element, (isPurchased ? "YES" : "NO"));
 
             }
 
-            Fragment frag = new AdFragment();
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            if (!atLeastOnePurchase) {
 
-// Replace whatever is in the fragment_container view with this fragment,
-// and add the transaction to the back stack
-            transaction.add(R.id.LinearLayout1, frag);
+                Fragment frag = new AdFragment();
+                FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
-// Commit the transaction
-            transaction.commit();
+                // Replace whatever is in the fragment_container view with this fragment,
+                // and add the transaction to the back stack
+                transaction.add(R.id.LinearLayout1, frag);
+
+                // Commit the transaction
+                transaction.commit();
+
+            }
+
 
             Log.d("NetLive", "Initial inventory query finished; enabling main UI.");
         }
     };
+
+    private boolean hasDonated() {
+
+        for (boolean element : skuPurchases) {
+            if (element) {
+                return true;
+            }
+        }
+
+        return false;
+
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        // very important:
+        Log.d("NetLive", "Destroying helper.");
+        if (mHelper != null) {
+            mHelper.dispose();
+            mHelper = null;
+        }
+    }
 }
