@@ -7,7 +7,7 @@ android {
     defaultConfig {
         minSdkVersion 18
         targetSdkVersion 21
-        versionCode 26
+        versionCode 28
         versionName "3.2 Beta"
     }
 

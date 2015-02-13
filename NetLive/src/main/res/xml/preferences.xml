@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:ads="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
 
     <ListPreference
@@ -48,10 +47,8 @@
 
     <PreferenceScreen
         android:key="pref_key_support_developer"
-        android:title="Support the developer"
-        android:summary="@string/pref_summary_support_developer"/>
-
-    <!--<com.richardlucasapps.netlive.AdPreference android:layout="@layout/ad_layout"/>-->
+        android:summary="@string/pref_summary_support_developer"
+        android:title="Support the developer" />
 
 
 </PreferenceScreen>

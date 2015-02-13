@@ -112,16 +112,16 @@
     </string-array>
 
     <string-array name="donate_amounts">
-        <item>$.99</item>
         <item>$1.99</item>
-        <item>$2.99</item>
         <item>$3.99</item>
-        <item>$4.99</item>
         <item>$5.99</item>
-        <item>$6.99</item>
         <item>$7.99</item>
-        <item>$8.99</item>
         <item>$9.99</item>
+        <item>$.99 per year</item>
+        <item>$2.99 per year</item>
+        <item>$4.99 per year</item>
+        <item>$6.99 per year</item>
+        <item>$8.99 per year</item>
     </string-array>
 
 

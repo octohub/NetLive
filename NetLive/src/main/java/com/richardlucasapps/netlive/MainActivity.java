@@ -3,10 +3,14 @@ package com.richardlucasapps.netlive;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -25,6 +29,7 @@ import android.widget.Toast;
 
 import com.richardlucasapps.netlive.util.IabHelper;
 import com.richardlucasapps.netlive.util.IabResult;
+import com.richardlucasapps.netlive.util.Inventory;
 import com.richardlucasapps.netlive.util.Purchase;
 
 import java.util.concurrent.TimeUnit;
@@ -41,9 +46,9 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
 
     SharedPreferences sharedPref;
     // SKUs for our products: the premium upgrade (non-consumable) and gas (consumable)
-    String[] skuArray = {"0dollar99cents","1dollar99cents","2dollar99cents","3dollar99cents",
-            "0dollar99cents","0dollar99cents","0dollar99cents","0dollar99cents","0dollar99cents",
-            "0dollar99cents"};
+    static final String[] skuArray = {"1dollar99cents","3dollar99cents","5dollar99cents","7dollar99cents",
+            "9dollar99cents","99centsperyear","2dollar99centsperyear","4dollar99centsperyear",
+            "6dollar99centsperyear", "8dollar99centsperyear"};
     static final String SKU_0_99 = "0dollar99cents";  //TODO gotta get rid of decimal and money sign
     static final String SKU_1_99 = "1dollar99cents";
     static final String SKU_2_99 = "2dollar99cents";
@@ -62,22 +67,32 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
     //*denotes pun
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main_no_ads);
 //        getFragmentManager().beginTransaction()
 //                .replace(android.R.id.content, new SettingsFragment())
 //                .add(new AdFragment(), "AdFragment")
 //                .commit();
-        boolean showAds = true;
-        if(showAds){
-            setContentView(R.layout.activity_main);
-
-        } else {
-            setContentView(R.layout.activity_main_no_ads);
-        }
-
-
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        //boolean showAds = sharedPref.getBoolean("SHOW_ADS", false);
+
+
+
+
+
+        // Create new fragment and transaction
+//        Fragment frag = new AdFragment();
+//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+//
+//// Replace whatever is in the fragment_container view with this fragment,
+//// and add the transaction to the back stack
+//        transaction.add(R.id.LinearLayout1, frag);
+//
+//// Commit the transaction
+//        transaction.commit();
+
+
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 
@@ -164,6 +179,7 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
                 if (!result.isSuccess()) {
                     // Oh noes, there was a problem.
                     //complain("Problem setting up in-app billing: " + result);
+                    Log.d("Problem setting up in-app billing:", "FAILED");
                     return;
                 }
 
@@ -171,8 +187,12 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
                 if (mHelper == null) return;
 
                 // IAB is fully set up. Now, let's get an inventory of stuff we own.
-                //Log.d(TAG, "Setup successful. Querying inventory.");
-                //mHelper.queryInventoryAsync(mGotInventoryListener);
+                Log.d("NetLive", "Setup successful. Querying inventory.");
+                if(savedInstanceState == null){  //this means we are first starting the Activity
+                    mHelper.queryInventoryAsync(mGotInventoryListener);
+
+                }
+
             }
         });
 
@@ -259,7 +279,15 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
     private void showAboutDialog() {
         AlertDialog.Builder aboutBuilder = new AlertDialog.Builder(this);
         TextView myMsg = new TextView(this);
-        SpannableString s = new SpannableString(getString(R.string.app_name_with_version_number)+"\n\nrichardlucasapps.com");
+        PackageInfo pInfo = null;
+        try {
+            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        int version = pInfo.versionCode;
+        SpannableString s = new SpannableString(getString(R.string.app_name_with_version_number) +
+                "\n\n Version Code: " + version  +"\n\nrichardlucasapps.com");
         Linkify.addLinks(s, Linkify.WEB_URLS);
         myMsg.setText(s);
         myMsg.setTextSize(15);
@@ -327,8 +355,6 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
         // The helper object
 
         Log.d("Donate Amount clicked", String.valueOf(which));
-        String[] donate_amounts = getResources().getStringArray(R.array.donate_amounts);
-        String donateAmount = donate_amounts[which];
 
         //setWaitScreen(true);
 
@@ -337,7 +363,9 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
          *        an empty string, but on a production app you should carefully generate this. */
         String payload = "";
 
-        mHelper.launchPurchaseFlow(this, donateAmount, RC_REQUEST,
+        Log.d("Item in SKUarray", skuArray[which]);
+
+        mHelper.launchPurchaseFlow(this, skuArray[which], RC_REQUEST,
                 mPurchaseFinishedListener, payload);
 
 
@@ -367,30 +395,10 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
             Log.d("TAG", "Purchase successful.");
             //purchase.getSku().equals(SKU_0_99);
             String purchaseSKU = purchase.getSku();
-            switch(purchaseSKU){
-                case SKU_0_99: Log.d("Purchase successful.", SKU_0_99);
-                                break;
-                case SKU_1_99: Log.d("Purchase successful.", SKU_1_99);
-                    break;
-                case SKU_2_99: Log.d("Purchase successful.", SKU_2_99);
-                    break;
-                case SKU_3_99: Log.d("Purchase successful.", SKU_3_99);
-                    break;
-                case SKU_4_99: Log.d("Purchase successful.", SKU_4_99);
-                    break;
-                case SKU_5_99: Log.d("Purchase successful.", SKU_5_99);
-                    break;
-                case SKU_6_99: Log.d("Purchase successful.", SKU_6_99);
-                    break;
-                case SKU_7_99: Log.d("Purchase successful.", SKU_7_99);
-                    break;
-                case SKU_8_99: Log.d("Purchase successful.", SKU_8_99);
-                    break;
-                case SKU_9_99: Log.d("Purchase successful.", SKU_9_99);
-                    break;
-                default: Log.d("Default", "No Match");
-                    break;
-
+            for(String element : skuArray){
+                if(purchaseSKU.equals(element)){
+                    Log.d("SKU MATCH", "Element");
+                }
             }
 
 
@@ -432,4 +440,49 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
     public void onFragmentInteraction(Uri uri) {
         return;
     }
+
+    // Listener that's called when we finish querying the items and subscriptions we own
+    IabHelper.QueryInventoryFinishedListener mGotInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
+        public void onQueryInventoryFinished(IabResult result, Inventory inventory) {
+            Log.d("NetLive", "Query inventory finished.");
+
+            // Have we been disposed of in the meantime? If so, quit.
+            if (mHelper == null) return;
+
+            // Is it a failure?
+            if (result.isFailure()) {
+                Log.d("Failed to query inventory: " + result, "");
+                return;
+            }
+
+            Log.d("NetLive", "Query inventory was successful.");
+
+            /*
+             * Check for items we own. Notice that for each purchase, we check
+             * the developer payload to see if it's correct! See
+             * verifyDeveloperPayload().
+             */
+
+            SharedPreferences.Editor edit = sharedPref.edit();
+            // Do we have the premium upgrade?
+            for(String element: skuArray){
+                Purchase purchase = inventory.getPurchase(element);
+                boolean isPurchased = (purchase != null && verifyDeveloperPayload(purchase));
+                Log.d("Did Purchase " + element,(isPurchased ? "YES" : "NO"));
+
+            }
+
+            Fragment frag = new AdFragment();
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+
+// Replace whatever is in the fragment_container view with this fragment,
+// and add the transaction to the back stack
+            transaction.add(R.id.LinearLayout1, frag);
+
+// Commit the transaction
+            transaction.commit();
+
+            Log.d("NetLive", "Initial inventory query finished; enabling main UI.");
+        }
+    };
 }
