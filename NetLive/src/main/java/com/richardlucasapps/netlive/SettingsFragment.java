@@ -51,9 +51,6 @@ public class SettingsFragment extends PreferenceFragment {
         disableCheckBoxPreference = (CheckBoxPreference) findPreference("pref_key_auto_start");
         disableCheckBoxPreference.setOnPreferenceChangeListener(disableCheckBoxPreferenceListener);
 
-        supportDeveloper = (PreferenceScreen) findPreference("pref_key_support_developer");
-        supportDeveloper.setOnPreferenceClickListener(supportDeveloperPreferenceListener);
-
 	}
 
     @Override
@@ -164,18 +161,6 @@ public class SettingsFragment extends PreferenceFragment {
         }
     };
 
-    private Preference.OnPreferenceClickListener supportDeveloperPreferenceListener = new Preference.OnPreferenceClickListener(){
-
-        @Override
-        public boolean onPreferenceClick(Preference arg0) {
-            ((MainActivity)getActivity()).showDonateDialogFragment();
-
-            return true;
-        }
-
-
-
-    };
 
     private void restartService(){
         getActivity().stopService(new Intent(getActivity(), MainService.class));

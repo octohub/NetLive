@@ -45,10 +45,5 @@
         android:summary="@string/pref_summary_auto_start"
         android:title="@string/pref_title_auto_start" />
 
-    <PreferenceScreen
-        android:key="pref_key_support_developer"
-        android:summary="@string/pref_summary_support_developer"
-        android:title="Support the developer" />
-
 
 </PreferenceScreen>
