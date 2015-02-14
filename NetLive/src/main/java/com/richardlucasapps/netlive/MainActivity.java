@@ -39,6 +39,8 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
 
     //TODO fix http://stackoverflow.com/questions/16777829/java-lang-runtimeexception-unable-to-start-activity-componentinfo-java-lang-nu
 
+    //TODO Security Recommendation: It is highly recommended that you do not hard-code the exact public license key string value as provided by Google Play. Instead, you can construct the whole public license key string at runtime from substrings, or retrieve it from an encrypted store, before passing it to the constructor. This approach makes it more difficult for malicious third-parties to modify the public license key string in your APK file.
+    //http://developer.android.com/training/in-app-billing/preparing-iab-app.html
 
     IabHelper mHelper;
 
@@ -157,29 +159,31 @@ public class MainActivity extends Activity implements AdFragment.OnFragmentInter
 
         String base64EncodedPublicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvgiGgngCKPB1oRP7KojA9Ler9vDPnIVaRKZXq5/dn+4tRZSV4imuNyL8oMsWIMUFdkP3KMjJYAwRVMCqF5Jxg4XPiYvD4/FAb3ZqXDtcW9k/d7AgqcTEvqi3B4nnrGGgKvkE3ExWrD+vsFDBsMUT1zLRzXmel2KMitOTgN9UergWez/eRjJaCSYEidmMiR/XR+4L+dTjcyT4K28zgBt15OsgiP+C9cfmKswCJ9vZODqc4iLQYS7dzmns/s15X8w5UlyqHCvBp5mi8dohopSZIIX/Olc30xa8maJemkfY8vAtnnnCdvQ5ANejZstB/dINUWXOS/FvqPf7SyFQga+HRQIDAQAB";
         mHelper = new IabHelper(this, base64EncodedPublicKey);
-        mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-            public void onIabSetupFinished(IabResult result) {
-                Log.d("TAG", "Setup finished.");
+        if(mHelper!=null) {
+            mHelper.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+                public void onIabSetupFinished(IabResult result) {
+                    Log.d("TAG", "Setup finished.");
 
-                if (!result.isSuccess()) {
-                    // Oh noes, there was a problem.
-                    //complain("Problem setting up in-app billing: " + result);
-                    Log.d("Problem setting up in-app billing:", "FAILED");
-                    return;
+                    if (!result.isSuccess()) {
+                        // Oh noes, there was a problem.
+                        //complain("Problem setting up in-app billing: " + result);
+                        Log.d("Problem setting up in-app billing:", "FAILED");
+                        return;
+                    }
+
+                    // Have we been disposed of in the meantime? If so, quit.
+                    if (mHelper == null) return;
+
+                    // IAB is fully set up. Now, let's get an inventory of stuff we own.
+                    Log.d("NetLive", "Setup successful. Querying inventory.");
+                    if (savedInstanceState == null) {  //this means we are first starting the Activity
+                        mHelper.queryInventoryAsync(mGotInventoryListener);
+
+                    }
+
                 }
-
-                // Have we been disposed of in the meantime? If so, quit.
-                if (mHelper == null) return;
-
-                // IAB is fully set up. Now, let's get an inventory of stuff we own.
-                Log.d("NetLive", "Setup successful. Querying inventory.");
-                if (savedInstanceState == null) {  //this means we are first starting the Activity
-                    mHelper.queryInventoryAsync(mGotInventoryListener);
-
-                }
-
-            }
-        });
+            });
+        }
 
     }
 

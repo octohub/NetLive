@@ -16,6 +16,8 @@
 #   public *;
 #}
 
+# rules used to prevent Pro Guard from messing with Play Services stuff.
+# from: https://developer.android.com/google/play-services/setup.html
 -keep class * extends java.util.ListResourceBundle {
     protected Object[][] getContents();
 }
