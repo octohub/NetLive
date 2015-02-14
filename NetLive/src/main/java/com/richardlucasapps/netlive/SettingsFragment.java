@@ -10,6 +10,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
 import android.util.Log;
+import android.widget.Toast;
 
 public class SettingsFragment extends PreferenceFragment {
 
@@ -99,7 +100,14 @@ public class SettingsFragment extends PreferenceFragment {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             ((ListPreference) preference).setValue(newValue.toString());
+            int pollValue = Integer.parseInt(newValue.toString());
+
+            if(5>pollValue){
+                Toast.makeText(getActivity(), getString(R.string.poll_rate_warning), Toast.LENGTH_LONG).show();
+            }
+
             restartService();
+
 
             return true;
         }
