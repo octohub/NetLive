@@ -33,41 +33,14 @@ import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends Activity {
 
-    //TODO fix http://stackoverflow.com/questions/16777829/java-lang-runtimeexception-unable-to-start-activity-componentinfo-java-lang-nu
-
-    //TODO Security Recommendation: It is highly recommended that you do not hard-code the exact public license key string value as provided by Google Play. Instead, you can construct the whole public license key string at runtime from substrings, or retrieve it from an encrypted store, before passing it to the constructor. This approach makes it more difficult for malicious third-parties to modify the public license key string in your APK file.
-    //http://developer.android.com/training/in-app-billing/preparing-iab-app.html
-
-
     SharedPreferences sharedPref;
-    // SKUs for our products: the premium upgrade (non-consumable) and gas (consumable)
-
-
-    //TODO externalize the strings in this activity, show some class*
-    //*denotes pun
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_no_ads);
-//        getFragmentManager().beginTransaction()
-//                .replace(android.R.id.content, new SettingsFragment())
-//                .add(new AdFragment(), "AdFragment")
-//                .commit();
+
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        //boolean showAds = sharedPref.getBoolean("SHOW_ADS", false);
-
-
-        // Create new fragment and transaction
-//        Fragment frag = new AdFragment();
-//        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-//
-//// Replace whatever is in the fragment_container view with this fragment,
-//// and add the transaction to the back stack
-//        transaction.add(R.id.LinearLayout1, frag);
-//
-//// Commit the transaction
-//        transaction.commit();
 
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);

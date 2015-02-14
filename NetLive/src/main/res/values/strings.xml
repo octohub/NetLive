@@ -73,9 +73,5 @@
     <string name="pref_dialog_title_poll_rate">Choose poll rate</string>
     <string name="widget_font_size_default_value">12</string>
     <string name="pref_key_poll_rate_default_value">5</string>
-    <string name="pref_summary_support_developer">Enjoy NetLive? Support its development by donating! Any amount is greatly appreciated :)</string>
-    <string name="pick_color">Donate</string>
-    <string name="banner_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

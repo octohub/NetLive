@@ -37,8 +37,6 @@ public class MainService extends Service {
 
 
     List<AppDataUsage> appDataUsageList;
-    int appMonitorCounter;
-    int setWhenCounter;
 
 
     Notification.Builder mBuilder;
@@ -53,7 +51,6 @@ public class MainService extends Service {
 
     String unitMeasurement;
     boolean showActiveApp;
-
 
 
     PowerManager pm;
@@ -73,7 +70,6 @@ public class MainService extends Service {
 
     boolean widgetRequestsActiveApp;
 
-    private int updatesMissed = 1;
 
     private boolean firstUpdate;
     private PackageManager packageManager;
@@ -86,13 +82,16 @@ public class MainService extends Service {
     private ArrayList<WidgetSettings> widgetSettingsOfAllWidgets;
 
     private long start = 0l;
-    private long end = 0L;
+    private long end = 0l;
+
+    private double totalSecondsSinceLastPackageRefresh = 0d;
+    private double totalSecondsSinceNotificaitonTimeUpdated = 0d;
+
 
     @Override
     public void onCreate() {
         super.onCreate();
         createService(this);
-
 
 
     }
@@ -131,9 +130,6 @@ public class MainService extends Service {
 
         }
 
-
-        appMonitorCounter = 0;
-        setWhenCounter = 0;
 
 
 
@@ -182,7 +178,6 @@ public class MainService extends Service {
     }
 
 
-
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -204,17 +199,17 @@ public class MainService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Bundle extras = null;
-        if(intent!=null){
+        if (intent != null) {
             extras = intent.getExtras();
         }
         boolean wasPackageAdded = false;
         //int newAppUid = 0;
-        if(extras!=null){
+        if (extras != null) {
             wasPackageAdded = extras.getBoolean("PACKAGE_ADDED");
             //newAppUid = extras.getInt("EXTRA_UID");
 
         }
-        if(wasPackageAdded && eitherNotificationOrWidgetRequestsActiveApp){
+        if (wasPackageAdded && eitherNotificationOrWidgetRequestsActiveApp) {
 
 
             loadAllAppsIntoAppDataUsageList();
@@ -225,7 +220,6 @@ public class MainService extends Service {
 //            } else {
 //                loadAllAppsIntoAppDataUsageList();
 //            }
-
 
 
         }
@@ -392,16 +386,15 @@ public class MainService extends Service {
     }
 
 
+    @SuppressWarnings("deprecation")
     private void update() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
             if (!pm.isInteractive()) {
-                updatesMissed += 1;
                 return;
             }
         } else if (!pm.isScreenOn()) {
-            updatesMissed += 1;
             return;
         }
 
@@ -433,25 +426,24 @@ public class MainService extends Service {
         }
 
 
-        end = System.nanoTime(); // TODO to correct for the first update, done let elapsed time be less than 1
+        end = System.nanoTime();
         long totalElapsed = end - start;
         long bytesSentSinceBoot = TrafficStats.getTotalTxBytes();
         long bytesReceivedSinceBoot = TrafficStats.getTotalRxBytes();
         start = System.nanoTime();
 
         double totalElapsedInSeconds = (double) totalElapsed / 1000000000.0;
-        //long totalElapsedInSeconds = TimeUnit.SECONDS.convert(totalElapsed, TimeUnit.NANOSECONDS);
+        totalSecondsSinceLastPackageRefresh += totalElapsedInSeconds;
+        totalSecondsSinceNotificaitonTimeUpdated += totalElapsedInSeconds;
+        Log.d("NetLive","totalElapsedInSeconds " + totalElapsedInSeconds);
+        Log.d("NetLive","totalSecondsSinceLastPackageRefresh " + totalSecondsSinceLastPackageRefresh);
+        Log.d("NetLive","totalSecondsSinceNotificaitonTimeUpdated " + totalSecondsSinceNotificaitonTimeUpdated);
         long bytesSentOverPollPeriod = bytesSentSinceBoot - previousBytesSentSinceBoot;
         long bytesReceivedOverPollPeriod = bytesReceivedSinceBoot - previousBytesReceivedSinceBoot;
 
         double bytesSentPerSecond = bytesSentOverPollPeriod / totalElapsedInSeconds;
         double bytesReceivedPerSecond = bytesReceivedOverPollPeriod / totalElapsedInSeconds;
 
-
-//TODO need to create Strings here so have them so can pass them to notification and widget, just pass strings directlty
-//TODO before doing string bullshit need to make sure these bytessentpersecond getting right value
-//        String sentString = String.format("%.3f",(converter.convert(bytesSentPerSecond) / correctedPollRate));
-//        String receivedString = String.format("%.3f",(converter.convert(bytesReceivedPerSecond) / correctedPollRate));
         previousBytesSentSinceBoot = bytesSentSinceBoot;
         previousBytesReceivedSinceBoot = bytesReceivedSinceBoot;
 
@@ -461,11 +453,10 @@ public class MainService extends Service {
             activeApp = getActiveAppWithTrafficApi();
 
 
-            appMonitorCounter += 1;  //TODO perhaps just get rid of this, or increase it by more. If a user installs another app, it updates app list
-            if (appMonitorCounter >= (10800 / pollRate)) {//divide by pollRate so that if you have a pollRate of 10, that will end up being 500 seconds, not 5000
+            if (totalSecondsSinceLastPackageRefresh >= 86400) { //86400 once a day, just reload all the apps.
 
                 loadAllAppsIntoAppDataUsageList();
-                appMonitorCounter = 0;
+                totalSecondsSinceLastPackageRefresh = 0;
             }
         }
 
@@ -503,15 +494,14 @@ public class MainService extends Service {
 
         mBuilder.setContentText(displayValuesText);
         mBuilder.setContentTitle(contentTitleText);
-        setWhenCounter++;
-        if (setWhenCounter > 10800 / pollRate) { //10800 seconds is three hours, but in reality this will be greater because the device will not be awake for that whole time
+
+        if (totalSecondsSinceNotificaitonTimeUpdated > 10800 ) { //10800 seconds is three hours
+            Log.d("NetLive", "Set When Updated");
             mBuilder.setWhen(System.currentTimeMillis());
-            setWhenCounter = 0;
+            totalSecondsSinceNotificaitonTimeUpdated = 0;
+
         }
 
-        displayValuesText = "";
-
-        //TODO Report issue to AOSP where if the notification is set to minimum priority, and you update it after having called setWhen(), it will reissue it like a new notification, wont just update it
 
         int mId = 1;
         if (!hideNotification) {
@@ -580,7 +570,7 @@ public class MainService extends Service {
 
 
     private synchronized void loadAllAppsIntoAppDataUsageList() {
-        if(appDataUsageList!=null){
+        if (appDataUsageList != null) {
             appDataUsageList.clear(); // clear before adding all the apps so we don't add duplicates
         }
         List<ApplicationInfo> appList = packageManager.getInstalledApplications(0);
@@ -592,9 +582,10 @@ public class MainService extends Service {
 
     }
 
+    //This method is not utilized because it the PackageWatcherBroadcastReceiver does not receive
+    //the exact UID that was added. As a result, have to reload the entire list of installed apps.
     private void addSpecificPackageWithUID(int uid) {
         String[] packagesForUid;
-        //TODO don't reinstantiate every time
 
 
         //check what the uid is coming back, also check if need to make new instance of paclageManager in order to make it work
