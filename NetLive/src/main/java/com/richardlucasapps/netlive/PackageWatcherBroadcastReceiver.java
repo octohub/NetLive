@@ -8,9 +8,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
-/**
- * Created by richard on 1/19/15.
- */
 public class PackageWatcherBroadcastReceiver extends BroadcastReceiver {
 
     @Override
@@ -40,6 +37,5 @@ public class PackageWatcherBroadcastReceiver extends BroadcastReceiver {
 
         startServiceIntent.putExtra("PACKAGE_ADDED", true);
         context.startService(startServiceIntent);
-
     }
 }

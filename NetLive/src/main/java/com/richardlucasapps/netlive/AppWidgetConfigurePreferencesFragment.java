@@ -12,7 +12,6 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceScreen;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -27,17 +26,12 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
 	int mAppWidgetId;
 	SharedPreferences sharedPref;
 	SharedPreferences.Editor edit;
-
-
 	ListPreference widgetUnitOfMeasure;
 	ListPreference widgetFontColor;
 	ListPreference widgetFontSize;
 	
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-
-		
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.widget_preference);
 
@@ -62,7 +56,6 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
 		widgetFontSize.setSummary(widgetFontSize.getEntry());
 		
 	}
-
 	
 	private OnPreferenceChangeListener widgetFontSizeListener = new OnPreferenceChangeListener(){
 
@@ -89,8 +82,6 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
 		
 	};
 	
-
-	
 	private OnPreferenceChangeListener widgetFontColorListener = new OnPreferenceChangeListener(){
 
 		@Override
@@ -104,7 +95,6 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
 		
 	};
 
-	
 	private OnPreferenceClickListener addWidgetPreferenceListener = new OnPreferenceClickListener(){
 
 		@Override
@@ -186,7 +176,6 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
 	    }
 	}
 	
-	
 	@Override
 	public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
 	    super.onPreferenceTreeClick(preferenceScreen, preference);
@@ -199,7 +188,4 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
 	    return false;
 	}
 
-	
-	
-	
 }

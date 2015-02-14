@@ -36,39 +36,39 @@ public class MainService extends Service {
     private long previousBytesReceivedSinceBoot;
 
 
-    List<AppDataUsage> appDataUsageList;
+    private List<AppDataUsage> appDataUsageList;
 
 
-    Notification.Builder mBuilder;
-    NotificationManager mNotifyMgr;
-    Notification notification;
+    private Notification.Builder mBuilder;
+    private NotificationManager mNotifyMgr;
+    private Notification notification;
 
-    SharedPreferences sharedPref;
+    private SharedPreferences sharedPref;
 
-    UnitConverter converter;
-    long pollRate;
-
-
-    String unitMeasurement;
-    boolean showActiveApp;
+    private UnitConverter converter;
+    private long pollRate;
 
 
-    PowerManager pm;
-    boolean notificationEnabled;
-
-    List<UnitConverter> widgetUnitMeasurementConverters;
-    List<RemoteViews> widgetRemoteViews;
-
-    int[] ids;
-    AppWidgetManager manager;
-    int N;
-
-    boolean eitherNotificationOrWidgetRequestsActiveApp;
-    boolean showTotalValueNotification;
-    boolean hideNotification;
+    private String unitMeasurement;
+    private boolean showActiveApp;
 
 
-    boolean widgetRequestsActiveApp;
+    private PowerManager pm;
+    private boolean notificationEnabled;
+
+    private List<UnitConverter> widgetUnitMeasurementConverters;
+    private List<RemoteViews> widgetRemoteViews;
+
+    private int[] ids;
+    private AppWidgetManager manager;
+    private int N;
+
+    private boolean eitherNotificationOrWidgetRequestsActiveApp;
+    private boolean showTotalValueNotification;
+    private boolean hideNotification;
+
+
+    private boolean widgetRequestsActiveApp;
 
 
     private boolean firstUpdate;
@@ -92,8 +92,6 @@ public class MainService extends Service {
     public void onCreate() {
         super.onCreate();
         createService(this);
-
-
     }
 
     private void createService(final Service service) {
@@ -130,9 +128,6 @@ public class MainService extends Service {
 
         }
 
-
-
-
         if (notificationEnabled) {
             mNotifyMgr =
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -142,7 +137,6 @@ public class MainService extends Service {
                     .setContentTitle("")
                     .setContentText("")
                     .setOngoing(true);
-
 
             if (hideNotification) {
                 mBuilder.setPriority(Notification.PRIORITY_MIN);
@@ -177,7 +171,6 @@ public class MainService extends Service {
 
     }
 
-
     @Override
     public IBinder onBind(Intent intent) {
         return null;
@@ -187,13 +180,12 @@ public class MainService extends Service {
     public void onDestroy() {
 
         try {
-            updateHandler.cancel(true); //TODO can probabaly get rid of this stuff, only call superOnDestory because it nothing is bound to service, it will stop.
+            updateHandler.cancel(true);
         } catch (NullPointerException e) {
             //The only way there will be a null pointer, is if the disabled preference is checked.  Because if it is, onDestory() is called right away, without creating the updateHandler
         }
 
         super.onDestroy();
-
     }
 
     @Override
@@ -210,8 +202,6 @@ public class MainService extends Service {
 
         }
         if (wasPackageAdded && eitherNotificationOrWidgetRequestsActiveApp) {
-
-
             loadAllAppsIntoAppDataUsageList();
             //the uid in the EXTRA_UID from the packagewatcher broadcast receiver is always blank, to be fair, API says only that is "may" include it. Wtf Google, get your shit together.
             //so for now just leave this disabled and just reload the entire list of apps
@@ -220,8 +210,6 @@ public class MainService extends Service {
 //            } else {
 //                loadAllAppsIntoAppDataUsageList();
 //            }
-
-
         }
         return START_STICKY;
     }
@@ -270,8 +258,6 @@ public class MainService extends Service {
             widgetRemoteViews.add(v);
             UnitConverter converter = getUnitConverter(measurementUnit);
             widgetUnitMeasurementConverters.add(converter);
-
-
         }
     }
 
@@ -282,7 +268,7 @@ public class MainService extends Service {
         String appLabel = "";
 
         for (AppDataUsage currentApp : appDataUsageList) {
-            delta = currentApp.getRateWithTrafficStatsAPI();
+            delta = currentApp.getTransferRate();
             if (delta > maxDelta) {
                 appLabel = currentApp.getAppName();
                 maxDelta = delta;
@@ -293,7 +279,6 @@ public class MainService extends Service {
             return "(" + "..." + ")";
         }
         return "(" + appLabel + ")";
-
     }
 
 
@@ -374,7 +359,6 @@ public class MainService extends Service {
 
     }
 
-
     public void startUpdateService(long pollRate) {
         final Runnable updater = new Runnable() {
             public void run() {
@@ -405,7 +389,6 @@ public class MainService extends Service {
     }
 
     private synchronized void initiateUpdate() {
-
 
         if (firstUpdate) {
             previousBytesSentSinceBoot = TrafficStats.getTotalTxBytes();//i dont initialize these to 0, because if i do, when app first reports, the rate will be crazy high

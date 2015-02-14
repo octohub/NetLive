@@ -16,7 +16,6 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
         boolean widgetExist = sharedPref.getBoolean("widget_exists", false);
         boolean autoStart = !(sharedPref.getBoolean("pref_key_auto_start", false));
 
-
         if(widgetExist || autoStart){
 
     		 Intent startServiceIntent = new Intent(context, MainService.class);

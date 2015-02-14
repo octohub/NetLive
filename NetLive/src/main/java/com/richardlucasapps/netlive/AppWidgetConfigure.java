@@ -5,12 +5,11 @@ import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.os.Bundle;
 
-//TODO Instead of making this an activity, then replace it with a preference fragment, why not simply make this a preference fragment.
-
 public class AppWidgetConfigure extends Activity {
 	
 	private static int mAppWidgetId;
-	@Override
+
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setResult(RESULT_CANCELED);
@@ -25,7 +24,8 @@ public class AppWidgetConfigure extends Activity {
         .replace(android.R.id.content, new AppWidgetConfigurePreferencesFragment())
         .commit();
 	}
-	public static int getmAppWidgetId() {
+
+    public static int getmAppWidgetId() {
 		return mAppWidgetId;
 	}
 	

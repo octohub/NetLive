@@ -1,8 +1,5 @@
 package com.richardlucasapps.netlive;
 
-/**
- * Created by richard on 1/27/15.
- */
 public class WidgetSettings {
 
     private String measurementUnit;
@@ -17,8 +14,6 @@ public class WidgetSettings {
         this.displayTotalValue = displayTotalValue;
 
     }
-
-
 
     public String getMeasurementUnit() {
         return measurementUnit;

@@ -3,8 +3,6 @@ package com.richardlucasapps.netlive;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -18,7 +16,6 @@ import android.text.Html;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -41,19 +38,12 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main_no_ads);
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-
-
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-
         boolean firstRun = getSharedPreferences("START_UP_PREFERENCE", MODE_PRIVATE).getBoolean("firstRun", true);
-
-
         SharedPreferences.Editor edit = sharedPref.edit();
-
         boolean alreadyPrompted = sharedPref.getBoolean("ALREADY_PROMPTED", false);
 
         if (!alreadyPrompted) {
-
             Long date_firstLaunch = sharedPref.getLong("PREF_DATE_FIRST_LAUNCH", 0);
             if (date_firstLaunch == 0) {
                 date_firstLaunch = System.currentTimeMillis();
@@ -62,8 +52,6 @@ public class MainActivity extends Activity {
             }
 
             long days = TimeUnit.MILLISECONDS.toDays(date_firstLaunch - System.currentTimeMillis());
-
-
             if (days > 7) {
                 edit.putBoolean("ALREADY_PROMPTED", true);
                 edit.commit();
@@ -77,8 +65,6 @@ public class MainActivity extends Activity {
                     public void onClick(DialogInterface dialog, int id) {
 
                         openNetLiveInGooglePlay();
-
-
                     }
                 });
                 builder.setMessage(getString(R.string.rate_app_dialog_explanation))
@@ -87,7 +73,6 @@ public class MainActivity extends Activity {
 
                 AlertDialog newFragment = dialog;
                 newFragment.show();
-
             }
         }
 
@@ -111,14 +96,9 @@ public class MainActivity extends Activity {
                     .commit();
 
         }
-
-
         Intent intent = new Intent(getApplicationContext(), MainService.class); //getApp
         startService(intent);
-
-
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -126,7 +106,6 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -166,11 +145,9 @@ public class MainActivity extends Activity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
 
     private void openNetLiveInGooglePlay() {
-
         Intent intent = new Intent(Intent.ACTION_VIEW);
         //Try Google play
         intent.setData(Uri.parse(getString(R.string.app_uri_for_google_play)));
@@ -182,7 +159,6 @@ public class MainActivity extends Activity {
                 Toast.makeText(this, getString(R.string.could_not_open_app_in_Google_play), Toast.LENGTH_SHORT).show();
             }
         }
-
     }
 
     private boolean MyStartActivity(Intent aIntent) {
@@ -193,7 +169,6 @@ public class MainActivity extends Activity {
             return false;
         }
     }
-
 
     private void showAboutDialog() {
         AlertDialog.Builder aboutBuilder = new AlertDialog.Builder(this);
@@ -223,8 +198,6 @@ public class MainActivity extends Activity {
 
         AlertDialog newFragment = dialog;
         newFragment.show();
-
-
     }
 
 
@@ -236,7 +209,7 @@ public class MainActivity extends Activity {
         String overviewContent = getString(R.string.help_dialog_para_2);
 
         String si = getString(R.string.help_dialog_para_3);
-        ;
+
 
         LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.help_dialog, null);
@@ -260,8 +233,6 @@ public class MainActivity extends Activity {
 
         AlertDialog newFragment = dialog;
         newFragment.show();
-
-
     }
 
 }
