@@ -118,7 +118,8 @@ public class MainActivity extends Activity {
 
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
-                String shareBody = getString(R.string.app_url_if_uri_fails);
+                String url = getString(R.string.app_url_if_uri_fails);
+                String shareBody = getString(R.string.netlive_share_body) + " " + url;
                 sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, getString(R.string.app_name));
                 sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
                 startActivity(Intent.createChooser(sharingIntent, getString(R.string.share_via)));
@@ -207,6 +208,9 @@ public class MainActivity extends Activity {
 
         String overviewTitle = "Overview";
         String overviewContent = getString(R.string.help_dialog_para_2);
+        String batteryLifeTitle = getString(R.string.battery_life_help_title);
+        String batteryLifeAdvice = getString(R.string.battery_life_help_advice);
+
 
         String si = getString(R.string.help_dialog_para_3);
 
@@ -214,8 +218,10 @@ public class MainActivity extends Activity {
         LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.help_dialog, null);
         TextView textview = (TextView) view.findViewById(R.id.textmsg);
-        textview.setText((Html.fromHtml(s + "<br>" + "<br>" + "<b>" + overviewTitle + "</b>" + "<br>" + "<br>" + overviewContent + "<br>" + "<br>"
-                        + si
+        textview.setText((Html.fromHtml(s + "<br>" + "<br>" + "<b>" + overviewTitle + "</b>"
+                        + "<br>" + "<br>" + overviewContent + "<br>" + "<br>"
+                        + si + "<br>" + "<br>" + "<b>" + batteryLifeTitle + "</b>" + "<br>" + "<br>"
+                        + batteryLifeAdvice
         )));
 
         textview.setTextSize(17);

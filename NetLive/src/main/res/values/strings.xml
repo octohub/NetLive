@@ -6,6 +6,9 @@
     <string name="help_dialog_para_3">NetLive uses the official International System of Units (SI). This means, for example, that a kilobit is considered 1000 bits, not 1024 bits.</string>
     <string name="welcome">Thank you for using NetLive.\n\nIf you have any questions, recommendations, or you run into a problem with the app, please do not hesitate to contact me
 			 		by going to the \"Send Feedback\" option in the menu.  Enjoy!</string>
+    <string name="battery_life_help_title">Battery Life Issues</string>
+    <string name="battery_life_help_advice">Increasing the poll rate to 5 seconds or greater will help most. Alternatively, you can disable the active app feature.  If this still does not help, go to the "Send Feedback" option in the menu and let me know so we can work this out.</string>
+
     <string name="app_name">NetLive</string>
     <string name="app_name_with_version_number">NetLive v3.0</string>
     <string name="action_settings_help">Help</string>
@@ -15,6 +18,7 @@
     <string name="positive_option_for_rate_app_dialog">Rate NetLive</string>
     <string name="app_uri_for_google_play">market://details?id=com.richardlucasapps.netlive</string>
     <string name="app_url_if_uri_fails">https://play.google.com/store/apps/details?id=com.richardlucasapps.netlive&amp;hl=en</string>
+    <string name="netlive_share_body">Monitor your internet transfer rate in real time with NetLive by @dickclucas</string>
     <string name="rate_app_dialog_explanation">Enjoy NetLive? Please take a moment to rate it.</string>
     <string name="rate_app_dialog_title">Rate NetLive</string>
     <string name="could_not_open_app_in_Google_play">Could not open Google Play</string>
