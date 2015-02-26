@@ -16,6 +16,7 @@ import android.text.Html;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,6 +32,8 @@ import java.util.concurrent.TimeUnit;
 public class MainActivity extends Activity {
 
     SharedPreferences sharedPref;
+    AlertDialog aboutDialog;
+    AlertDialog helpDialog;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -105,6 +108,19 @@ public class MainActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if(aboutDialog!=null){
+            aboutDialog.dismiss();
+            Log.d("aboutDialog", "here");
+        }
+        if(helpDialog!=null){
+            helpDialog.dismiss();
+            Log.d("helpDialog", "here");
+        }
     }
 
     @Override
@@ -197,8 +213,9 @@ public class MainActivity extends Activity {
                 .setTitle("About");
         AlertDialog dialog = aboutBuilder.create();
 
-        AlertDialog newFragment = dialog;
-        newFragment.show();
+        aboutDialog = dialog;
+        aboutDialog.show();
+
     }
 
 
@@ -237,8 +254,8 @@ public class MainActivity extends Activity {
                 .setTitle(getString(R.string.welcome_message_message) + " " + getString(R.string.app_name_with_version_number));
         AlertDialog dialog = builder.create();
 
-        AlertDialog newFragment = dialog;
-        newFragment.show();
+        helpDialog = dialog;
+        helpDialog.show();
     }
 
 }
