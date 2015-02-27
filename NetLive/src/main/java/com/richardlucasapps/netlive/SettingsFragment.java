@@ -3,12 +3,14 @@ package com.richardlucasapps.netlive;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -24,7 +26,13 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.xml.preferences);
+
+        if(Build.VERSION.SDK_INT == android.os.Build.VERSION_CODES.JELLY_BEAN_MR2){
+            addPreferencesFromResource(R.xml.preferences_for_jelly_bean_mr2);
+
+        } else {
+            addPreferencesFromResource(R.xml.preferences);
+        }
 
 		
 		notificationDrawerUnitOfMeasurePreference = (ListPreference) findPreference("pref_key_measurement_unit");
@@ -55,7 +63,6 @@ public class SettingsFragment extends PreferenceFragment {
         and killing it, then when they open the SettingsFragment, the disabled checkmark will be unchecked.  We need to make sure
         that if the MainService is not running, disable is checked.
          */
-        Log.d("onResume SettingsFragment", "here");
         super.onResume();
         if(!isMyServiceRunning(MainService.class)){
             Log.d("Service Not Running", "about to set disabled as checked");
@@ -119,7 +126,12 @@ public class SettingsFragment extends PreferenceFragment {
 
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
-            ((CheckBoxPreference) preference).setChecked((Boolean)newValue);
+            boolean boolVal = (Boolean)newValue;
+            ((CheckBoxPreference) preference).setChecked(boolVal);
+
+            if(Build.VERSION.SDK_INT == android.os.Build.VERSION_CODES.JELLY_BEAN_MR2 && boolVal){
+                Toast.makeText(getActivity(), getString(R.string.enable_active_app_feature_jelly_bean_mr2), Toast.LENGTH_LONG).show();
+            }
             restartService();
 
 

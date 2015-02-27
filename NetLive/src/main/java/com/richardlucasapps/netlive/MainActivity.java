@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Html;
@@ -34,14 +35,22 @@ public class MainActivity extends Activity {
     SharedPreferences sharedPref;
     AlertDialog aboutDialog;
     AlertDialog helpDialog;
+    AlertDialog welcomeDialog;
+    AlertDialog rateDialog;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main_no_ads);
+        setContentView(R.layout.activity_main);
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        if(Build.VERSION.SDK_INT == android.os.Build.VERSION_CODES.JELLY_BEAN_MR2){
+            PreferenceManager.setDefaultValues(this, R.xml.preferences_for_jelly_bean_mr2, false);
+
+        } else {
+            PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+        }
+
         boolean firstRun = getSharedPreferences("START_UP_PREFERENCE", MODE_PRIVATE).getBoolean("firstRun", true);
         SharedPreferences.Editor edit = sharedPref.edit();
         boolean alreadyPrompted = sharedPref.getBoolean("ALREADY_PROMPTED", false);
@@ -55,7 +64,7 @@ public class MainActivity extends Activity {
             }
 
             long days = TimeUnit.MILLISECONDS.toDays(date_firstLaunch - System.currentTimeMillis());
-            if (days > 7) {
+            if (days > 1) {
                 edit.putBoolean("ALREADY_PROMPTED", true);
                 edit.commit();
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -72,10 +81,10 @@ public class MainActivity extends Activity {
                 });
                 builder.setMessage(getString(R.string.rate_app_dialog_explanation))
                         .setTitle(getString(R.string.rate_app_dialog_title));
-                AlertDialog dialog = builder.create();
+                rateDialog = builder.create();
 
-                AlertDialog newFragment = dialog;
-                newFragment.show();
+
+                rateDialog.show();
             }
         }
 
@@ -86,12 +95,12 @@ public class MainActivity extends Activity {
                     // User clicked OK button
                 }
             });
-            builder.setMessage(getString(R.string.welcome))
+            builder.setMessage(getString(R.string.welcome) + getString(R.string.welcome_para))
                     .setTitle(getString(R.string.welcome_message_message) + " " + getString(R.string.app_name_with_version_number));
             AlertDialog dialog = builder.create();
 
-            AlertDialog newFragment = dialog;
-            newFragment.show();
+            welcomeDialog = dialog;
+            welcomeDialog.show();
 
             getSharedPreferences("START_UP_PREFERENCE", MODE_PRIVATE)
                     .edit()
@@ -120,6 +129,14 @@ public class MainActivity extends Activity {
         if(helpDialog!=null){
             helpDialog.dismiss();
             Log.d("helpDialog", "here");
+        }
+        if(welcomeDialog != null){
+            welcomeDialog.dismiss();
+            Log.d("welcomeDialog", "here");
+        }
+        if(rateDialog != null){
+            rateDialog.dismiss();
+            Log.d("rateDialog", "here");
         }
     }
 
@@ -228,6 +245,8 @@ public class MainActivity extends Activity {
         String batteryLifeTitle = getString(R.string.battery_life_help_title);
         String batteryLifeAdvice = getString(R.string.battery_life_help_advice);
 
+        String androidMR2Title = getString(R.string.help_dialog_android_jelly_bean_mr2_title);
+        String androidMR2Body = getString(R.string.help_dialog_android_jelly_bean_mr2_body);
 
         String si = getString(R.string.help_dialog_para_3);
 
@@ -238,11 +257,13 @@ public class MainActivity extends Activity {
         textview.setText((Html.fromHtml(s + "<br>" + "<br>" + "<b>" + overviewTitle + "</b>"
                         + "<br>" + "<br>" + overviewContent + "<br>" + "<br>"
                         + si + "<br>" + "<br>" + "<b>" + batteryLifeTitle + "</b>" + "<br>" + "<br>"
-                        + batteryLifeAdvice
+                        + batteryLifeAdvice + "<b>" + "<br>" + "<br>"+ androidMR2Title + "</b>" + "<br>" + "<br>"
+                        + androidMR2Body + "<a href=\"https://code.google.com/p/android/issues/detail?id=58210\">https://code.google.com/p/android/issues/detail?id=58210</a>"
         )));
 
         textview.setTextSize(17);
         textview.setPadding(15, 15, 15, 15);
+        textview.setMovementMethod(LinkMovementMethod.getInstance());
 
 
         builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {

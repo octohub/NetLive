@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="help_dialog_para_1">Thank you for using my app.If you have any questions, recommendations, or you run into a problem with the app, please do not hesitate to contact me by going to the \"Send Feedback\" option in the menu.</string>
+    <string name="help_dialog_para_1">Thank you for using NetLive. If you have any questions, recommendations, or you run into a problem with the app, please do not hesitate to contact me
+			 		by going to the \"Send Feedback\" option in the menu. Enjoy!</string>
+    <string name="welcome_para">If you have any questions, recommendations, or you run into a problem with the app, please do not hesitate to contact me
+			 		by going to the \"Send Feedback\" option in the menu. Enjoy!</string>
     <string name="help_dialog_para_2">NetLive allows you to monitor your internet data transfer rate while also showing the app that is using the most data at the current moment. It runs both in the notification drawer or as a widget, so you always have access to your transfer rate information.</string>
     <string name="help_dialog_para_3">NetLive uses the official International System of Units (SI). This means, for example, that a kilobit is considered 1000 bits, not 1024 bits.</string>
-    <string name="welcome">Thank you for using NetLive.\n\nIf you have any questions, recommendations, or you run into a problem with the app, please do not hesitate to contact me
-			 		by going to the \"Send Feedback\" option in the menu.  Enjoy!</string>
+    <string name="welcome">NetLive is now running in your notification drawer, welcome to the revolution!\n\n</string>
     <string name="battery_life_help_title">Battery Life Issues</string>
     <string name="battery_life_help_advice">Increasing the poll rate to 5 seconds or greater will help most. Alternatively, you can disable the active app feature.  If this still does not help, go to the "Send Feedback" option in the menu and let me know so we can work this out.</string>
 
@@ -19,9 +21,10 @@
     <string name="app_uri_for_google_play">market://details?id=com.richardlucasapps.netlive</string>
     <string name="app_url_if_uri_fails">https://play.google.com/store/apps/details?id=com.richardlucasapps.netlive&amp;hl=en</string>
     <string name="netlive_share_body">Monitor your internet transfer rate in real time with NetLive by @dickclucas</string>
-    <string name="rate_app_dialog_explanation">Enjoy NetLive? Please take a moment to rate it.</string>
+    <string name="rate_app_dialog_explanation">Enjoy NetLive? I would really appreciate if you took a moment to rate it :)</string>
     <string name="rate_app_dialog_title">Rate NetLive</string>
     <string name="could_not_open_app_in_Google_play">Could not open Google Play</string>
+    <string name="enable_active_app_feature_jelly_bean_mr2">This feature may not work due to a bug in this version of Android (4.3). Check the help section in the menu for details.</string>
     <string name="welcome_message_dismiss">Ok</string>
     <string name="welcome_message_message">Welcome to</string>
     <string name="action_settings_rate_netlive">Rate NetLive</string>
@@ -59,6 +62,7 @@
     <string name="pref_measurement_unit_default_value_notification_area">Auto (Kbps, Mbps, Gbps)</string>
     <string name="pref_title_active_app">Display active app</string>
     <string name="pref_summary_active_app">Display the name of the app currently using the most data. Enabling this feature may increase battery usage.</string>
+    <string name="pref_summary_active_app_jelly_bean_mr2">Display the name of the app currently using the most data. Enabling this feature may increase battery usage. Looks like you are running Android 4.3, this feature may not work due to a bug in this version of Android. Check the help section in the menu for details.</string>
     <string name="pref_widget_category_general">General Widget Settings</string>
     <string name="pref_widget_display_unit_of_measure_title">Display Unit of Measure</string>
     <string name="pref_widget_display_unit_of_measure_summary">Display unit of measure above transfer rates</string>
@@ -78,6 +82,15 @@
     <string name="widget_font_size_default_value">12</string>
     <string name="pref_key_poll_rate_default_value">5</string>
     <string name="poll_rate_warning">Setting a poll rate below 5 seconds may hurt battery life. 5 seconds offers a good balance.</string>
-
+    <string name="help_dialog_android_jelly_bean_mr2_title">Android 4.3 Bug</string>
+    <string name="help_dialog_android_jelly_bean_mr2_body">The methods in the Android SDK which
+        give you info on how much data an individual app is using, do not work in Android 4.3.
+        If you have a 4.3 device, you can easily tell if it is working or not by enabling the
+        active app feature, and then checking if an app title ever appears.  If it does, that means
+        it is working, if it simply shows this \"(...)\" all the time, then your device has the bug.
+        These methods may work on some devices with Android 4.3, but they certainly do not
+        work on the majority of 4.3 devices. I filed a bug report with the Android Open Source
+        Project and it is a confirmed issue. You can view the bug report here: \n</string>
+    <string name="android_jelly_bean_mr2_issue_url">https://code.google.com/p/android/issues/detail?id=58210</string>
 
 </resources>
