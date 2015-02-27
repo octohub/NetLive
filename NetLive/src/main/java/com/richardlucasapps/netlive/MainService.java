@@ -26,7 +26,6 @@ import android.preference.PreferenceManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 public class MainService extends Service {
@@ -418,9 +417,6 @@ public class MainService extends Service {
         double totalElapsedInSeconds = (double) totalElapsed / 1000000000.0;
         totalSecondsSinceLastPackageRefresh += totalElapsedInSeconds;
         totalSecondsSinceNotificaitonTimeUpdated += totalElapsedInSeconds;
-        Log.d("NetLive","totalElapsedInSeconds " + totalElapsedInSeconds);
-        Log.d("NetLive","totalSecondsSinceLastPackageRefresh " + totalSecondsSinceLastPackageRefresh);
-        Log.d("NetLive","totalSecondsSinceNotificaitonTimeUpdated " + totalSecondsSinceNotificaitonTimeUpdated);
         long bytesSentOverPollPeriod = bytesSentSinceBoot - previousBytesSentSinceBoot;
         long bytesReceivedOverPollPeriod = bytesReceivedSinceBoot - previousBytesReceivedSinceBoot;
 
@@ -479,7 +475,6 @@ public class MainService extends Service {
         mBuilder.setContentTitle(contentTitleText);
 
         if (totalSecondsSinceNotificaitonTimeUpdated > 10800 ) { //10800 seconds is three hours
-            Log.d("NetLive", "Set When Updated");
             mBuilder.setWhen(System.currentTimeMillis());
             totalSecondsSinceNotificaitonTimeUpdated = 0;
 

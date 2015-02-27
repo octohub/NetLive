@@ -10,8 +10,6 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.widget.Toast;
 
 public class SettingsFragment extends PreferenceFragment {
@@ -65,7 +63,6 @@ public class SettingsFragment extends PreferenceFragment {
          */
         super.onResume();
         if(!isMyServiceRunning(MainService.class)){
-            Log.d("Service Not Running", "about to set disabled as checked");
             disableCheckBoxPreference.setChecked(true);
         }
 
@@ -161,7 +158,6 @@ public class SettingsFragment extends PreferenceFragment {
 
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
-            Log.d("Settings Fragment", "disabled checkbox, in onPreferenceChange");
             boolean checked = (Boolean) newValue;
             ((CheckBoxPreference) preference).setChecked(checked);
             if(checked){

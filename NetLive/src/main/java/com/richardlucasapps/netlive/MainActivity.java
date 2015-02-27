@@ -17,7 +17,6 @@ import android.text.Html;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -124,19 +123,15 @@ public class MainActivity extends Activity {
         super.onPause();
         if(aboutDialog!=null){
             aboutDialog.dismiss();
-            Log.d("aboutDialog", "here");
         }
         if(helpDialog!=null){
             helpDialog.dismiss();
-            Log.d("helpDialog", "here");
         }
         if(welcomeDialog != null){
             welcomeDialog.dismiss();
-            Log.d("welcomeDialog", "here");
         }
         if(rateDialog != null){
             rateDialog.dismiss();
-            Log.d("rateDialog", "here");
         }
     }
 
