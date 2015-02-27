@@ -45,7 +45,6 @@ public class MainActivity extends Activity {
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         if(Build.VERSION.SDK_INT == android.os.Build.VERSION_CODES.JELLY_BEAN_MR2){
             PreferenceManager.setDefaultValues(this, R.xml.preferences_for_jelly_bean_mr2, false);
-
         } else {
             PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
         }

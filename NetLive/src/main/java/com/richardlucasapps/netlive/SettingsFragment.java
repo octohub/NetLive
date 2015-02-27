@@ -27,7 +27,6 @@ public class SettingsFragment extends PreferenceFragment {
 
         if(Build.VERSION.SDK_INT == android.os.Build.VERSION_CODES.JELLY_BEAN_MR2){
             addPreferencesFromResource(R.xml.preferences_for_jelly_bean_mr2);
-
         } else {
             addPreferencesFromResource(R.xml.preferences);
         }
