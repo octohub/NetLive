@@ -12,7 +12,7 @@
     <string name="battery_life_help_advice">Increasing the poll rate to 5 seconds or greater will help most. Alternatively, you can disable the active app feature.  If this still does not help, go to the "Send Feedback" option in the menu and let me know so we can work this out.</string>
 
     <string name="app_name">NetLive</string>
-    <string name="app_name_with_version_number">NetLive v3.1</string>
+    <string name="app_name_with_version_number">NetLive v3.2</string>
     <string name="action_settings_help">Help</string>
     <string name="action_settings_about">About</string>
     <string name="action_settings_send_feedback">Send Feedback</string>
