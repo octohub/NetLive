@@ -19,7 +19,6 @@ public class PackageWatcherBroadcastReceiver extends BroadcastReceiver {
             Log.d("both disabled", "here");
             return;
         }
-        Log.d("PackageWatcherBroadcastReceiver","Package Added");
         Intent startServiceIntent = new Intent(context, MainService.class);
         Bundle extras = intent.getExtras();
         String uid = null;
