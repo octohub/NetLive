@@ -97,5 +97,6 @@
     <string name="ok">Ok</string>
     <string name="heading_version_code">Version Code:</string>
     <string name="about">About</string>
+    <string name="overview">Overview</string>
 
 </resources>

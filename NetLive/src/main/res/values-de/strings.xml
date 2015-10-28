@@ -76,4 +76,5 @@
     <string name="welcome">NetLive ist jetzt in Ihrem Benachrichtigungsauszug läuft. Ich entschuldige mich, wenn die deutschen Wörter NetLive nicht richtig übersetzt. Ich tat, was ich konnte. Wenn jemand spricht Englisch und möchte mir helfen, zu übersetzen, kontaktieren Sie mich bitte!</string>
     <string name="welcome_message_message">Willkommen zu</string>
     <string name="welcome_para">Wenn Sie Fragen, Empfehlungen, oder Sie in ein Problem mit der App laufen, zögern Sie bitte nicht, mich, indem Sie auf die Option \“Senden Reaktion\” im Menü zu kontaktieren. Viel Spaß!</string>
+    <string name="overview">Übersicht</string>
 </resources>

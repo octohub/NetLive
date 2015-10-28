@@ -234,7 +234,7 @@ public class MainActivity extends Activity {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         String s = getString(R.string.help_dialog_para_1);
 
-        String overviewTitle = "Overview";
+        String overviewTitle = getString(R.string.overview);
         String overviewContent = getString(R.string.help_dialog_para_2);
         String batteryLifeTitle = getString(R.string.battery_life_help_title);
         String batteryLifeAdvice = getString(R.string.battery_life_help_advice);
