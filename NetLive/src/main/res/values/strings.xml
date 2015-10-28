@@ -92,5 +92,10 @@
         work on the majority of 4.3 devices. I filed a bug report with the Android Open Source
         Project and it is a confirmed issue. You can view the bug report here: \n</string>
     <string name="android_jelly_bean_mr2_issue_url">https://code.google.com/p/android/issues/detail?id=58210</string>
+    <string name="feedback">Feedback</string>
+    <string name="send_feedback">Send Feedback:</string>
+    <string name="ok">Ok</string>
+    <string name="heading_version_code">Version Code:</string>
+    <string name="about">About</string>
 
 </resources>

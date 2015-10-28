@@ -164,8 +164,8 @@ public class MainActivity extends Activity {
                 Intent Email = new Intent(Intent.ACTION_SEND);
                 Email.setType("message/rfc822");
                 Email.putExtra(Intent.EXTRA_EMAIL, new String[]{"richardlucasapps@gmail.com"});
-                Email.putExtra(Intent.EXTRA_SUBJECT, "Feedback");
-                startActivity(Intent.createChooser(Email, "Send Feedback:"));
+                Email.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.feedback)); //feedback
+                startActivity(Intent.createChooser(Email, getString(R.string.send_feedback)));
                 return true;
             case android.R.id.home:
                 startActivity(new Intent(MainActivity.this, MainActivity.class));
@@ -209,19 +209,19 @@ public class MainActivity extends Activity {
         }
         int version = pInfo.versionCode;
         SpannableString s = new SpannableString(getString(R.string.app_name_with_version_number) +
-                "\n\n Version Code: " + version + "\n\nrichardlucasapps.com");
+                "\n\n" +" " + getString(R.string.heading_version_code)  + " " + version + "\n\nrichardlucasapps.com");
         Linkify.addLinks(s, Linkify.WEB_URLS);
         myMsg.setText(s);
         myMsg.setTextSize(15);
         myMsg.setMovementMethod(LinkMovementMethod.getInstance());
         myMsg.setGravity(Gravity.CENTER);
-        aboutBuilder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        aboutBuilder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
             }
         });
         aboutBuilder.setView(myMsg)
-                .setTitle("About");
+                .setTitle(getString(R.string.about));
         AlertDialog dialog = aboutBuilder.create();
 
         aboutDialog = dialog;
@@ -260,7 +260,7 @@ public class MainActivity extends Activity {
         textview.setMovementMethod(LinkMovementMethod.getInstance());
 
 
-        builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
             }
