@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="pref_widget_font_color_entries">
+        <item>Schwarz</item>
+        <item>blau</item>
+        <item>dunkelblau</item>
+        <item>grün</item>
+        <item>dunkelgrün</item>
+        <item>grau</item>
+        <item>Orange</item>
+        <item>dunkelorange</item>
+        <item>Lila</item>
+        <item>Dunkelviolett</item>
+        <item>Rot</item>
+        <item>Dunkelrot</item>
+        <item>Weiß</item>
+    </string-array>
+
+
+</resources>

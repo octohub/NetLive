@@ -25,7 +25,7 @@
     <string name="rate_app_dialog_title">Rate NetLive</string>
     <string name="could_not_open_app_in_Google_play">Could not open Google Play</string>
     <string name="enable_active_app_feature_jelly_bean_mr2">This feature may not work due to a bug in this version of Android (4.3). Check the help section in the menu for details.</string>
-    <string name="welcome_message_dismiss">Ok</string>
+    <string name="welcome_message_dismiss" translatable="false">Ok</string>
     <string name="welcome_message_message">Welcome to</string>
     <string name="action_settings_rate_netlive">Rate NetLive</string>
     <string name="action_settings_share">Share</string>
@@ -41,7 +41,7 @@
     <string name="notification_drawer_category">General</string>
     <string name="show_love_category_name">General</string>
     <string name="pref_title_measurement_unit">Unit of measure</string>
-    <string name="pref_measurement_unit_summary"></string>
+    <string name="pref_measurement_unit_summary" translatable="false"></string>
     <string name="pref_dialog_title_choose_measurement_unit">Choose measurement unit</string>
     <string name="pref_measurement_unit_default_value" translatable="false">Auto (Kbps, Mbps, Gbps)</string>
     <string name="pref_summary_show_mesurement_units">Display unit of measure beside transfer rates</string>

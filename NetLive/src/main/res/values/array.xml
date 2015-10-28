@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="pref_measurement_unit_entries">
+    <string-array name="pref_measurement_unit_entries" translatable="false">
         <item>bps</item>
         <item>Kbps</item>
         <item>Mbps</item>
@@ -14,7 +14,7 @@
         <!--<item>Auto (Bps, KBps, MBps, GBps)</item>-->
     </string-array>
 
-    <string-array name="pref_measurement_unit_values">
+    <string-array name="pref_measurement_unit_values" translatable="false">
         <item>bps</item>
         <item>Kbps</item>
         <item>Mbps</item>
@@ -37,7 +37,7 @@
     <!--<item>Auto (Bps, KBps, MBps, GBps)</item>-->
     <!--</string-array>-->
 
-    <string-array name="pref_widget_font_size_entries">
+    <string-array name="pref_widget_font_size_entries" translatable="false">
         <item>Micro</item>
         <item>Small</item>
         <item>Medium</item>
@@ -61,14 +61,14 @@
     </string-array>
 
 
-    <string-array name="pref_widget_font_size_values">
+    <string-array name="pref_widget_font_size_values" translatable="false">
         <item>12</item>
         <item>14</item>
         <item>18</item>
         <item>22</item>
     </string-array>
 
-    <string-array name="pref_widget_font_color_values">
+    <string-array name="pref_widget_font_color_values" translatable="false">
         <item>black</item>
         <item>#33B5E5</item>
         <item>#0099CC</item>
@@ -84,7 +84,7 @@
         <item>white</item>
     </string-array>
 
-    <string-array name="pref_poll_rate_entries">
+    <string-array name="pref_poll_rate_entries" translatable="false">
         <item>1</item>
         <item>2</item>
         <item>3</item>
@@ -98,7 +98,7 @@
     </string-array>
 
 
-    <string-array name="pref_poll_rate_values">
+    <string-array name="pref_poll_rate_values" translatable="false">
         <item>1</item>
         <item>2</item>
         <item>3</item>
