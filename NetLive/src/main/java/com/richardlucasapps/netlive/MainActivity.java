@@ -26,9 +26,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import java.util.concurrent.TimeUnit;
-
-
 public class MainActivity extends Activity {
 
     SharedPreferences sharedPref;
@@ -50,41 +47,6 @@ public class MainActivity extends Activity {
         }
 
         boolean firstRun = getSharedPreferences("START_UP_PREFERENCE", MODE_PRIVATE).getBoolean("firstRun", true);
-        SharedPreferences.Editor edit = sharedPref.edit();
-        boolean alreadyPrompted = sharedPref.getBoolean("ALREADY_PROMPTED", false);
-
-        if (!alreadyPrompted) {
-            Long date_firstLaunch = sharedPref.getLong("PREF_DATE_FIRST_LAUNCH", 0);
-            if (date_firstLaunch == 0) {
-                date_firstLaunch = System.currentTimeMillis();
-                edit.putLong("PREF_DATE_FIRST_LAUNCH", date_firstLaunch);
-                edit.commit();
-            }
-
-            long days = TimeUnit.MILLISECONDS.toDays(date_firstLaunch - System.currentTimeMillis());
-            if (days > 1) {
-                edit.putBoolean("ALREADY_PROMPTED", true);
-                edit.commit();
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setNegativeButton(getString(R.string.negative_option_for_rate_app_dialog), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-
-                    }
-                });
-                builder.setPositiveButton(getString(R.string.positive_option_for_rate_app_dialog), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-
-                        openNetLiveInGooglePlay();
-                    }
-                });
-                builder.setMessage(getString(R.string.rate_app_dialog_explanation))
-                        .setTitle(getString(R.string.rate_app_dialog_title));
-                rateDialog = builder.create();
-
-
-                rateDialog.show();
-            }
-        }
 
         if (firstRun) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
