@@ -18,7 +18,6 @@ public class NetworkSpeedWidget extends AppWidgetProvider {
     start a service, to update every second.
     */
 
-
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
 
