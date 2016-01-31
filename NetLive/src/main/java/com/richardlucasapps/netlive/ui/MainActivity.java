@@ -39,7 +39,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         if (Build.VERSION.SDK_INT == android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
             PreferenceManager.setDefaultValues(this, R.xml.preferences_for_jelly_bean_mr2, false);
         } else {
@@ -90,9 +89,6 @@ public class MainActivity extends Activity {
         }
         if (welcomeDialog != null) {
             welcomeDialog.dismiss();
-        }
-        if (rateDialog != null) {
-            rateDialog.dismiss();
         }
     }
 
