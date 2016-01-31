@@ -92,6 +92,14 @@ public class MainService extends Service {
         sharedPref = PreferenceManager.getDefaultSharedPreferences(service);
 
         notificationEnabled = !(sharedPref.getBoolean("pref_key_auto_start", false));
+        /*
+        Confirmed that this line: widgetExist = sharedPref.getBoolean("widget_exists", false);
+        is a bad way to check if a widget exists. If using the auto backup feature in API 23 and above,
+        this can cause an issue where the user ads a widget, they uninstall the device, and next time
+        they install the app, before they even add a widget, this value will say that a widget exists,
+        even though it does not. This will keep the service alive even if they disable the notification
+        in the app, because that only affects the notification view.
+         */
         widgetExist = sharedPref.getBoolean("widget_exists", false);
 
         if (!notificationEnabled && !widgetExist) {
