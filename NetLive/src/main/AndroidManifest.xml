@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.richardlucasapps.netlive">
+
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
-
         android:name="MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,7 +16,6 @@
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -24,19 +23,15 @@
         <receiver android:name="com.richardlucasapps.netlive.MyBroadcastReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
-
             </intent-filter>
         </receiver>
 
         <receiver
             android:name="com.richardlucasapps.netlive.PackageWatcherBroadcastReceiver"
-
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.PACKAGE_ADDED" />
                 <data android:scheme="package" />
-
             </intent-filter>
         </receiver>
 
@@ -62,6 +57,5 @@
         </activity>
 
     </application>
-
 
 </manifest>

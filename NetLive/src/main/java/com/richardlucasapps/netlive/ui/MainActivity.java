@@ -1,5 +1,6 @@
 package com.richardlucasapps.netlive.ui;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -198,7 +199,7 @@ public class MainActivity extends Activity {
         String si = getString(R.string.help_dialog_para_3);
 
         LayoutInflater inflater = LayoutInflater.from(this);
-        View view = inflater.inflate(R.layout.help_dialog, null);
+        @SuppressLint("InflateParams") View view = inflater.inflate(R.layout.help_dialog, null);
         TextView textview = (TextView) view.findViewById(R.id.textmsg);
         textview.setText((Html.fromHtml(s + "<br>" + "<br>" + "<b>" + overviewTitle + "</b>"
                         + "<br>" + "<br>" + overviewContent + "<br>" + "<br>"

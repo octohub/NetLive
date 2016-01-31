@@ -33,7 +33,7 @@ public class NetworkSpeedWidget extends AppWidgetProvider {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MyApplication.getInstance());
         SharedPreferences.Editor edit = sharedPref.edit();
         edit.putBoolean("widget_exists",false);
-        edit.commit();
+        edit.apply();
         MyApplication.getInstance().stopService(new Intent(MyApplication.getInstance(),MainService.class));
         MyApplication.getInstance().startService(new Intent(MyApplication.getInstance(), MainService.class));
         super.onDisabled(context);
