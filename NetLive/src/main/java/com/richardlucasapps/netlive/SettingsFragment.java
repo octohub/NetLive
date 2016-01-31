@@ -1,4 +1,4 @@
-package com.richardlucasapps.netlive.ui;
+package com.richardlucasapps.netlive;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -11,9 +11,6 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
 import android.widget.Toast;
-
-import com.richardlucasapps.netlive.MainService;
-import com.richardlucasapps.netlive.R;
 
 public class SettingsFragment extends PreferenceFragment {
 

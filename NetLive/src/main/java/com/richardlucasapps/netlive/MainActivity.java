@@ -1,4 +1,4 @@
-package com.richardlucasapps.netlive.ui;
+package com.richardlucasapps.netlive;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -23,9 +23,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.richardlucasapps.netlive.MainService;
-import com.richardlucasapps.netlive.R;
 
 public class MainActivity extends Activity {
 

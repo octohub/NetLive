@@ -21,8 +21,6 @@ import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 
-import com.richardlucasapps.netlive.ui.MainActivity;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
