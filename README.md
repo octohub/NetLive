@@ -14,7 +14,7 @@ NetLive allows you to monitor your internet data transfer rate while displaying 
 
 # Feel free to contact me:
 
-- [Email]
+- richardlucasapps@gmail.com
 - [Twitter]
 - [Google+]
 
@@ -36,7 +36,6 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 [Google Play Listing]: <https://play.google.com/store/apps/details?id=com.richardlucasapps.netlive&hl=en>
 [Help me test NetLive and offer feedback, join the official beta community]: <https://plus.google.com/u/0/communities/106451458359352152887>
-[Email]: <richardlucasapps@gmail.com>
 [Twitter]:<https://twitter.com/dickclucas>
 [Google+]:<https://google.com/+RichardLucasapps>
 
