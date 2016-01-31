@@ -22,8 +22,6 @@ import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
 
 import com.richardlucasapps.netlive.ui.MainActivity;
-import com.richardlucasapps.netlive.widget.NetworkSpeedWidget;
-import com.richardlucasapps.netlive.widget.WidgetSettings;
 
 import java.util.ArrayList;
 import java.util.List;

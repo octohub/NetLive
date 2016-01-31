@@ -1,4 +1,4 @@
-package com.richardlucasapps.netlive.widget;
+package com.richardlucasapps.netlive;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;

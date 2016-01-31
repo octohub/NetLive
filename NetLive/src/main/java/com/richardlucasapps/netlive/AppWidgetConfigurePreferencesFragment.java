@@ -1,4 +1,4 @@
-package com.richardlucasapps.netlive.widget;
+package com.richardlucasapps.netlive;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -19,10 +19,6 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-
-import com.richardlucasapps.netlive.MainService;
-import com.richardlucasapps.netlive.MyApplication;
-import com.richardlucasapps.netlive.R;
 
 public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
 

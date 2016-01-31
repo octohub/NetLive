@@ -1,13 +1,10 @@
-package com.richardlucasapps.netlive.widget;
+package com.richardlucasapps.netlive;
 
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-
-import com.richardlucasapps.netlive.MainService;
-import com.richardlucasapps.netlive.MyApplication;
 
 
 public class NetworkSpeedWidget extends AppWidgetProvider {
