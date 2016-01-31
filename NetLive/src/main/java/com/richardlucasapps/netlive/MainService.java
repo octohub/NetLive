@@ -44,12 +44,10 @@ public class MainService extends Service {
 
     private Notification.Builder mBuilder;
     private NotificationManager mNotifyMgr;
-    private Notification notification;
 
     private SharedPreferences sharedPref;
 
     private UnitConverter converter;
-    private long pollRate;
 
 
     private String unitMeasurement;
@@ -85,7 +83,6 @@ public class MainService extends Service {
     private ArrayList<WidgetSettings> widgetSettingsOfAllWidgets;
 
     private long start = 0l;
-    private long end = 0l;
 
     private double totalSecondsSinceLastPackageRefresh = 0d;
     private double totalSecondsSinceNotificaitonTimeUpdated = 0d;
@@ -113,7 +110,7 @@ public class MainService extends Service {
 
         unitMeasurement = sharedPref.getString("pref_key_measurement_unit", "Mbps");
         showTotalValueNotification = sharedPref.getBoolean("pref_key_show_total_value", false);
-        pollRate = Long.parseLong(sharedPref.getString("pref_key_poll_rate", "5"));
+        long pollRate = Long.parseLong(sharedPref.getString("pref_key_poll_rate", "5"));
         showActiveApp = sharedPref.getBoolean("pref_key_active_app", true);
         hideNotification = sharedPref.getBoolean("pref_key_hide_notification", false);
 
@@ -156,7 +153,7 @@ public class MainService extends Service {
                     );
             mBuilder.setContentIntent(resultPendingIntent);
 
-            notification = mBuilder.build();
+            Notification notification = mBuilder.build();
 
             mNotifyMgr.notify(
                     mId,
@@ -396,7 +393,7 @@ public class MainService extends Service {
         }
 
 
-        end = System.nanoTime();
+        long end = System.nanoTime();
         long totalElapsed = end - start;
         long bytesSentSinceBoot = TrafficStats.getTotalTxBytes();
         long bytesReceivedSinceBoot = TrafficStats.getTotalRxBytes();

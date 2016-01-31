@@ -17,12 +17,7 @@ import com.richardlucasapps.netlive.R;
 
 public class SettingsFragment extends PreferenceFragment {
 
-    private ListPreference notificationDrawerUnitOfMeasurePreference;
     private CheckBoxPreference disableCheckBoxPreference;
-    private ListPreference pollRatePreference;
-    private CheckBoxPreference activeAppPreference;
-    private CheckBoxPreference showTotalValuePreference;
-    private CheckBoxPreference hideNotificationIconPreference;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,20 +29,20 @@ public class SettingsFragment extends PreferenceFragment {
             addPreferencesFromResource(R.xml.preferences);
         }
 
-        notificationDrawerUnitOfMeasurePreference = (ListPreference) findPreference("pref_key_measurement_unit");
+        ListPreference notificationDrawerUnitOfMeasurePreference = (ListPreference) findPreference("pref_key_measurement_unit");
         notificationDrawerUnitOfMeasurePreference.setOnPreferenceChangeListener(notificationDrawerUnitOfMeasurePreferenceListener);
         notificationDrawerUnitOfMeasurePreference.setSummary(notificationDrawerUnitOfMeasurePreference.getValue());
 
-        showTotalValuePreference = (CheckBoxPreference) findPreference("pref_key_show_total_value");
+        CheckBoxPreference showTotalValuePreference = (CheckBoxPreference) findPreference("pref_key_show_total_value");
         showTotalValuePreference.setOnPreferenceChangeListener(showTotalValuePreferenceListener);
 
-        pollRatePreference = (ListPreference) findPreference("pref_key_poll_rate");
+        ListPreference pollRatePreference = (ListPreference) findPreference("pref_key_poll_rate");
         pollRatePreference.setOnPreferenceChangeListener(pollRatePreferenceListener);
 
-        activeAppPreference = (CheckBoxPreference) findPreference("pref_key_active_app");
+        CheckBoxPreference activeAppPreference = (CheckBoxPreference) findPreference("pref_key_active_app");
         activeAppPreference.setOnPreferenceChangeListener(activeAppPreferenceListener);
 
-        hideNotificationIconPreference = (CheckBoxPreference) findPreference("pref_key_hide_notification");
+        CheckBoxPreference hideNotificationIconPreference = (CheckBoxPreference) findPreference("pref_key_hide_notification");
         hideNotificationIconPreference.setOnPreferenceChangeListener(hideNotificationIconPreferenceListener);
 
         disableCheckBoxPreference = (CheckBoxPreference) findPreference("pref_key_auto_start");

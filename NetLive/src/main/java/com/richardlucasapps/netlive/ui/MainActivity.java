@@ -56,9 +56,8 @@ public class MainActivity extends Activity {
             });
             builder.setMessage(getString(R.string.welcome) + getString(R.string.welcome_para))
                     .setTitle(getString(R.string.welcome_message_message) + " " + getString(R.string.app_name_with_version_number));
-            AlertDialog dialog = builder.create();
 
-            welcomeDialog = dialog;
+            welcomeDialog = builder.create();
             welcomeDialog.show();
 
             getSharedPreferences("START_UP_PREFERENCE", MODE_PRIVATE)
@@ -180,9 +179,8 @@ public class MainActivity extends Activity {
         });
         aboutBuilder.setView(myMsg)
                 .setTitle(getString(R.string.about));
-        AlertDialog dialog = aboutBuilder.create();
 
-        aboutDialog = dialog;
+        aboutDialog = aboutBuilder.create();
         aboutDialog.show();
 
     }
