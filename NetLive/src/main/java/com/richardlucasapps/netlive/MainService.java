@@ -347,19 +347,16 @@ public class MainService extends Service {
 
     @SuppressWarnings("deprecation")
     private void update() {
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
             if (!pm.isInteractive()) {
                 return;
             }
+
         } else if (!pm.isScreenOn()) {
             return;
         }
 
-
         initiateUpdate();
-
 
     }
 
