@@ -57,8 +57,9 @@ public class MainActivity extends Activity {
             });
             builder.setMessage(getString(R.string.welcome) + getString(R.string.welcome_para))
                     .setTitle(getString(R.string.welcome_message_message) + " " + getString(R.string.app_name_with_version_number));
+            AlertDialog dialog = builder.create();
 
-            welcomeDialog = builder.create();
+            welcomeDialog = dialog;
             welcomeDialog.show();
 
             getSharedPreferences("START_UP_PREFERENCE", MODE_PRIVATE)
