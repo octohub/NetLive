@@ -8,12 +8,9 @@
 
     <fragment
         android:id="@+id/list"
-        android:name="com.richardlucasapps.netlive.SettingsFragment"
+        android:name="com.richardlucasapps.netlive.ui.SettingsFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
-
-
-
 
 </LinearLayout>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-
     <ListPreference
         android:defaultValue="Mbps"
         android:dialogTitle="@string/pref_dialog_title_choose_measurement_unit"
@@ -38,12 +37,10 @@
         android:summary="@string/pref_summary_hide_notification"
         android:title="@string/pref_title_hide_notification" />
 
-
     <CheckBoxPreference
         android:defaultValue="false"
         android:key="pref_key_auto_start"
         android:summary="@string/pref_summary_auto_start"
         android:title="@string/pref_title_auto_start" />
-
 
 </PreferenceScreen>

@@ -1,4 +1,4 @@
-package com.richardlucasapps.netlive;
+package com.richardlucasapps.netlive.widget;
 
 public class WidgetSettings {
 
@@ -8,11 +8,9 @@ public class WidgetSettings {
 
     public WidgetSettings(String measurementUnit, boolean displayActiveApp,
                           boolean displayTotalValue) {
-
         this.measurementUnit = measurementUnit;
         this.displayActiveApp = displayActiveApp;
         this.displayTotalValue = displayTotalValue;
-
     }
 
     public String getMeasurementUnit() {

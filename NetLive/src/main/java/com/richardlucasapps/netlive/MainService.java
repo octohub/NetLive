@@ -1,12 +1,5 @@
 package com.richardlucasapps.netlive;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
-
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -14,8 +7,11 @@ import android.app.Service;
 import android.app.TaskStackBuilder;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.net.TrafficStats;
 import android.os.Build;
@@ -23,10 +19,18 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
-import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.widget.RemoteViews;
+
+import com.richardlucasapps.netlive.ui.MainActivity;
+import com.richardlucasapps.netlive.widget.NetworkSpeedWidget;
+import com.richardlucasapps.netlive.widget.WidgetSettings;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 public class MainService extends Service {
 
@@ -107,7 +111,6 @@ public class MainService extends Service {
             return;
         }
 
-
         unitMeasurement = sharedPref.getString("pref_key_measurement_unit", "Mbps");
         showTotalValueNotification = sharedPref.getBoolean("pref_key_show_total_value", false);
         pollRate = Long.parseLong(sharedPref.getString("pref_key_poll_rate", "5"));
@@ -115,7 +118,6 @@ public class MainService extends Service {
         hideNotification = sharedPref.getBoolean("pref_key_hide_notification", false);
 
         converter = getUnitConverter(unitMeasurement);
-
 
         widgetRequestsActiveApp = false;
         if (widgetExist) {
@@ -143,7 +145,6 @@ public class MainService extends Service {
                 mBuilder.setPriority(Notification.PRIORITY_HIGH);
             }
 
-
             Intent resultIntent = new Intent(service, MainActivity.class);
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(service);
             stackBuilder.addParentStack(MainActivity.class);
@@ -155,9 +156,7 @@ public class MainService extends Service {
                     );
             mBuilder.setContentIntent(resultPendingIntent);
 
-
             notification = mBuilder.build();
-
 
             mNotifyMgr.notify(
                     mId,
@@ -165,9 +164,7 @@ public class MainService extends Service {
 
             startForeground(mId, notification);
         }
-
         startUpdateService(pollRate);
-
     }
 
     @Override
@@ -177,13 +174,11 @@ public class MainService extends Service {
 
     @Override
     public void onDestroy() {
-
         try {
             updateHandler.cancel(true);
         } catch (NullPointerException e) {
             //The only way there will be a null pointer, is if the disabled preference is checked.  Because if it is, onDestory() is called right away, without creating the updateHandler
         }
-
         super.onDestroy();
     }
 
@@ -198,7 +193,6 @@ public class MainService extends Service {
         if (extras != null) {
             wasPackageAdded = extras.getBoolean("PACKAGE_ADDED");
             //newAppUid = extras.getInt("EXTRA_UID");
-
         }
         if (wasPackageAdded && eitherNotificationOrWidgetRequestsActiveApp) {
             loadAllAppsIntoAppDataUsageList();
@@ -240,14 +234,12 @@ public class MainService extends Service {
                     displayActiveApp, displayTotalValue);
             widgetSettingsOfAllWidgets.add(i, widgetSettings);
 
-
             if (displayActiveApp) {
                 widgetRequestsActiveApp = true;
             }
 
             int widgetColor;
             widgetColor = Color.parseColor(colorOfFont);
-
 
             RemoteViews v = new RemoteViews(getPackageName(), R.layout.widget);
             v.setTextColor(R.id.widgetTextViewLineOne, widgetColor);
@@ -261,7 +253,6 @@ public class MainService extends Service {
     }
 
     public synchronized String getActiveAppWithTrafficApi() {
-
         long maxDelta = 0L;
         long delta = 0L;
         String appLabel = "";
@@ -354,8 +345,6 @@ public class MainService extends Service {
                 return (bytesPerSecond * 8.0) / 1000000.0;
             }
         });
-
-
     }
 
     public void startUpdateService(long pollRate) {
@@ -367,7 +356,6 @@ public class MainService extends Service {
         ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
         updateHandler = scheduler.scheduleAtFixedRate(updater, 0, pollRate, TimeUnit.SECONDS);
     }
-
 
     @SuppressWarnings("deprecation")
     private void update() {
@@ -474,7 +462,7 @@ public class MainService extends Service {
         mBuilder.setContentText(displayValuesText);
         mBuilder.setContentTitle(contentTitleText);
 
-        if (totalSecondsSinceNotificaitonTimeUpdated > 10800 ) { //10800 seconds is three hours
+        if (totalSecondsSinceNotificaitonTimeUpdated > 10800) { //10800 seconds is three hours
             mBuilder.setWhen(System.currentTimeMillis());
             totalSecondsSinceNotificaitonTimeUpdated = 0;
 
@@ -541,33 +529,26 @@ public class MainService extends Service {
             RemoteViews v = widgetRemoteViews.get(i);
             v.setTextViewText(R.id.widgetTextViewLineOne, widgetTextViewLineOneText);
             manager.updateAppWidget(awID, v);
-
         }
-
     }
-
 
     private synchronized void loadAllAppsIntoAppDataUsageList() {
         if (appDataUsageList != null) {
             appDataUsageList.clear(); // clear before adding all the apps so we don't add duplicates
-        } else{
+        } else {
             appDataUsageList = new ArrayList<AppDataUsage>();
         }
         List<ApplicationInfo> appList = packageManager.getInstalledApplications(0);
 
         for (ApplicationInfo appInfo : appList) {
             addAppToAppDataUsageList(appInfo);
-
         }
-
     }
 
     //This method is not utilized because it the PackageWatcherBroadcastReceiver does not receive
     //the exact UID that was added. As a result, have to reload the entire list of installed apps.
     private void addSpecificPackageWithUID(int uid) {
         String[] packagesForUid;
-
-
         //check what the uid is coming back, also check if need to make new instance of paclageManager in order to make it work
         packagesForUid = packageManager.getPackagesForUid(uid);
         for (String element : packagesForUid) {
@@ -577,9 +558,7 @@ public class MainService extends Service {
             } catch (PackageManager.NameNotFoundException e) {
                 //e.printStackTrace();
             }
-
         }
-
     }
 
     private synchronized void addAppToAppDataUsageList(ApplicationInfo appInfo) {  //synchronized because both addSpecificPackageUID and loadAllAppsIntoAppDataUsageList may be changing the app list at the same time.
@@ -589,6 +568,4 @@ public class MainService extends Service {
         appDataUsageList.add(app);
 
     }
-
-
 }

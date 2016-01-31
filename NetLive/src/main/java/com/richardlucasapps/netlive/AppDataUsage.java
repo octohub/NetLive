@@ -8,16 +8,14 @@ public class AppDataUsage {
     private int uId;
     private long previousTotalData;
 
-    public AppDataUsage(String appName1, int uid1) {
-        this.appName = appName1;
-        this.uId = uid1;
+    public AppDataUsage(String appName, int uid) {
+        this.appName = appName;
+        this.uId = uid;
         this.previousTotalData = getTotalBytesTransferredSinceBoot();
-
     }
 
     public Long getTotalBytesTransferredSinceBoot() {
         return TrafficStats.getUidRxBytes(this.uId) + TrafficStats.getUidTxBytes(this.uId);
-
     }
 
     public Long getTransferRate() {
@@ -34,6 +32,5 @@ public class AppDataUsage {
     @Override
     public String toString() {
         return String.valueOf(uId) + String.valueOf(previousTotalData);
-
     }
 }

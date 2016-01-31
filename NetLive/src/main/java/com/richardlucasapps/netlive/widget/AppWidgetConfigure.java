@@ -1,4 +1,4 @@
-package com.richardlucasapps.netlive;
+package com.richardlucasapps.netlive.widget;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
@@ -28,7 +28,4 @@ public class AppWidgetConfigure extends Activity {
     public static int getmAppWidgetId() {
 		return mAppWidgetId;
 	}
-	
-	
-
 }

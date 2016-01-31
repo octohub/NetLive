@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-
 public class MyBroadcastReceiver extends BroadcastReceiver {
 
     @Override
@@ -16,10 +15,10 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
         boolean widgetExist = sharedPref.getBoolean("widget_exists", false);
         boolean autoStart = !(sharedPref.getBoolean("pref_key_auto_start", false));
 
-        if(widgetExist || autoStart){
+        if (widgetExist || autoStart) {
 
-    		 Intent startServiceIntent = new Intent(context, MainService.class);
-    	     context.startService(startServiceIntent);
-    	}
+            Intent startServiceIntent = new Intent(context, MainService.class);
+            context.startService(startServiceIntent);
+        }
     }
 }

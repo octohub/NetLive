@@ -1,4 +1,4 @@
-package com.richardlucasapps.netlive;
+package com.richardlucasapps.netlive.ui;
 
 
 import android.app.Activity;
@@ -25,14 +25,17 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.richardlucasapps.netlive.MainService;
+import com.richardlucasapps.netlive.R;
+
 
 public class MainActivity extends Activity {
 
-    SharedPreferences sharedPref;
-    AlertDialog aboutDialog;
-    AlertDialog helpDialog;
-    AlertDialog welcomeDialog;
-    AlertDialog rateDialog;
+    private SharedPreferences sharedPref;
+    private AlertDialog aboutDialog;
+    private AlertDialog helpDialog;
+    private AlertDialog welcomeDialog;
+    private AlertDialog rateDialog;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -40,7 +43,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
-        if(Build.VERSION.SDK_INT == android.os.Build.VERSION_CODES.JELLY_BEAN_MR2){
+        if (Build.VERSION.SDK_INT == android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
             PreferenceManager.setDefaultValues(this, R.xml.preferences_for_jelly_bean_mr2, false);
         } else {
             PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
@@ -82,16 +85,16 @@ public class MainActivity extends Activity {
     @Override
     protected void onPause() {
         super.onPause();
-        if(aboutDialog!=null){
+        if (aboutDialog != null) {
             aboutDialog.dismiss();
         }
-        if(helpDialog!=null){
+        if (helpDialog != null) {
             helpDialog.dismiss();
         }
-        if(welcomeDialog != null){
+        if (welcomeDialog != null) {
             welcomeDialog.dismiss();
         }
-        if(rateDialog != null){
+        if (rateDialog != null) {
             rateDialog.dismiss();
         }
     }
@@ -171,7 +174,7 @@ public class MainActivity extends Activity {
         }
         int version = pInfo.versionCode;
         SpannableString s = new SpannableString(getString(R.string.app_name_with_version_number) +
-                "\n\n" +" " + getString(R.string.heading_version_code)  + " " + version + "\n\nrichardlucasapps.com");
+                "\n\n" + " " + getString(R.string.heading_version_code) + " " + version + "\n\nrichardlucasapps.com");
         Linkify.addLinks(s, Linkify.WEB_URLS);
         myMsg.setText(s);
         myMsg.setTextSize(15);
@@ -213,14 +216,13 @@ public class MainActivity extends Activity {
         textview.setText((Html.fromHtml(s + "<br>" + "<br>" + "<b>" + overviewTitle + "</b>"
                         + "<br>" + "<br>" + overviewContent + "<br>" + "<br>"
                         + si + "<br>" + "<br>" + "<b>" + batteryLifeTitle + "</b>" + "<br>" + "<br>"
-                        + batteryLifeAdvice + "<b>" + "<br>" + "<br>"+ androidMR2Title + "</b>" + "<br>" + "<br>"
+                        + batteryLifeAdvice + "<b>" + "<br>" + "<br>" + androidMR2Title + "</b>" + "<br>" + "<br>"
                         + androidMR2Body + "<a href=\"https://code.google.com/p/android/issues/detail?id=58210\">https://code.google.com/p/android/issues/detail?id=58210</a>"
         )));
 
         textview.setTextSize(17);
         textview.setPadding(15, 15, 15, 15);
         textview.setMovementMethod(LinkMovementMethod.getInstance());
-
 
         builder.setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
