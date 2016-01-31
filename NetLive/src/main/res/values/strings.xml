@@ -97,5 +97,6 @@
     <string name="heading_version_code">Version Code:</string>
     <string name="about">About</string>
     <string name="overview">Overview</string>
+    <string name="version_code_not_found">unknown</string>
 
 </resources>

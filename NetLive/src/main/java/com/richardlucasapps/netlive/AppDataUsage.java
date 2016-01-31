@@ -2,10 +2,10 @@ package com.richardlucasapps.netlive;
 
 import android.net.TrafficStats;
 
-public class AppDataUsage {
+class AppDataUsage {
 
-    private String appName;
-    private int uId;
+    private final String appName;
+    private final int uId;
     private long previousTotalData;
 
     public AppDataUsage(String appName, int uid) {
@@ -14,7 +14,7 @@ public class AppDataUsage {
         this.previousTotalData = getTotalBytesTransferredSinceBoot();
     }
 
-    public Long getTotalBytesTransferredSinceBoot() {
+    private Long getTotalBytesTransferredSinceBoot() {
         return TrafficStats.getUidRxBytes(this.uId) + TrafficStats.getUidTxBytes(this.uId);
     }
 

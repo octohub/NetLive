@@ -31,11 +31,9 @@ import com.richardlucasapps.netlive.R;
 
 public class MainActivity extends Activity {
 
-    private SharedPreferences sharedPref;
     private AlertDialog aboutDialog;
     private AlertDialog helpDialog;
     private AlertDialog welcomeDialog;
-    private AlertDialog rateDialog;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -166,12 +164,12 @@ public class MainActivity extends Activity {
     private void showAboutDialog() {
         AlertDialog.Builder aboutBuilder = new AlertDialog.Builder(this);
         TextView myMsg = new TextView(this);
-        int version = 0;
+        String version;
         try {
-            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-            version = pInfo.versionCode;
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            version = Integer.toString(packageInfo.versionCode);
         } catch (PackageManager.NameNotFoundException e) {
-
+            version = getString(R.string.version_code_not_found);
         }
         SpannableString s = new SpannableString(getString(R.string.app_name_with_version_number) +
                 "\n\n" + " " + getString(R.string.heading_version_code) + " " + version + "\n\nrichardlucasapps.com");

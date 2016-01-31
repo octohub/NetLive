@@ -544,22 +544,6 @@ public class MainService extends Service {
         }
     }
 
-    //This method is not utilized because it the PackageWatcherBroadcastReceiver does not receive
-    //the exact UID that was added. As a result, have to reload the entire list of installed apps.
-    private void addSpecificPackageWithUID(int uid) {
-        String[] packagesForUid;
-        //check what the uid is coming back, also check if need to make new instance of paclageManager in order to make it work
-        packagesForUid = packageManager.getPackagesForUid(uid);
-        for (String element : packagesForUid) {
-            try {
-                ApplicationInfo appInfo = packageManager.getApplicationInfo(element, 0);
-                addAppToAppDataUsageList(appInfo);
-            } catch (PackageManager.NameNotFoundException e) {
-                //e.printStackTrace();
-            }
-        }
-    }
-
     private synchronized void addAppToAppDataUsageList(ApplicationInfo appInfo) {  //synchronized because both addSpecificPackageUID and loadAllAppsIntoAppDataUsageList may be changing the app list at the same time.
         String appLabel = (String) packageManager.getApplicationLabel(appInfo);
         int uid = appInfo.uid;

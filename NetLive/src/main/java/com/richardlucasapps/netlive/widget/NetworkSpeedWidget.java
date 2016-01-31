@@ -1,6 +1,5 @@
 package com.richardlucasapps.netlive.widget;
 
-import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
@@ -29,12 +28,6 @@ public class NetworkSpeedWidget extends AppWidgetProvider {
     }
 
     @Override
-    public void onEnabled(Context context) {
-
-        super.onEnabled(context);
-    }
-
-    @Override
     public void onDisabled(Context context) {
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MyApplication.getInstance());
@@ -45,15 +38,4 @@ public class NetworkSpeedWidget extends AppWidgetProvider {
         MyApplication.getInstance().startService(new Intent(MyApplication.getInstance(), MainService.class));
         super.onDisabled(context);
     }
-
-    @Override
-	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
-			int[] appWidgetIds) {
-		super.onUpdate(context, appWidgetManager, appWidgetIds);
-
-
-
-		
-	}
-
 }	

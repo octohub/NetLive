@@ -1,5 +1,6 @@
 package com.richardlucasapps.netlive.widget;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
@@ -60,7 +61,7 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
         widgetFontSize.setSummary(widgetFontSize.getEntry());
     }
 
-    private OnPreferenceChangeListener widgetFontSizeListener = new OnPreferenceChangeListener() {
+    private final OnPreferenceChangeListener widgetFontSizeListener = new OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             ((ListPreference) preference).setValue(newValue.toString());
@@ -70,7 +71,7 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
         }
     };
 
-    private OnPreferenceChangeListener widgetUnitOfMeasureListener = new OnPreferenceChangeListener() {
+    private final OnPreferenceChangeListener widgetUnitOfMeasureListener = new OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             ((ListPreference) preference).setValue(newValue.toString());
@@ -79,7 +80,7 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
         }
     };
 
-    private OnPreferenceChangeListener widgetFontColorListener = new OnPreferenceChangeListener() {
+    private final OnPreferenceChangeListener widgetFontColorListener = new OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             ((ListPreference) preference).setValue(newValue.toString());
@@ -89,7 +90,7 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
         }
     };
 
-    private OnPreferenceClickListener addWidgetPreferenceListener = new OnPreferenceClickListener() {
+    private final OnPreferenceClickListener addWidgetPreferenceListener = new OnPreferenceClickListener() {
 
         @Override
         public boolean onPreferenceClick(Preference arg0) {
@@ -114,7 +115,7 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
             edit.commit();
             Intent result = new Intent();
             result.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
-            getActivity().setResult(getActivity().RESULT_OK, result);
+            getActivity().setResult(Activity.RESULT_OK, result);
             getActivity().finish();
             MyApplication.getInstance().stopService(new Intent(MyApplication.getInstance(), MainService.class));
             MyApplication.getInstance().startService(new Intent(MyApplication.getInstance(), MainService.class));
