@@ -41,7 +41,6 @@
     <string name="notification_drawer_category">General</string>
     <string name="show_love_category_name">General</string>
     <string name="pref_title_measurement_unit">Unit of measure</string>
-    <string name="pref_measurement_unit_summary" translatable="false"></string>
     <string name="pref_dialog_title_choose_measurement_unit">Choose measurement unit</string>
     <string name="pref_measurement_unit_default_value" translatable="false">Auto (Kbps, Mbps, Gbps)</string>
     <string name="pref_summary_show_mesurement_units">Display unit of measure beside transfer rates</string>

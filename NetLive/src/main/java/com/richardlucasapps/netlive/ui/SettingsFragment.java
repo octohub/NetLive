@@ -68,7 +68,6 @@ public class SettingsFragment extends PreferenceFragment {
 
     }
 
-
     private OnPreferenceChangeListener notificationDrawerUnitOfMeasurePreferenceListener = new OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -87,7 +86,6 @@ public class SettingsFragment extends PreferenceFragment {
             return true;
         }
     };
-
 
     private OnPreferenceChangeListener pollRatePreferenceListener = new OnPreferenceChangeListener() {
         @Override

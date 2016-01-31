@@ -7,7 +7,6 @@
         android:entries="@array/pref_measurement_unit_entries"
         android:entryValues="@array/pref_measurement_unit_values"
         android:key="pref_key_measurement_unit"
-        android:summary="@string/pref_measurement_unit_summary"
         android:title="@string/pref_title_measurement_unit" />
 
     <CheckBoxPreference

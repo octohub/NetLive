@@ -505,7 +505,6 @@ public class MainService extends Service {
 
             WidgetSettings widgetSettings = widgetSettingsOfAllWidgets.get(i);
 
-
             String widgetTextViewLineOneText = "";
 
             if (widgetSettings.isDisplayActiveApp()) {
