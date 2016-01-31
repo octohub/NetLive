@@ -49,7 +49,7 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
 
         widgetUnitOfMeasure = (ListPreference) findPreference("pref_key_widget_measurement_unit");
         widgetUnitOfMeasure.setOnPreferenceChangeListener(widgetUnitOfMeasureListener);
-        widgetUnitOfMeasure.setSummary(widgetUnitOfMeasure.getValue().toString());
+        widgetUnitOfMeasure.setSummary(widgetUnitOfMeasure.getValue());
 
         widgetFontColor = (ListPreference) findPreference("pref_key_widget_font_color");
         widgetFontColor.setOnPreferenceChangeListener(widgetFontColorListener);

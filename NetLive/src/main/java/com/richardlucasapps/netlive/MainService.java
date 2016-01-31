@@ -215,8 +215,8 @@ public class MainService extends Service {
         manager = AppWidgetManager.getInstance(this);
 
 
-        widgetUnitMeasurementConverters = new ArrayList<UnitConverter>();
-        widgetRemoteViews = new ArrayList<RemoteViews>();
+        widgetUnitMeasurementConverters = new ArrayList<>();
+        widgetRemoteViews = new ArrayList<>();
 
         N = ids.length;
 
@@ -254,7 +254,7 @@ public class MainService extends Service {
 
     public synchronized String getActiveAppWithTrafficApi() {
         long maxDelta = 0L;
-        long delta = 0L;
+        long delta;
         String appLabel = "";
 
         for (AppDataUsage currentApp : appDataUsageList) {
@@ -381,7 +381,7 @@ public class MainService extends Service {
             previousBytesSentSinceBoot = TrafficStats.getTotalTxBytes();//i dont initialize these to 0, because if i do, when app first reports, the rate will be crazy high
             previousBytesReceivedSinceBoot = TrafficStats.getTotalRxBytes();
             if (eitherNotificationOrWidgetRequestsActiveApp) {
-                appDataUsageList = new ArrayList<AppDataUsage>();
+                appDataUsageList = new ArrayList<>();
                 loadAllAppsIntoAppDataUsageList();
 
             }
@@ -390,7 +390,7 @@ public class MainService extends Service {
         }
 
         if (firstUpdate && eitherNotificationOrWidgetRequestsActiveApp) {  //lazy initiazation, do it here so it is not done on the main thread, thus freezing the UI
-            appDataUsageList = new ArrayList<AppDataUsage>();
+            appDataUsageList = new ArrayList<>();
             loadAllAppsIntoAppDataUsageList();  //
             firstUpdate = false;
         }
@@ -535,7 +535,7 @@ public class MainService extends Service {
         if (appDataUsageList != null) {
             appDataUsageList.clear(); // clear before adding all the apps so we don't add duplicates
         } else {
-            appDataUsageList = new ArrayList<AppDataUsage>();
+            appDataUsageList = new ArrayList<>();
         }
         List<ApplicationInfo> appList = packageManager.getInstalledApplications(0);
 

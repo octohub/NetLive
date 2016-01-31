@@ -166,13 +166,13 @@ public class MainActivity extends Activity {
     private void showAboutDialog() {
         AlertDialog.Builder aboutBuilder = new AlertDialog.Builder(this);
         TextView myMsg = new TextView(this);
-        PackageInfo pInfo = null;
+        int version = 0;
         try {
-            pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            version = pInfo.versionCode;
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+
         }
-        int version = pInfo.versionCode;
         SpannableString s = new SpannableString(getString(R.string.app_name_with_version_number) +
                 "\n\n" + " " + getString(R.string.heading_version_code) + " " + version + "\n\nrichardlucasapps.com");
         Linkify.addLinks(s, Linkify.WEB_URLS);

@@ -36,7 +36,7 @@ public class SettingsFragment extends PreferenceFragment {
 
         notificationDrawerUnitOfMeasurePreference = (ListPreference) findPreference("pref_key_measurement_unit");
         notificationDrawerUnitOfMeasurePreference.setOnPreferenceChangeListener(notificationDrawerUnitOfMeasurePreferenceListener);
-        notificationDrawerUnitOfMeasurePreference.setSummary(notificationDrawerUnitOfMeasurePreference.getValue().toString());
+        notificationDrawerUnitOfMeasurePreference.setSummary(notificationDrawerUnitOfMeasurePreference.getValue());
 
         showTotalValuePreference = (CheckBoxPreference) findPreference("pref_key_show_total_value");
         showTotalValuePreference.setOnPreferenceChangeListener(showTotalValuePreferenceListener);
