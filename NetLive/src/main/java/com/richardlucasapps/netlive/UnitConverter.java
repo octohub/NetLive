@@ -1,5 +1,5 @@
 package com.richardlucasapps.netlive;
 
-public interface UnitConverter {
+interface UnitConverter {
     double convert(double bytesPerSecond);
 }

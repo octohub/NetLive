@@ -26,37 +26,32 @@ import com.richardlucasapps.netlive.R;
 
 public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
 
-    private PreferenceScreen addWidgetPreference;
-    private AppWidgetConfigure appWidgetConfigure;
     private int mAppWidgetId;
     private SharedPreferences sharedPref;
     private SharedPreferences.Editor edit;
-    private ListPreference widgetUnitOfMeasure;
-    private ListPreference widgetFontColor;
-    private ListPreference widgetFontSize;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.widget_preference);
 
-        addWidgetPreference = (PreferenceScreen) findPreference("pref_key_widget_add_widget_preference_screen");
+        PreferenceScreen addWidgetPreference = (PreferenceScreen) findPreference("pref_key_widget_add_widget_preference_screen");
         addWidgetPreference.setOnPreferenceClickListener(addWidgetPreferenceListener);
-        appWidgetConfigure = new AppWidgetConfigure();
-        mAppWidgetId = appWidgetConfigure.getmAppWidgetId();
+        AppWidgetConfigure appWidgetConfigure = new AppWidgetConfigure();
+        mAppWidgetId = AppWidgetConfigure.getmAppWidgetId();
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
         edit = sharedPref.edit();
 
-        widgetUnitOfMeasure = (ListPreference) findPreference("pref_key_widget_measurement_unit");
+        ListPreference widgetUnitOfMeasure = (ListPreference) findPreference("pref_key_widget_measurement_unit");
         widgetUnitOfMeasure.setOnPreferenceChangeListener(widgetUnitOfMeasureListener);
         widgetUnitOfMeasure.setSummary(widgetUnitOfMeasure.getValue());
 
-        widgetFontColor = (ListPreference) findPreference("pref_key_widget_font_color");
+        ListPreference widgetFontColor = (ListPreference) findPreference("pref_key_widget_font_color");
         widgetFontColor.setOnPreferenceChangeListener(widgetFontColorListener);
         widgetFontColor.setSummary(widgetFontColor.getEntry().toString());
 
-        widgetFontSize = (ListPreference) findPreference("pref_key_widget_font_size");
+        ListPreference widgetFontSize = (ListPreference) findPreference("pref_key_widget_font_size");
         widgetFontSize.setOnPreferenceChangeListener(widgetFontSizeListener);
         widgetFontSize.setSummary(widgetFontSize.getEntry());
     }
@@ -126,7 +121,7 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
 
     };
 
-    public static void initializeActionBar(PreferenceScreen preferenceScreen) {
+    private static void initializeActionBar(PreferenceScreen preferenceScreen) {
         final Dialog dialog = preferenceScreen.getDialog();
 
         if (dialog != null) {

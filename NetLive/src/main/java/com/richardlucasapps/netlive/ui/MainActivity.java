@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -58,9 +57,8 @@ public class MainActivity extends Activity {
             });
             builder.setMessage(getString(R.string.welcome) + getString(R.string.welcome_para))
                     .setTitle(getString(R.string.welcome_message_message) + " " + getString(R.string.app_name_with_version_number));
-            AlertDialog dialog = builder.create();
 
-            welcomeDialog = dialog;
+            welcomeDialog = builder.create();
             welcomeDialog.show();
 
             getSharedPreferences("START_UP_PREFERENCE", MODE_PRIVATE)
@@ -142,10 +140,10 @@ public class MainActivity extends Activity {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         //Try Google play
         intent.setData(Uri.parse(getString(R.string.app_uri_for_google_play)));
-        if (MyStartActivity(intent) == false) {
+        if (!MyStartActivity(intent)) {
             //Market (Google play) app seems not installed, let's try to open a webbrowser
             intent.setData(Uri.parse(getString(R.string.app_url_if_uri_fails)));
-            if (MyStartActivity(intent) == false) {
+            if (!MyStartActivity(intent)) {
                 //Well if this also fails, we have run out of options, inform the user.
                 Toast.makeText(this, getString(R.string.could_not_open_app_in_Google_play), Toast.LENGTH_SHORT).show();
             }
@@ -185,9 +183,8 @@ public class MainActivity extends Activity {
         });
         aboutBuilder.setView(myMsg)
                 .setTitle(getString(R.string.about));
-        AlertDialog dialog = aboutBuilder.create();
 
-        aboutDialog = dialog;
+        aboutDialog = aboutBuilder.create();
         aboutDialog.show();
 
     }
@@ -229,9 +226,8 @@ public class MainActivity extends Activity {
         });
         builder.setView(view)
                 .setTitle(getString(R.string.welcome_message_message) + " " + getString(R.string.app_name_with_version_number));
-        AlertDialog dialog = builder.create();
 
-        helpDialog = dialog;
+        helpDialog = builder.create();
         helpDialog.show();
     }
 

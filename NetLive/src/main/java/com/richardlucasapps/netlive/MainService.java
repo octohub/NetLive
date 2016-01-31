@@ -252,7 +252,7 @@ public class MainService extends Service {
         }
     }
 
-    public synchronized String getActiveAppWithTrafficApi() {
+    private synchronized String getActiveAppWithTrafficApi() {
         long maxDelta = 0L;
         long delta;
         String appLabel = "";
@@ -347,7 +347,7 @@ public class MainService extends Service {
         });
     }
 
-    public void startUpdateService(long pollRate) {
+    private void startUpdateService(long pollRate) {
         final Runnable updater = new Runnable() {
             public void run() {
                 update();
