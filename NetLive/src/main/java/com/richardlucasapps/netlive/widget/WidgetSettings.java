@@ -2,9 +2,9 @@ package com.richardlucasapps.netlive.widget;
 
 public class WidgetSettings {
 
-    private String measurementUnit;
-    private boolean displayActiveApp;
-    private boolean displayTotalValue;
+    private final String measurementUnit;
+    private final boolean displayActiveApp;
+    private final boolean displayTotalValue;
 
     public WidgetSettings(String measurementUnit, boolean displayActiveApp,
                           boolean displayTotalValue) {

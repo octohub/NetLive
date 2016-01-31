@@ -37,7 +37,6 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
 
         PreferenceScreen addWidgetPreference = (PreferenceScreen) findPreference("pref_key_widget_add_widget_preference_screen");
         addWidgetPreference.setOnPreferenceClickListener(addWidgetPreferenceListener);
-        AppWidgetConfigure appWidgetConfigure = new AppWidgetConfigure();
         mAppWidgetId = AppWidgetConfigure.getmAppWidgetId();
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());

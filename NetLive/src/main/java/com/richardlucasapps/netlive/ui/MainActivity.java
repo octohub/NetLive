@@ -140,22 +140,22 @@ public class MainActivity extends Activity {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         //Try Google play
         intent.setData(Uri.parse(getString(R.string.app_uri_for_google_play)));
-        if (!MyStartActivity(intent)) {
+        if (noActivityFoundForIntent(intent)) {
             //Market (Google play) app seems not installed, let's try to open a webbrowser
             intent.setData(Uri.parse(getString(R.string.app_url_if_uri_fails)));
-            if (!MyStartActivity(intent)) {
+            if (noActivityFoundForIntent(intent)) {
                 //Well if this also fails, we have run out of options, inform the user.
                 Toast.makeText(this, getString(R.string.could_not_open_app_in_Google_play), Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private boolean MyStartActivity(Intent aIntent) {
+    private boolean noActivityFoundForIntent(Intent aIntent) {
         try {
             startActivity(aIntent);
-            return true;
-        } catch (ActivityNotFoundException e) {
             return false;
+        } catch (ActivityNotFoundException e) {
+            return true;
         }
     }
 
@@ -183,8 +183,9 @@ public class MainActivity extends Activity {
         });
         aboutBuilder.setView(myMsg)
                 .setTitle(getString(R.string.about));
+        AlertDialog dialog = aboutBuilder.create();
 
-        aboutDialog = aboutBuilder.create();
+        aboutDialog = dialog;
         aboutDialog.show();
 
     }

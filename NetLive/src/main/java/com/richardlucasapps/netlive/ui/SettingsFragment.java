@@ -68,7 +68,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     }
 
-    private OnPreferenceChangeListener notificationDrawerUnitOfMeasurePreferenceListener = new OnPreferenceChangeListener() {
+    private final OnPreferenceChangeListener notificationDrawerUnitOfMeasurePreferenceListener = new OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             ((ListPreference) preference).setValue(newValue.toString());
@@ -78,7 +78,7 @@ public class SettingsFragment extends PreferenceFragment {
         }
     };
 
-    private OnPreferenceChangeListener showTotalValuePreferenceListener = new OnPreferenceChangeListener() {
+    private final OnPreferenceChangeListener showTotalValuePreferenceListener = new OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             ((CheckBoxPreference) preference).setChecked((Boolean) newValue);
@@ -87,7 +87,7 @@ public class SettingsFragment extends PreferenceFragment {
         }
     };
 
-    private OnPreferenceChangeListener pollRatePreferenceListener = new OnPreferenceChangeListener() {
+    private final OnPreferenceChangeListener pollRatePreferenceListener = new OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             ((ListPreference) preference).setValue(newValue.toString());
@@ -102,7 +102,7 @@ public class SettingsFragment extends PreferenceFragment {
         }
     };
 
-    private OnPreferenceChangeListener activeAppPreferenceListener = new OnPreferenceChangeListener() {
+    private final OnPreferenceChangeListener activeAppPreferenceListener = new OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             boolean boolVal = (Boolean) newValue;
@@ -118,7 +118,7 @@ public class SettingsFragment extends PreferenceFragment {
 
     };
 
-    private OnPreferenceChangeListener hideNotificationIconPreferenceListener = new OnPreferenceChangeListener() {
+    private final OnPreferenceChangeListener hideNotificationIconPreferenceListener = new OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             ((CheckBoxPreference) preference).setChecked((Boolean) newValue);
@@ -128,7 +128,7 @@ public class SettingsFragment extends PreferenceFragment {
     };
 
 
-    private OnPreferenceChangeListener disableCheckBoxPreferenceListener = new OnPreferenceChangeListener() {
+    private final OnPreferenceChangeListener disableCheckBoxPreferenceListener = new OnPreferenceChangeListener() {
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             boolean checked = (Boolean) newValue;
