@@ -26,7 +26,6 @@
     <string name="action_settings_rate_netlive">Rate NetLive</string>
     <string name="action_settings_share">Share</string>
     <string name="share_via">Share via</string>
-    <string name="general_category">General</string>
     <string name="pref_title_show_total_value">Show total value</string>
     <string name="pref_summary_show_total_value">Show total speed beside upload and download speeds.</string>
     <string name="pref_summary_hide_notification">Hide NetLive notification icon from displaying in the status bar. This will hide upload and download arrows from displaying that can show you at a glance info in the status bar.</string>

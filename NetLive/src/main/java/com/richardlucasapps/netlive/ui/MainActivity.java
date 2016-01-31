@@ -1,6 +1,5 @@
 package com.richardlucasapps.netlive.ui;
 
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
@@ -26,7 +25,6 @@ import android.widget.Toast;
 
 import com.richardlucasapps.netlive.MainService;
 import com.richardlucasapps.netlive.R;
-
 
 public class MainActivity extends Activity {
 
@@ -185,7 +183,6 @@ public class MainActivity extends Activity {
 
     }
 
-
     private void showHelpDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         String s = getString(R.string.help_dialog_para_1);
@@ -199,7 +196,6 @@ public class MainActivity extends Activity {
         String androidMR2Body = getString(R.string.help_dialog_android_jelly_bean_mr2_body);
 
         String si = getString(R.string.help_dialog_para_3);
-
 
         LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.help_dialog, null);
