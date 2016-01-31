@@ -117,7 +117,6 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
             return true;
         }
 
-
     };
 
     private static void initializeActionBar(PreferenceScreen preferenceScreen) {
