@@ -34,13 +34,10 @@ import java.util.concurrent.TimeUnit;
 
 public class MainService extends Service {
 
-
     private long previousBytesSentSinceBoot;
     private long previousBytesReceivedSinceBoot;
 
-
     private List<AppDataUsage> appDataUsageList;
-
 
     private Notification.Builder mBuilder;
     private NotificationManager mNotifyMgr;
@@ -49,10 +46,8 @@ public class MainService extends Service {
 
     private UnitConverter converter;
 
-
     private String unitMeasurement;
     private boolean showActiveApp;
-
 
     private PowerManager pm;
     private boolean notificationEnabled;
@@ -68,13 +63,10 @@ public class MainService extends Service {
     private boolean showTotalValueNotification;
     private boolean hideNotification;
 
-
     private boolean widgetRequestsActiveApp;
-
 
     private boolean firstUpdate;
     private PackageManager packageManager;
-
 
     private boolean widgetExist;
 
@@ -86,7 +78,6 @@ public class MainService extends Service {
 
     private double totalSecondsSinceLastPackageRefresh = 0d;
     private double totalSecondsSinceNotificaitonTimeUpdated = 0d;
-
 
     @Override
     public void onCreate() {

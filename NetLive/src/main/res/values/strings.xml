@@ -25,7 +25,7 @@
     <string name="rate_app_dialog_title">Rate NetLive</string>
     <string name="could_not_open_app_in_Google_play">Could not open Google Play</string>
     <string name="enable_active_app_feature_jelly_bean_mr2">This feature may not work due to a bug in this version of Android (4.3). Check the help section in the menu for details.</string>
-    <string name="welcome_message_dismiss" translatable="false">Ok</string>
+    <string name="welcome_message_dismiss" translatable="false">@android:string/ok</string>
     <string name="welcome_message_message">Welcome to</string>
     <string name="action_settings_rate_netlive">Rate NetLive</string>
     <string name="action_settings_share">Share</string>
@@ -86,7 +86,7 @@
         give you info on how much data an individual app is using, do not work in Android 4.3.
         If you have a 4.3 device, you can easily tell if it is working or not by enabling the
         active app feature, and then checking if an app title ever appears.  If it does, that means
-        it is working, if it simply shows this \"(...)\" all the time, then your device has the bug.
+        it is working, if it simply shows this \"(&#8230;)\" all the time, then your device has the bug.
         These methods may work on some devices with Android 4.3, but they certainly do not
         work on the majority of 4.3 devices. I filed a bug report with the Android Open Source
         Project and it is a confirmed issue. You can view the bug report here: \n</string>
