@@ -49,4 +49,5 @@
     <string name="welcome_para">Wenn Sie Fragen, Empfehlungen, oder Sie in ein Problem mit der App laufen, zögern Sie bitte nicht, mich, indem Sie auf die Option \“Feedback geben\” im Menü zu kontaktieren. Viel Spaß!</string>
     <string name="overview">Übersicht</string>
     <string name="version_code_not_found">unbekannt</string>
+    <string name="pref_title_add_widget">Widget hinzufügen</string>
 </resources>

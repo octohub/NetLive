@@ -67,5 +67,6 @@
     <string name="overview">Overview</string>
     <string name="version_code_not_found">unknown</string>
     <string name="widget_awaiting_update">awaiting update&#8230;\nre-add widget if\nupdate never comes</string>
+    <string name="pref_title_add_widget">Add widget</string>
 
 </resources>

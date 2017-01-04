@@ -3,7 +3,7 @@
 
     <PreferenceScreen
         android:key="pref_key_widget_add_widget_preference_screen"
-        android:title="Add widget" />
+        android:title="@string/pref_title_add_widget" />
 
     <ListPreference
         android:defaultValue="Mbps"
