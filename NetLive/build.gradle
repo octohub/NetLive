@@ -7,8 +7,8 @@ android {
   defaultConfig {
     minSdkVersion 18
     targetSdkVersion 25
-    versionCode 37
-    versionName "3.3.3"
+    versionCode 38
+    versionName "3.3.4"
   }
 
   buildTypes {
@@ -17,6 +17,9 @@ android {
       minifyEnabled false
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
     }
+  }
+  lintOptions {
+    checkReleaseBuilds false
   }
 }
 

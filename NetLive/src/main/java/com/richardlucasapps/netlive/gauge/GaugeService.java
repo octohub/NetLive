@@ -512,7 +512,7 @@ public class GaugeService extends Service {
       ApplicationInfo appInfo) {  //synchronized because both addSpecificPackageUID and loadAllAppsIntoAppDataUsageList may be changing the app list at the same time.
     String appLabel = (String) packageManager.getApplicationLabel(appInfo);
     int uid = appInfo.uid;
-    AppDataUsage app = new AppDataUsage(appLabel, uid, this);
+    AppDataUsage app = new AppDataUsage(appLabel, uid);
     appDataUsageList.add(app);
   }
 }

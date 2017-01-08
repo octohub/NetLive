@@ -11,8 +11,8 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
 import android.widget.Toast;
-import com.richardlucasapps.netlive.gauge.GaugeService;
 import com.richardlucasapps.netlive.R;
+import com.richardlucasapps.netlive.gauge.GaugeService;
 
 public class SettingsFragment extends PreferenceFragment {
 
@@ -23,6 +23,8 @@ public class SettingsFragment extends PreferenceFragment {
 
     if (Build.VERSION.SDK_INT == android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
       addPreferencesFromResource(R.xml.preferences_for_jelly_bean_mr2);
+    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+      addPreferencesFromResource(R.xml.preferences_for_n_and_above);
     } else {
       addPreferencesFromResource(R.xml.preferences);
     }
@@ -44,6 +46,9 @@ public class SettingsFragment extends PreferenceFragment {
     CheckBoxPreference activeAppPreference =
         (CheckBoxPreference) findPreference("pref_key_active_app");
     activeAppPreference.setOnPreferenceChangeListener(activeAppPreferenceListener);
+    if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)) {
+      activeAppPreference.setChecked(false);
+    }
 
     CheckBoxPreference hideNotificationIconPreference =
         (CheckBoxPreference) findPreference("pref_key_hide_notification");

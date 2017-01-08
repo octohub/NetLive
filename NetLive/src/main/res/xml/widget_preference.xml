@@ -1,46 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceScreen
-        android:key="pref_key_widget_add_widget_preference_screen"
-        android:title="@string/pref_title_add_widget" />
+  <PreferenceScreen
+      android:key="pref_key_widget_add_widget_preference_screen"
+      android:title="@string/pref_title_add_widget" />
 
-    <ListPreference
-        android:defaultValue="Mbps"
-        android:dialogTitle="@string/pref_dialog_title_choose_measurement_unit"
-        android:entries="@array/pref_measurement_unit_entries"
-        android:entryValues="@array/pref_measurement_unit_values"
-        android:key="pref_key_widget_measurement_unit"
-        android:title="@string/pref_title_measurement_unit" />
+  <ListPreference
+      android:defaultValue="Mbps"
+      android:dialogTitle="@string/pref_dialog_title_choose_measurement_unit"
+      android:entries="@array/pref_measurement_unit_entries"
+      android:entryValues="@array/pref_measurement_unit_values"
+      android:key="pref_key_widget_measurement_unit"
+      android:title="@string/pref_title_measurement_unit" />
 
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="pref_key_widget_show_total"
-        android:summary="@string/pref_summary_show_total_value"
-        android:title="@string/pref_title_show_total_value" />
+  <CheckBoxPreference
+      android:defaultValue="false"
+      android:key="pref_key_widget_show_total"
+      android:summary="@string/pref_summary_show_total_value"
+      android:title="@string/pref_title_show_total_value" />
 
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="pref_key_widget_active_app"
-        android:summary="@string/pref_summary_active_app"
-        android:title="@string/pref_title_active_app" />
+  <CheckBoxPreference
+      android:defaultValue="false"
+      android:key="pref_key_widget_active_app"
+      android:summary="@string/pref_summary_active_app"
+      android:title="@string/pref_title_active_app" />
 
-    <ListPreference
-        android:defaultValue="@string/widget_font_size_default_value"
-        android:dialogTitle="@string/pref_widget_dialog_font_size"
-        android:entries="@array/pref_widget_font_size_entries"
-        android:entryValues="@array/pref_widget_font_size_values"
-        android:key="pref_key_widget_font_size"
-        android:summary="@string/pref_widget_summary_font_size"
-        android:title="@string/pref_widget_title_font_size" />
+  <ListPreference
+      android:defaultValue="@string/widget_font_size_default_value"
+      android:dialogTitle="@string/pref_widget_dialog_font_size"
+      android:entries="@array/pref_widget_font_size_entries"
+      android:entryValues="@array/pref_widget_font_size_values"
+      android:key="pref_key_widget_font_size"
+      android:summary="@string/pref_widget_summary_font_size"
+      android:title="@string/pref_widget_title_font_size" />
 
-    <ListPreference
-        android:defaultValue="white"
-        android:dialogTitle="@string/pref_widget_dialog_font_color"
-        android:entries="@array/pref_widget_font_color_entries"
-        android:entryValues="@array/pref_widget_font_color_values"
-        android:key="pref_key_widget_font_color"
-        android:summary="@string/pref_widget_summary_font_color"
-        android:title="@string/pref_widget_title_font_color" />
+  <ListPreference
+      android:defaultValue="white"
+      android:dialogTitle="@string/pref_widget_dialog_font_color"
+      android:entries="@array/pref_widget_font_color_entries"
+      android:entryValues="@array/pref_widget_font_color_values"
+      android:key="pref_key_widget_font_color"
+      android:summary="@string/pref_widget_summary_font_color"
+      android:title="@string/pref_widget_title_font_color" />
 
 </PreferenceScreen>

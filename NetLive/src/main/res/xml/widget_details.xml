@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<appwidget-provider
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:configure="com.richardlucasapps.netlive.widget.AppWidgetConfigure"
-    android:updatePeriodMillis="0"
-    android:minWidth="120dp"
-    android:minHeight="25dp"
     android:initialLayout="@layout/widget"
+    android:minHeight="25dp"
     android:minResizeHeight="25dp"
     android:minResizeWidth="25dp"
-    android:widgetCategory="keyguard|home_screen"
-    android:resizeMode="horizontal|vertical">
-    <!--Though the update period is set to 1000 miliseconds here, which is one second,
-         Android only allows you to update the widget a max of once every 15 minutes.
-         So the "1000" update period is somewhat symbolic.  I must use an alarm manager
-         if I want to update my app faster than once every 15 minutes-->
+    android:minWidth="120dp"
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="0"
+    android:widgetCategory="keyguard|home_screen">
+  <!--Though the update period is set to 1000 miliseconds here, which is one second,
+       Android only allows you to update the widget a max of once every 15 minutes.
+       So the "1000" update period is somewhat symbolic.  I must use an alarm manager
+       if I want to update my app faster than once every 15 minutes-->
 
 </appwidget-provider>

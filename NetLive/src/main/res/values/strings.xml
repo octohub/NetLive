@@ -5,52 +5,53 @@
 			 		by going to the \"Send Feedback\" option in the menu. Enjoy!</string>
     <string name="welcome_para">If you have any questions, recommendations, or you run into a problem with the app, please do not hesitate to contact me
 			 		by going to the \"Send Feedback\" option in the menu. Enjoy!</string>
-    <string name="help_dialog_para_2">NetLive allows you to monitor your internet data transfer rate while also showing the app that is using the most data at the current moment. It runs both in the notification drawer or as a widget, so you always have access to your transfer rate information.</string>
-    <string name="help_dialog_para_3">NetLive uses the official International System of Units (SI). This means, for example, that a kilobit is considered 1000 bits, not 1024 bits.</string>
-    <string name="welcome">NetLive is now running in your notification drawer, welcome to the revolution!\n\n</string>
-    <string name="battery_life_help_title">Battery Life Issues</string>
-    <string name="battery_life_help_advice">Increasing the poll rate to 5 seconds or greater will help most. Alternatively, you can disable the active app feature.  If this still does not help, go to the "Send Feedback" option in the menu and let me know so we can work this out.</string>
+  <string name="help_dialog_para_2">NetLive allows you to monitor your internet data transfer rate while also showing the app that is using the most data at the current moment. It runs both in the notification drawer or as a widget, so you always have access to your transfer rate information.</string>
+  <string name="help_dialog_para_3">NetLive uses the official International System of Units (SI). This means, for example, that a kilobit is considered 1000 bits, not 1024 bits.</string>
+  <string name="welcome">NetLive is now running in your notification drawer, welcome to the revolution!\n\n</string>
+  <string name="battery_life_help_title">Battery Life Issues</string>
+  <string name="battery_life_help_advice">Increasing the poll rate to 5 seconds or greater will help most. Alternatively, you can disable the active app feature.  If this still does not help, go to the "Send Feedback" option in the menu and let me know so we can work this out.</string>
 
-    <string name="app_name" translatable="false">NetLive</string>
-    <string name="app_name_with_version_number" translatable="false">NetLive v3.3.3</string>
-    <string name="action_settings_help">Help</string>
-    <string name="action_settings_about">About</string>
-    <string name="action_settings_send_feedback">Send Feedback</string>
-    <string name="app_uri_for_google_play" translatable="false">market://details?id=com.richardlucasapps.netlive</string>
-    <string name="app_url_if_uri_fails" translatable="false">https://play.google.com/store/apps/details?id=com.richardlucasapps.netlive&amp;hl=en</string>
-    <string name="netlive_share_body">Monitor your internet transfer rate in real time with NetLive by @dickclucas</string>
-    <string name="could_not_open_app_in_Google_play">Could not open Google Play</string>
-    <string name="enable_active_app_feature_jelly_bean_mr2">This feature may not work due to a bug in this version of Android (4.3). Check the help section in the menu for details.</string>
-    <string name="welcome_message_dismiss" translatable="false">@android:string/ok</string>
-    <string name="welcome_message_message">Welcome to</string>
-    <string name="action_settings_rate_netlive">Rate NetLive</string>
-    <string name="action_settings_share">Share</string>
-    <string name="share_via">Share via</string>
-    <string name="pref_title_show_total_value">Show total value</string>
-    <string name="pref_summary_show_total_value">Show total speed beside upload and download speeds.</string>
-    <string name="pref_summary_hide_notification">Hide NetLive notification icon from displaying in the status bar. This will hide upload and download arrows from displaying that can show you at a glance info in the status bar.</string>
-    <string name="pref_title_hide_notification">Hide notification icon</string>
-    <string name="pref_summary_auto_start">Prevent all transfer rate reporting in the notification area (widgets must be deleted manually).</string>
-    <string name="pref_title_auto_start">Disable</string>
-    <string name="pref_title_measurement_unit">Unit of measure</string>
-    <string name="pref_dialog_title_choose_measurement_unit">Choose measurement unit</string>
-    <string name="pref_title_show_measurement_unit_total">Total</string>
-    <string name="pref_title_active_app">Display active app</string>
-    <string name="pref_summary_active_app">Display the name of the app currently using the most data. Enabling this feature may increase battery usage.</string>
-    <string name="pref_summary_active_app_jelly_bean_mr2">Display the name of the app currently using the most data. Enabling this feature may increase battery usage. Looks like you are running Android 4.3, this feature may not work due to a bug in this version of Android. Check the help section in the menu for details.</string>
-    <string name="pref_widget_title_font_size">Size</string>
-    <string name="pref_widget_summary_font_size">Choose font size</string>
-    <string name="pref_widget_dialog_font_size">Choose font size</string>
-    <string name="pref_widget_title_font_color">Color</string>
-    <string name="pref_widget_summary_font_color">Choose predefined font color</string>
-    <string name="pref_widget_dialog_font_color">Choose font color</string>
-    <string name="pref_title_poll_rate">Poll Rate</string>
-    <string name="pref_summary_poll_rate">Choose how often in seconds NetLive updates, shorter poll rates increase battery usage (controls widgets too).</string>
-    <string name="pref_dialog_title_poll_rate">Choose poll rate</string>
-    <string name="widget_font_size_default_value" translatable="false">12</string>
-    <string name="pref_key_poll_rate_default_value" translatable="false">5</string>
-    <string name="poll_rate_warning">Setting a poll rate below 5 seconds may hurt battery life. 5 seconds offers a good balance.</string>
-    <string name="help_dialog_android_jelly_bean_mr2_title">Android 4.3 Bug</string>
+  <string name="app_name" translatable="false">NetLive</string>
+  <string name="app_name_with_version_number" translatable="false">NetLive v3.3.4</string>
+  <string name="action_settings_help">Help</string>
+  <string name="action_settings_about">About</string>
+  <string name="action_settings_send_feedback">Send Feedback</string>
+  <string name="app_uri_for_google_play" translatable="false">market://details?id=com.richardlucasapps.netlive</string>
+  <string name="app_url_if_uri_fails" translatable="false">https://play.google.com/store/apps/details?id=com.richardlucasapps.netlive&amp;hl=en</string>
+  <string name="netlive_share_body">Monitor your internet transfer rate in real time with NetLive by @dickclucas</string>
+  <string name="could_not_open_app_in_Google_play">Could not open Google Play</string>
+  <string name="enable_active_app_feature_jelly_bean_mr2">This feature may not work due to a bug in this version of Android (4.3). Check the help section in the menu for details.</string>
+  <string name="welcome_message_dismiss" translatable="false">@android:string/ok</string>
+  <string name="welcome_message_message">Welcome to</string>
+  <string name="action_settings_rate_netlive">Rate NetLive</string>
+  <string name="action_settings_share">Share</string>
+  <string name="share_via">Share via</string>
+  <string name="pref_title_show_total_value">Show total value</string>
+  <string name="pref_summary_show_total_value">Show total speed beside upload and download speeds.</string>
+  <string name="pref_summary_hide_notification">Hide NetLive notification icon from displaying in the status bar. This will hide upload and download arrows from displaying that can show you at a glance info in the status bar.</string>
+  <string name="pref_title_hide_notification">Hide notification icon</string>
+  <string name="pref_summary_auto_start">Prevent all transfer rate reporting in the notification area (widgets must be deleted manually).</string>
+  <string name="pref_title_auto_start">Disable</string>
+  <string name="pref_title_measurement_unit">Unit of measure</string>
+  <string name="pref_dialog_title_choose_measurement_unit">Choose measurement unit</string>
+  <string name="pref_title_show_measurement_unit_total">Total</string>
+  <string name="pref_title_active_app">Display active app</string>
+  <string name="pref_summary_active_app">Display the name of the app currently using the most data. Enabling this feature may increase battery usage.</string>
+  <string name="pref_summary_active_app_android_n">This feature is not available on Android 7.0 and above because of changes to Android. Apologies for the inconvenience!</string>
+  <string name="pref_summary_active_app_jelly_bean_mr2">Display the name of the app currently using the most data. Enabling this feature may increase battery usage. Looks like you are running Android 4.3, this feature may not work due to a bug in this version of Android. Check the help section in the menu for details.</string>
+  <string name="pref_widget_title_font_size">Size</string>
+  <string name="pref_widget_summary_font_size">Choose font size</string>
+  <string name="pref_widget_dialog_font_size">Choose font size</string>
+  <string name="pref_widget_title_font_color">Color</string>
+  <string name="pref_widget_summary_font_color">Choose predefined font color</string>
+  <string name="pref_widget_dialog_font_color">Choose font color</string>
+  <string name="pref_title_poll_rate">Poll Rate</string>
+  <string name="pref_summary_poll_rate">Choose how often in seconds NetLive updates, shorter poll rates increase battery usage (controls widgets too).</string>
+  <string name="pref_dialog_title_poll_rate">Choose poll rate</string>
+  <string name="widget_font_size_default_value" translatable="false">12</string>
+  <string name="pref_key_poll_rate_default_value" translatable="false">5</string>
+  <string name="poll_rate_warning">Setting a poll rate below 5 seconds may hurt battery life. 5 seconds offers a good balance.</string>
+  <string name="help_dialog_android_jelly_bean_mr2_title">Android 4.3 Bug</string>
     <string name="help_dialog_android_jelly_bean_mr2_body">The methods in the Android SDK which
         give you info on how much data an individual app is using, do not work in Android 4.3.
         If you have a 4.3 device, you can easily tell if it is working or not by enabling the
@@ -59,14 +60,18 @@
         These methods may work on some devices with Android 4.3, but they certainly do not
         work on the majority of 4.3 devices. I filed a bug report with the Android Open Source
         Project and it is a confirmed issue. You can view the bug report here: \n</string>
-    <string name="feedback">Feedback</string>
-    <string name="send_feedback">Send Feedback:</string>
-    <string name="ok">@android:string/ok</string>
-    <string name="heading_version_code">Version Code:</string>
-    <string name="about">About</string>
-    <string name="overview">Overview</string>
-    <string name="version_code_not_found">unknown</string>
-    <string name="widget_awaiting_update">awaiting update&#8230;\nre-add widget if\nupdate never comes</string>
-    <string name="pref_title_add_widget">Add widget</string>
+  <string name="feedback">Feedback</string>
+  <string name="send_feedback">Send Feedback:</string>
+  <string name="ok">@android:string/ok</string>
+  <string name="heading_version_code">Version Code:</string>
+  <string name="about">About</string>
+  <string name="overview">Overview</string>
+  <string name="version_code_not_found">unknown</string>
+  <string name="widget_awaiting_update">awaiting update&#8230;\nre-add widget if\nupdate never comes</string>
+  <string name="pref_title_add_widget">Add widget</string>
+  <string name="help_dialog_android_n_title">Android 7.0 and Above</string>
+  <string name="help_dialog_android_n_body">The active app feature is no longer available on Android 7.0 and above due to changes in Android. The functionality
+  that was provided by TrafficStats has been replaced by NetworkStatsManager. NetworkStatsManager does not update quickly enough to support the active app feature.
+  NetworksStatsManager is meant to provide historical data, not moment to moment data. More info here: \n</string>
 
 </resources>

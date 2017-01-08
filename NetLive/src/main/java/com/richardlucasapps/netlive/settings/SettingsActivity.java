@@ -1,12 +1,9 @@
 package com.richardlucasapps.netlive.settings;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.AppOpsManager;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -15,9 +12,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
@@ -32,7 +26,7 @@ import android.widget.Toast;
 import com.richardlucasapps.netlive.R;
 import com.richardlucasapps.netlive.gauge.GaugeService;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends Activity {
   private static final int READ_PHONE_STATE_REQUEST = 37;
 
   private AlertDialog aboutDialog;
@@ -45,12 +39,10 @@ public class SettingsActivity extends AppCompatActivity {
 
     if (Build.VERSION.SDK_INT == android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
       PreferenceManager.setDefaultValues(this, R.xml.preferences_for_jelly_bean_mr2, false);
+    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+      PreferenceManager.setDefaultValues(this, R.xml.preferences_for_n_and_above, false);
     } else {
       PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
-    }
-
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-      fillStats();
     }
 
     boolean firstRun =
@@ -77,84 +69,6 @@ public class SettingsActivity extends AppCompatActivity {
     }
     Intent intent = new Intent(getApplicationContext(), GaugeService.class); //getApp
     startService(intent);
-  }
-
-  @Override protected void onStart() {
-    super.onStart();
-    requestPermissions();
-  }
-
-  @Override @TargetApi(Build.VERSION_CODES.M) protected void onResume() {
-    super.onResume();
-    if (!hasPermissions()) {
-      return;
-    }
-  }
-
-  private void requestPermissions() {
-    if (!hasPermissionToReadNetworkHistory()) {
-      return;
-    }
-    if (!hasPermissionToReadPhoneStats()) {
-      requestPhoneStateStats();
-      return;
-    }
-  }
-
-  private boolean hasPermissions() {
-    return hasPermissionToReadNetworkHistory() && hasPermissionToReadPhoneStats();
-  }
-
-  private boolean hasPermissionToReadPhoneStats() {
-    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
-        == PackageManager.PERMISSION_DENIED) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  private void requestPhoneStateStats() {
-    ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.READ_PHONE_STATE },
-        READ_PHONE_STATE_REQUEST);
-  }
-
-  private boolean hasPermissionToReadNetworkHistory() {
-    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-      return true;
-    }
-    final AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
-    int mode =
-        appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, android.os.Process.myUid(),
-            getPackageName());
-    if (mode == AppOpsManager.MODE_ALLOWED) {
-      return true;
-    }
-    appOps.startWatchingMode(AppOpsManager.OPSTR_GET_USAGE_STATS,
-        getApplicationContext().getPackageName(), new AppOpsManager.OnOpChangedListener() {
-          @Override @TargetApi(Build.VERSION_CODES.M)
-          public void onOpChanged(String op, String packageName) {
-            int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
-                android.os.Process.myUid(), getPackageName());
-            if (mode != AppOpsManager.MODE_ALLOWED) {
-              return;
-            }
-            appOps.stopWatchingMode(this);
-            Intent intent = new Intent(SettingsActivity.this, SettingsActivity.class);
-            if (getIntent().getExtras() != null) {
-              intent.putExtras(getIntent().getExtras());
-            }
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            getApplicationContext().startActivity(intent);
-          }
-        });
-    requestReadNetworkHistoryAccess();
-    return false;
-  }
-
-  private void requestReadNetworkHistoryAccess() {
-    Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-    startActivity(intent);
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {
@@ -286,6 +200,9 @@ public class SettingsActivity extends AppCompatActivity {
     String androidMR2Title = getString(R.string.help_dialog_android_jelly_bean_mr2_title);
     String androidMR2Body = getString(R.string.help_dialog_android_jelly_bean_mr2_body);
 
+    String androidNTitle = getString(R.string.help_dialog_android_n_title);
+    String androidNBody = getString(R.string.help_dialog_android_n_body);
+
     String si = getString(R.string.help_dialog_para_3);
 
     LayoutInflater inflater = LayoutInflater.from(this);
@@ -319,7 +236,19 @@ public class SettingsActivity extends AppCompatActivity {
         + "<br>"
         + "<br>"
         + androidMR2Body
-        + "<a href=\"https://code.google.com/p/android/issues/detail?id=58210\">https://code.google.com/p/android/issues/detail?id=58210</a>")));
+        + "<a href=\"https://code.google.com/p/android/issues/detail?id=58210\">https://code.google.com/p/android/issues/detail?id=58210</a>"
+        + "<b>"
+        + "<br>"
+        + "<br>"
+        + androidNTitle
+        + "</b>"
+        + "<br>"
+        + "<br>"
+        + androidNBody
+        + "<a href=\"https://developer.android.com/reference/android/app/usage/NetworkStatsManager.html\">https://developer.android.com/reference/android/app/usage/NetworkStatsManager.html</a>"
+
+
+    )));
 
     textview.setTextSize(17);
     textview.setPadding(15, 15, 15, 15);
@@ -336,43 +265,5 @@ public class SettingsActivity extends AppCompatActivity {
 
     helpDialog = builder.create();
     helpDialog.show();
-  }
-
-  private static final int MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS = 100;
-
-  private void fillStats() {
-    if (hasPermission()) {
-      //getStats();
-    } else {
-      requestPermission();
-    }
-  }
-
-  @TargetApi(Build.VERSION_CODES.N) private boolean hasPermission() {
-    AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
-
-    int mode =
-        appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, android.os.Process.myUid(),
-            getPackageName());
-
-    return mode == AppOpsManager.MODE_ALLOWED;
-  }
-
-  @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    switch (requestCode) {
-      case MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS:
-        if (hasPermission()) {
-          //getStats();
-        } else {
-          requestPermission();
-        }
-        break;
-    }
-  }
-
-  private void requestPermission() {
-    Toast.makeText(this, "Need to request permission", Toast.LENGTH_SHORT).show();
-    startActivityForResult(new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS),
-        MY_PERMISSIONS_REQUEST_PACKAGE_USAGE_STATS);
   }
 }

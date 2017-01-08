@@ -1,6 +1,5 @@
 package com.richardlucasapps.netlive.gauge;
 
-import android.content.Context;
 import android.net.TrafficStats;
 
 class AppDataUsage {
@@ -8,13 +7,11 @@ class AppDataUsage {
   private final String appName;
   private final int uid;
   private long previousTotalData;
-  private Context context;
 
-  public AppDataUsage(String appName, int uid, Context context) {
+  public AppDataUsage(String appName, int uid) {
     this.appName = appName;
     this.uid = uid;
     this.previousTotalData = getTotalBytesTransferredSinceBoot();
-    this.context = context;
   }
 
   private Long getTotalBytesTransferredSinceBoot() {
