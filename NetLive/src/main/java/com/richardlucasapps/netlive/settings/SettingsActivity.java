@@ -1,8 +1,8 @@
 package com.richardlucasapps.netlive.settings;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AppOpsManager;
 import android.content.ActivityNotFoundException;
@@ -16,6 +16,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.method.LinkMovementMethod;
@@ -27,10 +29,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.richardlucasapps.netlive.gauge.GaugeService;
 import com.richardlucasapps.netlive.R;
+import com.richardlucasapps.netlive.gauge.GaugeService;
 
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends AppCompatActivity {
+  private static final int READ_PHONE_STATE_REQUEST = 37;
 
   private AlertDialog aboutDialog;
   private AlertDialog helpDialog;
@@ -74,6 +77,84 @@ public class SettingsActivity extends Activity {
     }
     Intent intent = new Intent(getApplicationContext(), GaugeService.class); //getApp
     startService(intent);
+  }
+
+  @Override protected void onStart() {
+    super.onStart();
+    requestPermissions();
+  }
+
+  @Override @TargetApi(Build.VERSION_CODES.M) protected void onResume() {
+    super.onResume();
+    if (!hasPermissions()) {
+      return;
+    }
+  }
+
+  private void requestPermissions() {
+    if (!hasPermissionToReadNetworkHistory()) {
+      return;
+    }
+    if (!hasPermissionToReadPhoneStats()) {
+      requestPhoneStateStats();
+      return;
+    }
+  }
+
+  private boolean hasPermissions() {
+    return hasPermissionToReadNetworkHistory() && hasPermissionToReadPhoneStats();
+  }
+
+  private boolean hasPermissionToReadPhoneStats() {
+    if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
+        == PackageManager.PERMISSION_DENIED) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  private void requestPhoneStateStats() {
+    ActivityCompat.requestPermissions(this, new String[] { Manifest.permission.READ_PHONE_STATE },
+        READ_PHONE_STATE_REQUEST);
+  }
+
+  private boolean hasPermissionToReadNetworkHistory() {
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+      return true;
+    }
+    final AppOpsManager appOps = (AppOpsManager) getSystemService(Context.APP_OPS_SERVICE);
+    int mode =
+        appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, android.os.Process.myUid(),
+            getPackageName());
+    if (mode == AppOpsManager.MODE_ALLOWED) {
+      return true;
+    }
+    appOps.startWatchingMode(AppOpsManager.OPSTR_GET_USAGE_STATS,
+        getApplicationContext().getPackageName(), new AppOpsManager.OnOpChangedListener() {
+          @Override @TargetApi(Build.VERSION_CODES.M)
+          public void onOpChanged(String op, String packageName) {
+            int mode = appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
+                android.os.Process.myUid(), getPackageName());
+            if (mode != AppOpsManager.MODE_ALLOWED) {
+              return;
+            }
+            appOps.stopWatchingMode(this);
+            Intent intent = new Intent(SettingsActivity.this, SettingsActivity.class);
+            if (getIntent().getExtras() != null) {
+              intent.putExtras(getIntent().getExtras());
+            }
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            getApplicationContext().startActivity(intent);
+          }
+        });
+    requestReadNetworkHistoryAccess();
+    return false;
+  }
+
+  private void requestReadNetworkHistoryAccess() {
+    Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+    startActivity(intent);
   }
 
   @Override public boolean onCreateOptionsMenu(Menu menu) {

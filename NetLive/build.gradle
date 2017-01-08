@@ -1,25 +1,26 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+  compileSdkVersion 25
+  buildToolsVersion '25.0.2'
 
-    defaultConfig {
-        minSdkVersion 18
-        targetSdkVersion 25
-        versionCode 37
-        versionName "3.3.3"
-    }
+  defaultConfig {
+    minSdkVersion 18
+    targetSdkVersion 25
+    versionCode 37
+    versionName "3.3.3"
+  }
 
-    buildTypes {
-        release {
-            zipAlignEnabled true
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
-        }
+  buildTypes {
+    release {
+      zipAlignEnabled true
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
     }
+  }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+  compile 'com.android.support:appcompat-v7:25.1.0'
+  compile fileTree(dir: 'libs', include: ['*.jar'])
 }
