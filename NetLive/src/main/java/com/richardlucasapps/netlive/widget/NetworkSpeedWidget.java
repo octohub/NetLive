@@ -16,23 +16,26 @@ public class NetworkSpeedWidget extends AppWidgetProvider {
     start a service, to update every second.
     */
 
-    @Override
-    public void onDeleted(Context context, int[] appWidgetIds) {
+  @Override public void onDeleted(Context context, int[] appWidgetIds) {
 
-        MyApplication.getInstance().stopService(new Intent(MyApplication.getInstance(), GaugeService.class));
-        MyApplication.getInstance().startService(new Intent(MyApplication.getInstance(), GaugeService.class));
-        super.onDeleted(context, appWidgetIds);
-    }
+    MyApplication.getInstance()
+        .stopService(new Intent(MyApplication.getInstance(), GaugeService.class));
+    MyApplication.getInstance()
+        .startService(new Intent(MyApplication.getInstance(), GaugeService.class));
+    super.onDeleted(context, appWidgetIds);
+  }
 
-    @Override
-    public void onDisabled(Context context) {
+  @Override public void onDisabled(Context context) {
 
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(MyApplication.getInstance());
-        SharedPreferences.Editor edit = sharedPref.edit();
-        edit.putBoolean("widget_exists",false);
-        edit.apply();
-        MyApplication.getInstance().stopService(new Intent(MyApplication.getInstance(),GaugeService.class));
-        MyApplication.getInstance().startService(new Intent(MyApplication.getInstance(), GaugeService.class));
-        super.onDisabled(context);
-    }
+    SharedPreferences sharedPref =
+        PreferenceManager.getDefaultSharedPreferences(MyApplication.getInstance());
+    SharedPreferences.Editor edit = sharedPref.edit();
+    edit.putBoolean("widget_exists", false);
+    edit.apply();
+    MyApplication.getInstance()
+        .stopService(new Intent(MyApplication.getInstance(), GaugeService.class));
+    MyApplication.getInstance()
+        .startService(new Intent(MyApplication.getInstance(), GaugeService.class));
+    super.onDisabled(context);
+  }
 }	
