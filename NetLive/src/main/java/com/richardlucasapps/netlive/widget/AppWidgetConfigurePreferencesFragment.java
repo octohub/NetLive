@@ -1,4 +1,4 @@
-package com.richardlucasapps.netlive;
+package com.richardlucasapps.netlive.widget;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -19,6 +19,9 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import com.richardlucasapps.netlive.gauge.GaugeService;
+import com.richardlucasapps.netlive.global.MyApplication;
+import com.richardlucasapps.netlive.R;
 
 public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
 
@@ -107,8 +110,8 @@ public class AppWidgetConfigurePreferencesFragment extends PreferenceFragment {
             result.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, mAppWidgetId);
             getActivity().setResult(Activity.RESULT_OK, result);
             getActivity().finish();
-            MyApplication.getInstance().stopService(new Intent(MyApplication.getInstance(), MainService.class));
-            MyApplication.getInstance().startService(new Intent(MyApplication.getInstance(), MainService.class));
+            MyApplication.getInstance().stopService(new Intent(MyApplication.getInstance(), GaugeService.class));
+            MyApplication.getInstance().startService(new Intent(MyApplication.getInstance(), GaugeService.class));
 
             return true;
         }

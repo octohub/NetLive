@@ -1,4 +1,4 @@
-package com.richardlucasapps.netlive;
+package com.richardlucasapps.netlive.packagewatcher;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import com.richardlucasapps.netlive.gauge.GaugeService;
 
 public class PackageWatcherBroadcastReceiver extends BroadcastReceiver {
 
@@ -17,7 +18,7 @@ public class PackageWatcherBroadcastReceiver extends BroadcastReceiver {
         if (!notificationEnabled && !widgetExist) {
             return;
         }
-        Intent startServiceIntent = new Intent(context, MainService.class);
+        Intent startServiceIntent = new Intent(context, GaugeService.class);
         Bundle extras = intent.getExtras();
         String uid = null;
 

@@ -27,7 +27,7 @@ ADDED from AndroidManifest.xml:6:5
 		ADDED from AndroidManifest.xml:12:9
 	android:name
 		ADDED from AndroidManifest.xml:8:9
-activity#com.richardlucasapps.netlive.MainActivity
+activity#com.richardlucasapps.netlive.settings.SettingsActivity
 ADDED from AndroidManifest.xml:14:9
 	android:label
 		ADDED from AndroidManifest.xml:16:13
@@ -43,7 +43,7 @@ category#android.intent.category.LAUNCHER
 ADDED from AndroidManifest.xml:20:17
 	android:name
 		ADDED from AndroidManifest.xml:20:27
-receiver#com.richardlucasapps.netlive.MyBroadcastReceiver
+receiver#com.richardlucasapps.netlive.widget.MyBroadcastReceiver
 ADDED from AndroidManifest.xml:24:9
 	android:name
 		ADDED from AndroidManifest.xml:24:19
@@ -53,7 +53,7 @@ action#android.intent.action.BOOT_COMPLETED
 ADDED from AndroidManifest.xml:26:17
 	android:name
 		ADDED from AndroidManifest.xml:26:25
-receiver#com.richardlucasapps.netlive.PackageWatcherBroadcastReceiver
+receiver#com.richardlucasapps.netlive.packagewatcher.PackageWatcherBroadcastReceiver
 ADDED from AndroidManifest.xml:31:9
 	android:exported
 		ADDED from AndroidManifest.xml:34:13
@@ -69,7 +69,7 @@ data
 ADDED from AndroidManifest.xml:38:17
 	android:scheme
 		ADDED from AndroidManifest.xml:38:23
-receiver#com.richardlucasapps.netlive.NetworkSpeedWidget
+receiver#com.richardlucasapps.netlive.widget.NetworkSpeedWidget
 ADDED from AndroidManifest.xml:44:9
 	android:label
 		ADDED from AndroidManifest.xml:46:13
@@ -87,13 +87,13 @@ ADDED from AndroidManifest.xml:50:13
 		ADDED from AndroidManifest.xml:52:17
 	android:name
 		ADDED from AndroidManifest.xml:51:17
-service#com.richardlucasapps.netlive.MainService
+service#com.richardlucasapps.netlive.gauge.GaugeService
 ADDED from AndroidManifest.xml:55:9
 	android:exported
 		ADDED from AndroidManifest.xml:57:13
 	android:name
 		ADDED from AndroidManifest.xml:56:13
-activity#com.richardlucasapps.netlive.AppWidgetConfigure
+activity#com.richardlucasapps.netlive.widget.AppWidgetConfigure
 ADDED from AndroidManifest.xml:59:9
 	android:name
 		ADDED from AndroidManifest.xml:59:19

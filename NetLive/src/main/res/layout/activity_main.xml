@@ -4,11 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".settings.SettingsActivity">
 
     <fragment
         android:id="@+id/list"
-        android:name="com.richardlucasapps.netlive.SettingsFragment"
+        android:name="com.richardlucasapps.netlive.settings.SettingsFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />

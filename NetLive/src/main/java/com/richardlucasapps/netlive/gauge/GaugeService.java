@@ -1,4 +1,4 @@
-package com.richardlucasapps.netlive;
+package com.richardlucasapps.netlive.gauge;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -20,7 +20,10 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.preference.PreferenceManager;
 import android.widget.RemoteViews;
-
+import com.richardlucasapps.netlive.R;
+import com.richardlucasapps.netlive.settings.SettingsActivity;
+import com.richardlucasapps.netlive.widget.NetworkSpeedWidget;
+import com.richardlucasapps.netlive.widget.WidgetSettings;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -28,7 +31,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-public class MainService extends Service {
+public class GaugeService extends Service {
 
     private long previousBytesSentSinceBoot;
     private long previousBytesReceivedSinceBoot;
@@ -137,9 +140,9 @@ public class MainService extends Service {
                 mBuilder.setPriority(Notification.PRIORITY_HIGH);
             }
 
-            Intent resultIntent = new Intent(service, MainActivity.class);
+            Intent resultIntent = new Intent(service, SettingsActivity.class);
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(service);
-            stackBuilder.addParentStack(MainActivity.class);
+            stackBuilder.addParentStack(SettingsActivity.class);
             stackBuilder.addNextIntent(resultIntent);
             PendingIntent resultPendingIntent =
                     stackBuilder.getPendingIntent(
@@ -536,7 +539,7 @@ public class MainService extends Service {
     private synchronized void addAppToAppDataUsageList(ApplicationInfo appInfo) {  //synchronized because both addSpecificPackageUID and loadAllAppsIntoAppDataUsageList may be changing the app list at the same time.
         String appLabel = (String) packageManager.getApplicationLabel(appInfo);
         int uid = appInfo.uid;
-        AppDataUsage app = new AppDataUsage(appLabel, uid);
+        AppDataUsage app = new AppDataUsage(appLabel, uid, this);
         appDataUsageList.add(app);
 
     }

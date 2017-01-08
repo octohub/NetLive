@@ -1,4 +1,4 @@
-package com.richardlucasapps.netlive;
+package com.richardlucasapps.netlive.settings;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
@@ -27,8 +27,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.richardlucasapps.netlive.gauge.GaugeService;
+import com.richardlucasapps.netlive.R;
 
-public class MainActivity extends Activity {
+public class SettingsActivity extends Activity {
 
   private AlertDialog aboutDialog;
   private AlertDialog helpDialog;
@@ -70,7 +72,7 @@ public class MainActivity extends Activity {
           .putBoolean("firstRun", false)
           .commit();
     }
-    Intent intent = new Intent(getApplicationContext(), MainService.class); //getApp
+    Intent intent = new Intent(getApplicationContext(), GaugeService.class); //getApp
     startService(intent);
   }
 
@@ -126,7 +128,7 @@ public class MainActivity extends Activity {
         startActivity(Intent.createChooser(Email, getString(R.string.send_feedback)));
         return true;
       case android.R.id.home:
-        startActivity(new Intent(MainActivity.this, MainActivity.class));
+        startActivity(new Intent(SettingsActivity.this, SettingsActivity.class));
         return true;
       default:
         return super.onOptionsItemSelected(item);

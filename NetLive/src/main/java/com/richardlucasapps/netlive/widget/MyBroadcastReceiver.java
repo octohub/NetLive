@@ -1,10 +1,12 @@
-package com.richardlucasapps.netlive;
+package com.richardlucasapps.netlive.widget;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import com.richardlucasapps.netlive.gauge.GaugeService;
+import com.richardlucasapps.netlive.global.MyApplication;
 
 public class MyBroadcastReceiver extends BroadcastReceiver {
 
@@ -17,7 +19,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
 
         if (widgetExist || autoStart) {
 
-            Intent startServiceIntent = new Intent(context, MainService.class);
+            Intent startServiceIntent = new Intent(context, GaugeService.class);
             context.startService(startServiceIntent);
         }
     }

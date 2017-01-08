@@ -1,4 +1,4 @@
-package com.richardlucasapps.netlive;
+package com.richardlucasapps.netlive.settings;
 
 import android.app.ActivityManager;
 import android.content.Context;
@@ -11,6 +11,8 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
 import android.widget.Toast;
+import com.richardlucasapps.netlive.gauge.GaugeService;
+import com.richardlucasapps.netlive.R;
 
 public class SettingsFragment extends PreferenceFragment {
 
@@ -49,12 +51,12 @@ public class SettingsFragment extends PreferenceFragment {
     @Override
     public void onResume() {
         /*
-        This is important to have because if the system or someone manually kills the MainService by going into the running apps
+        This is important to have because if the system or someone manually kills the GaugeService by going into the running apps
         and killing it, then when they open the SettingsFragment, the disabled checkmark will be unchecked.  We need to make sure
-        that if the MainService is not running, disable is checked.
+        that if the GaugeService is not running, disable is checked.
          */
         super.onResume();
-        if (!isMyServiceRunning(MainService.class)) {
+        if (!isMyServiceRunning(GaugeService.class)) {
             disableCheckBoxPreference.setChecked(true);
         }
 
@@ -126,17 +128,17 @@ public class SettingsFragment extends PreferenceFragment {
             boolean checked = (Boolean) newValue;
             ((CheckBoxPreference) preference).setChecked(checked);
             if (checked) {
-                getActivity().stopService(new Intent(getActivity(), MainService.class));
+                getActivity().stopService(new Intent(getActivity(), GaugeService.class));
             } else {
-                getActivity().startService(new Intent(getActivity(), MainService.class));
+                getActivity().startService(new Intent(getActivity(), GaugeService.class));
             }
             return true;
         }
     };
 
     private void restartService() {
-        getActivity().stopService(new Intent(getActivity(), MainService.class));
-        getActivity().startService(new Intent(getActivity(), MainService.class));
+        getActivity().stopService(new Intent(getActivity(), GaugeService.class));
+        getActivity().startService(new Intent(getActivity(), GaugeService.class));
     }
 
     private boolean isMyServiceRunning(Class<?> serviceClass) {

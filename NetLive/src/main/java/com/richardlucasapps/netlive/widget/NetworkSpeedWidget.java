@@ -1,11 +1,12 @@
-package com.richardlucasapps.netlive;
+package com.richardlucasapps.netlive.widget;
 
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-
+import com.richardlucasapps.netlive.gauge.GaugeService;
+import com.richardlucasapps.netlive.global.MyApplication;
 
 public class NetworkSpeedWidget extends AppWidgetProvider {
 
@@ -18,8 +19,8 @@ public class NetworkSpeedWidget extends AppWidgetProvider {
     @Override
     public void onDeleted(Context context, int[] appWidgetIds) {
 
-        MyApplication.getInstance().stopService(new Intent(MyApplication.getInstance(), MainService.class));
-        MyApplication.getInstance().startService(new Intent(MyApplication.getInstance(), MainService.class));
+        MyApplication.getInstance().stopService(new Intent(MyApplication.getInstance(), GaugeService.class));
+        MyApplication.getInstance().startService(new Intent(MyApplication.getInstance(), GaugeService.class));
         super.onDeleted(context, appWidgetIds);
     }
 
@@ -30,8 +31,8 @@ public class NetworkSpeedWidget extends AppWidgetProvider {
         SharedPreferences.Editor edit = sharedPref.edit();
         edit.putBoolean("widget_exists",false);
         edit.apply();
-        MyApplication.getInstance().stopService(new Intent(MyApplication.getInstance(),MainService.class));
-        MyApplication.getInstance().startService(new Intent(MyApplication.getInstance(), MainService.class));
+        MyApplication.getInstance().stopService(new Intent(MyApplication.getInstance(),GaugeService.class));
+        MyApplication.getInstance().startService(new Intent(MyApplication.getInstance(), GaugeService.class));
         super.onDisabled(context);
     }
 }	
