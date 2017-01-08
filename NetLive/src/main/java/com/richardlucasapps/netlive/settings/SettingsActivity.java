@@ -56,7 +56,7 @@ public class SettingsActivity extends Activity {
               // User clicked OK button
             }
           });
-      builder.setMessage(getString(R.string.welcome) + getString(R.string.welcome_para))
+      builder.setMessage(getString(R.string.welcome) + getString(R.string.welcome_para) + getString(R.string.welcome_para_n_note))
           .setTitle(getString(R.string.welcome_message_message) + " " + getString(
               R.string.app_name_with_version_number));
 

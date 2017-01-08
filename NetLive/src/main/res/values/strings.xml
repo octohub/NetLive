@@ -4,7 +4,8 @@
     <string name="help_dialog_para_1">Thank you for using NetLive. If you have any questions, recommendations, or you run into a problem with the app, please do not hesitate to contact me
 			 		by going to the \"Send Feedback\" option in the menu. Enjoy!</string>
     <string name="welcome_para">If you have any questions, recommendations, or you run into a problem with the app, please do not hesitate to contact me
-			 		by going to the \"Send Feedback\" option in the menu. Enjoy!</string>
+			 		by going to the \"Send Feedback\" option in the menu. Enjoy!\n\n</string>
+  <string name="welcome_para_n_note">Attention: Due to a change in Android, the active app feature no longer works on Android 7.0 and above. Apologies for the inconvenience!</string>
   <string name="help_dialog_para_2">NetLive allows you to monitor your internet data transfer rate while also showing the app that is using the most data at the current moment. It runs both in the notification drawer or as a widget, so you always have access to your transfer rate information.</string>
   <string name="help_dialog_para_3">NetLive uses the official International System of Units (SI). This means, for example, that a kilobit is considered 1000 bits, not 1024 bits.</string>
   <string name="welcome">NetLive is now running in your notification drawer, welcome to the revolution!\n\n</string>

@@ -54,5 +54,6 @@
 
   <string name="help_dialog_android_n_title">Android 7.0 und höher</string>
   <string name="help_dialog_android_n_body">Die aktive App-Funktion ist auf Android 7.0 und höher aufgrund von Änderungen in Android nicht mehr verfügbar. Die Funktionalität Die von TrafficStats bereitgestellt wurde, wurde durch NetworkStatsManager ersetzt. NetworkStatsManager aktualisiert sich nicht schnell genug, um die aktive App-Funktion zu unterstützen. NetworksStatsManager ist für die Bereitstellung von historischen Daten, nicht von Moment zu Moment Daten vorgesehen. Mehr Infos hier: \n</string>
+  <string name="welcome_para_n_note">Achtung: Aufgrund einer Änderung von Android funktioniert die aktive App-Funktion nicht mehr auf Android 7.0 und höher. Entschuldigung für die Unannehmlichkeiten!</string>
 
 </resources>
