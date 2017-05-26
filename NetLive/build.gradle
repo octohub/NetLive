@@ -7,7 +7,6 @@ android {
   defaultConfig {
     minSdkVersion 18
     targetSdkVersion 25
-    maxSdkVersion 22
     versionCode 38
     versionName "3.3.4"
   }
