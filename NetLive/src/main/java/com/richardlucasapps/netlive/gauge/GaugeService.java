@@ -108,7 +108,6 @@ public class GaugeService extends Service {
     unitMeasurement = sharedPref.getString("pref_key_measurement_unit", "Mbps");
     showTotalValueNotification = sharedPref.getBoolean("pref_key_show_total_value", false);
     long pollRate = Long.parseLong(sharedPref.getString("pref_key_poll_rate", "5"));
-//    long pollRate = Long.parseLong(sharedPref.getString("pref_key_poll_rate", "1"));
     showActiveApp = sharedPref.getBoolean("pref_key_active_app", true);
     hideNotification = sharedPref.getBoolean("pref_key_hide_notification", false);
 
