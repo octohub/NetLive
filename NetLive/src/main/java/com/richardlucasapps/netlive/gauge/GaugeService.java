@@ -76,7 +76,7 @@ public class GaugeService extends Service {
   private long start = 0l;
 
   private double totalSecondsSinceLastPackageRefresh = 0d;
-  private double totalSecondsSinceNotificaitonTimeUpdated = 0d;
+  private double totalSecondsSinceNotificatهonTimeUpdated = 0d;
 
   @Override public void onCreate() {
     super.onCreate();
@@ -370,7 +370,7 @@ public class GaugeService extends Service {
 
     double totalElapsedInSeconds = (double) totalElapsed / 1000000000.0;
     totalSecondsSinceLastPackageRefresh += totalElapsedInSeconds;
-    totalSecondsSinceNotificaitonTimeUpdated += totalElapsedInSeconds;
+    totalSecondsSinceNotificatهonTimeUpdated += totalElapsedInSeconds;
     long bytesSentOverPollPeriod = bytesSentSinceBoot - previousBytesSentSinceBoot;
     long bytesReceivedOverPollPeriod = bytesReceivedSinceBoot - previousBytesReceivedSinceBoot;
 
@@ -425,9 +425,9 @@ public class GaugeService extends Service {
     mBuilder.setContentText(displayValuesText);
     mBuilder.setContentTitle(contentTitleText);
 
-    if (totalSecondsSinceNotificaitonTimeUpdated > 10800) { //10800 seconds is three hours
+    if (totalSecondsSinceNotificatهonTimeUpdated > 10800) { //10800 seconds is three hours
       mBuilder.setWhen(System.currentTimeMillis());
-      totalSecondsSinceNotificaitonTimeUpdated = 0;
+      totalSecondsSinceNotificatهonTimeUpdated = 0;
     }
 
     int mId = 1;
